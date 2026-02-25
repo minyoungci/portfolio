@@ -12,8 +12,8 @@ export default function PieceSection({ pieces }: Props) {
   const [lightbox, setLightbox] = useState<Piece | null>(null)
 
   return (
-    <section id="piece" className="py-16 px-4">
-      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+    <section id="piece" className="py-8 px-6">
+      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
         <span className="opacity-30">04</span>
         <span>Piece</span>
       </h2>

@@ -18,8 +18,8 @@ export default function HomePage() {
     <PageTransition>
       <main className="min-h-screen">
         {/* 01 — PROJECTS */}
-        <section id="projects" className="py-16 px-4">
-          <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+        <section id="projects" className="py-8 px-6">
+          <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
             <span className="opacity-30">01</span>
             <span>Projects</span>
           </h2>

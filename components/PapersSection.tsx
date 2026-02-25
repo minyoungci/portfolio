@@ -12,8 +12,8 @@ export default function PapersSection({ papers }: Props) {
   const [openId, setOpenId] = useState<number | null>(null)
 
   return (
-    <section id="papers" className="py-16 px-4">
-      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+    <section id="papers" className="py-8 px-6">
+      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
         <span className="opacity-30">02</span>
         <span>Papers</span>
       </h2>
@@ -26,10 +26,10 @@ export default function PapersSection({ papers }: Props) {
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-base italic leading-snug group-hover:opacity-60 transition-opacity">
+                  <p className="text-[13px] italic leading-snug group-hover:opacity-60 transition-opacity">
                     {paper.title}
                   </p>
-                  <p className="text-xs mt-1 opacity-50">
+                  <p className="text-[11px] mt-1 opacity-50">
                     {paper.authors} — {paper.journal}, {paper.year}
                   </p>
                 </div>

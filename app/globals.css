@@ -6,12 +6,13 @@
   --color-white: #ffffff;
   --color-gray: #F5F5F5;
 
-  /* Font family — Roboto via next/font */
-  --font-sans: var(--font-roboto), Arial, sans-serif;
+  /* Font family — Inter via next/font */
+  --font-sans: var(--font-inter), Helvetica Neue, Arial, sans-serif;
   --font-serif: var(--font-cormorant), Georgia, serif;
 }
 
 body {
   background-color: var(--color-white);
   color: var(--color-black);
+  font-size: 13px;
 }

@@ -7,8 +7,8 @@ const LINKS = [
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="py-16 px-4 pb-32">
-      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+    <section id="contact" className="py-8 px-6 pb-24">
+      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
         <span className="opacity-30">05</span>
         <span>Contact</span>
       </h2>
@@ -20,7 +20,7 @@ export default function ContactSection() {
               href={href}
               target={href.startsWith('mailto') ? undefined : '_blank'}
               rel="noopener noreferrer"
-              className="text-sm underline opacity-60 hover:opacity-100 transition-opacity"
+              className="text-[13px] underline opacity-60 hover:opacity-100 transition-opacity"
             >
               {href.replace('mailto:', '')}
             </a>

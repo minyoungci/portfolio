@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Roboto, Cormorant_Garamond } from "next/font/google";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 import Navigation from "@/components/Navigation";
 import "./globals.css";
 
-const roboto = Roboto({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
-  variable: "--font-roboto",
+  variable: "--font-inter",
 });
 
 const cormorant = Cormorant_Garamond({
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${roboto.variable} ${cormorant.variable}`}>
+    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
       <body className="bg-white text-black font-sans antialiased">
         <Navigation />
         {children}

@@ -12,8 +12,8 @@ export default function ResearchSection({ items }: Props) {
   const [openId, setOpenId] = useState<number | null>(null)
 
   return (
-    <section id="research" className="py-16 px-4">
-      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+    <section id="research" className="py-8 px-6">
+      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
         <span className="opacity-30">03</span>
         <span>Research</span>
       </h2>
@@ -26,12 +26,12 @@ export default function ResearchSection({ items }: Props) {
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <p className="text-base leading-snug group-hover:opacity-60 transition-opacity">
+                  <p className="text-[13px] leading-snug group-hover:opacity-60 transition-opacity">
                     {item.title}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {item.tags.map((tag) => (
-                      <span key={tag} className="text-xs border border-black px-2 py-0.5">
+                      <span key={tag} className="text-[11px] border border-black px-2 py-0.5">
                         {tag}
                       </span>
                     ))}
