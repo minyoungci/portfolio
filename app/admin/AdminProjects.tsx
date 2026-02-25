@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import type { Project } from '@/types'
+import ImageUploadButton from '@/components/ImageUploadButton'
 
 const EMPTY = {
   title: '', subtitle: '', year: new Date().getFullYear(),
@@ -174,7 +175,15 @@ export default function AdminProjects() {
                     className="w-full text-sm border-b border-black outline-none py-1 bg-transparent resize-none leading-relaxed"
                   />
                 </div>
-                <F label="Thumbnail URL" k="thumbnail" placeholder="https://..." />
+                <div className="mb-4">
+                  <label className="text-xs opacity-50 block mb-1">Thumbnail URL</label>
+                  <div className="flex items-center gap-2">
+                    <input value={form.thumbnail} onChange={e => set('thumbnail', e.target.value)}
+                      placeholder="https://... 또는 파일 선택"
+                      className="flex-1 text-sm border-b border-black outline-none py-1 bg-transparent" />
+                    <ImageUploadButton onUpload={(url) => set('thumbnail', url)} />
+                  </div>
+                </div>
                 <div className="mt-2 pt-4 border-t border-black">
                   <p className="text-xs opacity-50 mb-3">Links</p>
                   <F label="GitHub" k="github" placeholder="https://github.com/..." />

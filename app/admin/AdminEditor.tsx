@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import type { Piece } from '@/types'
+import ImageUploadButton from '@/components/ImageUploadButton'
 
 const EMPTY = {
   title: '',
@@ -130,9 +131,12 @@ export default function AdminEditor() {
               <div className="flex-1 max-w-lg space-y-5">
                 <div>
                   <label className="text-xs opacity-50 block mb-1">Image URL <span className="text-red-400">*</span></label>
-                  <input value={form.image} onChange={e => set('image', e.target.value)}
-                    placeholder="https://..."
-                    className="w-full text-sm border-b border-black outline-none py-1 bg-transparent" />
+                  <div className="flex items-center gap-2">
+                    <input value={form.image} onChange={e => set('image', e.target.value)}
+                      placeholder="https://... 또는 파일 선택"
+                      className="flex-1 text-sm border-b border-black outline-none py-1 bg-transparent" />
+                    <ImageUploadButton onUpload={(url) => set('image', url)} />
+                  </div>
                 </div>
                 <div>
                   <label className="text-xs opacity-50 block mb-1">Prompt / Description <span className="text-red-400">*</span></label>
