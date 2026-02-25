@@ -1,8 +1,8 @@
 const LINKS = [
-  { label: 'Email',    href: 'mailto:minyoung.kim@example.ac.kr' },
+  { label: 'Email',    href: 'mailto:dbssus123@gmail.com' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/minyoung-kim-327a5b223/' },
+  { label: 'Blog',     href: 'https://minyoungxi.tistory.com/' },
   { label: 'GitHub',   href: 'https://github.com/minyoungci' },
-  { label: 'Scholar',  href: 'https://scholar.google.com' },
-  { label: 'Twitter',  href: 'https://twitter.com/minyoungci' },
 ]
 
 export default function ContactSection() {
@@ -26,9 +26,6 @@ export default function ContactSection() {
           </div>
         ))}
       </div>
-      <p className="text-xs opacity-30 max-w-sm leading-relaxed">
-        Medical AI researcher interested in clinical deployment, safety, and the gap between benchmark performance and real-world utility.
-      </p>
     </section>
   )
 }
