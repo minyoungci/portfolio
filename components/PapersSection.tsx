@@ -13,7 +13,7 @@ export default function PapersSection({ papers }: Props) {
 
   return (
     <section id="papers" className="py-8 px-6">
-      <h2 className="text-base tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
+      <h2 className="text-base tracking-[0.25em] font-normal uppercase italic mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
         <span className="opacity-50">02</span>
         <span>Papers</span>
       </h2>
