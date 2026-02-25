@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import dynamic from 'next/dynamic'
 
 const AdminProjects = dynamic(() => import('./AdminProjects'), { ssr: false })
@@ -25,7 +26,10 @@ export default function AdminWrapper() {
         </div>
       )}
       {/* Tab bar */}
-      <div className="flex border-b border-black px-4 shrink-0">
+      <div className="flex border-b border-black px-4 shrink-0 items-center">
+        <Link href="/" className="text-xs opacity-40 hover:opacity-100 transition-opacity mr-6">
+          ← 홈
+        </Link>
         {TABS.map(t => (
           <button
             key={t}

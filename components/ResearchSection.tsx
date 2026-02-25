@@ -13,8 +13,9 @@ export default function ResearchSection({ items }: Props) {
 
   return (
     <section id="research" className="py-16 px-4">
-      <h2 className="text-xs tracking-widest mb-8 pb-3 border-b border-black">
-        03 — RESEARCH
+      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+        <span className="opacity-30">03</span>
+        <span>Research</span>
       </h2>
       <div className="divide-y divide-black">
         {items.map((item) => (

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Roboto, Cormorant_Garamond } from "next/font/google";
 import Navigation from "@/components/Navigation";
 import "./globals.css";
 
@@ -8,6 +8,12 @@ const roboto = Roboto({
   weight: ["400", "700"],
   style: ["normal", "italic"],
   variable: "--font-roboto",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--font-cormorant",
 });
 
 export const metadata: Metadata = {
@@ -21,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={`${roboto.variable} ${cormorant.variable}`}>
       <body className="bg-white text-black font-sans antialiased">
         <Navigation />
         {children}

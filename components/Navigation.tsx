@@ -1,25 +1,47 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const NAME_LETTERS = ['M', 'I', 'N', 'Y', 'O', 'U', 'N', 'G', 'K', 'I', 'M']
 
 const SECTIONS = [
-  { label: 'Projects', href: '#projects' },
-  { label: 'Papers',   href: '#papers' },
-  { label: 'Research', href: '#research' },
-  { label: 'Piece',    href: '#piece' },
-  { label: 'Contact',  href: '#contact' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Papers',   id: 'papers' },
+  { label: 'Research', id: 'research' },
+  { label: 'Piece',    id: 'piece' },
+  { label: 'Contact',  id: 'contact' },
 ]
 
 export default function Navigation() {
+  const [activeSection, setActiveSection] = useState<string>('')
+
   const scrollTo = useCallback((id: string) => {
     const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
+  useEffect(() => {
+    const observers: IntersectionObserver[] = []
+
+    SECTIONS.forEach(({ id }) => {
+      const el = document.getElementById(id)
+      if (!el) return
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id)
+        },
+        { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
+      )
+      observer.observe(el)
+      observers.push(observer)
+    })
+
+    return () => observers.forEach(o => o.disconnect())
+  }, [])
+
   return (
-    <header>
+    <header className="sticky top-0 z-50 bg-white">
       {/* Row 1: Name letters spread across full width */}
       <div className="flex justify-between px-4 py-2 border-b border-black">
         {NAME_LETTERS.map((letter, i) => (
@@ -30,11 +52,13 @@ export default function Navigation() {
       </div>
       {/* Row 2: Section anchor links */}
       <nav className="flex justify-between px-4 py-2 border-b border-black">
-        {SECTIONS.map(({ label, href }) => (
+        {SECTIONS.map(({ label, id }) => (
           <button
-            key={href}
-            onClick={() => scrollTo(href.replace('#', ''))}
-            className="text-sm opacity-40 hover:opacity-100 transition-opacity duration-200 bg-transparent border-0 cursor-pointer"
+            key={id}
+            onClick={() => scrollTo(id)}
+            className={`text-sm transition-opacity duration-200 bg-transparent border-0 cursor-pointer ${
+              activeSection === id ? 'opacity-100' : 'opacity-40 hover:opacity-100'
+            }`}
           >
             {label}
           </button>

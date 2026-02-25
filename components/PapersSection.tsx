@@ -13,8 +13,9 @@ export default function PapersSection({ papers }: Props) {
 
   return (
     <section id="papers" className="py-16 px-4">
-      <h2 className="text-xs tracking-widest mb-8 pb-3 border-b border-black">
-        02 — PAPERS
+      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+        <span className="opacity-30">02</span>
+        <span>Papers</span>
       </h2>
       <div className="divide-y divide-black">
         {papers.map((paper) => (

@@ -8,8 +8,9 @@ const LINKS = [
 export default function ContactSection() {
   return (
     <section id="contact" className="py-16 px-4 pb-32">
-      <h2 className="text-xs tracking-widest mb-8 pb-3 border-b border-black">
-        05 — CONTACT
+      <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-10 pt-4 border-t border-black flex items-baseline gap-3">
+        <span className="opacity-30">05</span>
+        <span>Contact</span>
       </h2>
       <div className="space-y-4 mb-12">
         {LINKS.map(({ label, href }) => (
@@ -26,6 +27,9 @@ export default function ContactSection() {
           </div>
         ))}
       </div>
+      <p className="text-[10px] tracking-[0.2em] opacity-20 uppercase">
+        © {new Date().getFullYear()} Minyoung KIM
+      </p>
     </section>
   )
 }
