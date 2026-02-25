@@ -21,7 +21,7 @@ export default function AdminWrapper() {
       {/* Live 환경 경고 */}
       {isLive && (
         <div className="bg-black text-white text-xs px-4 py-2 text-center">
-          ⚠️ 배포 환경에서는 저장/업로드가 작동하지 않습니다. 로컬(localhost)에서 편집 후 git push 하세요.
+          저장 시 GitHub에 커밋 → Vercel 자동 재배포 (반영까지 약 1–2분 소요)
         </div>
       )}
       {/* Tab bar */}
