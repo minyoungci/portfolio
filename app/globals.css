@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-gray: #F5F5F5;
+
+  /* Font family — Roboto via next/font */
+  --font-sans: var(--font-roboto), Arial, sans-serif;
+}
+
+body {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}

@@ -1,0 +1,12 @@
+{"t":0,"agent":"add31ad","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"a419a0d","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"ac9f83f","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"a98bccc","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"aa94fe3","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"ae53292","agent_type":"unknown","event":"agent_stop","success":true}
+{"t":0,"agent":"system","event":"keyword_detected","keyword":"research"}
+{"t":0,"agent":"system","event":"skill_invoked","skill_name":"oh-my-claudecode:research"}
+{"t":0,"agent":"a6dd98c","agent_type":"Explore","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"ae1554b","agent_type":"Explore","event":"agent_start","parent_mode":"none"}
+{"t":0,"agent":"ae1554b","agent_type":"Explore","event":"agent_stop","success":true,"duration_ms":26262}
+{"t":0,"agent":"a6dd98c","agent_type":"Explore","event":"agent_stop","success":true,"duration_ms":53831}

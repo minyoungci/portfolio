@@ -1,0 +1,325 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1771982626661,
+  "projectRoot": "/mnt/d/portfolio",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "16.1.6",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19.2.3",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.3",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "eslint"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "app",
+      "components",
+      "public"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "app": {
+      "path": "app",
+      "purpose": "Application code",
+      "fileCount": 4,
+      "lastAccessed": 1771982626649,
+      "keyFiles": [
+        "favicon.ico",
+        "globals.css",
+        "layout.tsx",
+        "page.tsx"
+      ]
+    },
+    "components": {
+      "path": "components",
+      "purpose": "UI components",
+      "fileCount": 4,
+      "lastAccessed": 1771982626651,
+      "keyFiles": [
+        "Navigation.tsx",
+        "PageTransition.tsx",
+        "ProjectCard.tsx",
+        "ProjectGrid.tsx"
+      ]
+    },
+    "data": {
+      "path": "data",
+      "purpose": "Data files",
+      "fileCount": 1,
+      "lastAccessed": 1771982626653,
+      "keyFiles": [
+        "projects.ts"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 5,
+      "lastAccessed": 1771982626655,
+      "keyFiles": [
+        "file.svg",
+        "globe.svg",
+        "next.svg",
+        "vercel.svg",
+        "window.svg"
+      ]
+    },
+    "types": {
+      "path": "types",
+      "purpose": "Type definitions",
+      "fileCount": 1,
+      "lastAccessed": 1771982626657,
+      "keyFiles": [
+        "index.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "app/admin/AdminEditor.tsx",
+      "accessCount": 15,
+      "lastAccessed": 1772004388712,
+      "type": "file"
+    },
+    {
+      "path": "app/page.tsx",
+      "accessCount": 8,
+      "lastAccessed": 1771999073252,
+      "type": "file"
+    },
+    {
+      "path": "data/projects.ts",
+      "accessCount": 6,
+      "lastAccessed": 1771998661724,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/page.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1771998823736,
+      "type": "file"
+    },
+    {
+      "path": "types/index.ts",
+      "accessCount": 6,
+      "lastAccessed": 1772004344411,
+      "type": "file"
+    },
+    {
+      "path": "components/Navigation.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1771985005445,
+      "type": "file"
+    },
+    {
+      "path": "components/ProjectCard.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1771985736343,
+      "type": "file"
+    },
+    {
+      "path": "components/ProjectGrid.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1771985736399,
+      "type": "file"
+    },
+    {
+      "path": "data/pieces.json",
+      "accessCount": 4,
+      "lastAccessed": 1771998330576,
+      "type": "file"
+    },
+    {
+      "path": "data/papers.ts",
+      "accessCount": 4,
+      "lastAccessed": 1771998662350,
+      "type": "file"
+    },
+    {
+      "path": "data/research.ts",
+      "accessCount": 4,
+      "lastAccessed": 1771998662066,
+      "type": "file"
+    },
+    {
+      "path": "app/layout.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1771984551698,
+      "type": "file"
+    },
+    {
+      "path": "app/projects/[slug]/page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1771985736364,
+      "type": "file"
+    },
+    {
+      "path": "components/PieceSection.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1772004361694,
+      "type": "file"
+    },
+    {
+      "path": "next.config.ts",
+      "accessCount": 3,
+      "lastAccessed": 1772004911808,
+      "type": "file"
+    },
+    {
+      "path": "app/globals.css",
+      "accessCount": 2,
+      "lastAccessed": 1771982670544,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 2,
+      "lastAccessed": 1771983388184,
+      "type": "directory"
+    },
+    {
+      "path": "app/about/page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1771984552090,
+      "type": "file"
+    },
+    {
+      "path": "components/ContactSection.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1771985825059,
+      "type": "file"
+    },
+    {
+      "path": "components/ResearchSection.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1771997855338,
+      "type": "file"
+    },
+    {
+      "path": "app/api/save-content/route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1771998666882,
+      "type": "file"
+    },
+    {
+      "path": "components/PageTransition.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1771999084925,
+      "type": "file"
+    },
+    {
+      "path": "components/AdminAccess.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1772004342207,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1771984551088,
+      "type": "file"
+    },
+    {
+      "path": "components/PapersSection.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771985014547,
+      "type": "file"
+    },
+    {
+      "path": "data/projects.json",
+      "accessCount": 1,
+      "lastAccessed": 1771998654057,
+      "type": "file"
+    },
+    {
+      "path": "data/papers.json",
+      "accessCount": 1,
+      "lastAccessed": 1771998654515,
+      "type": "file"
+    },
+    {
+      "path": "data/research.json",
+      "accessCount": 1,
+      "lastAccessed": 1771998655140,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/AdminProjects.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771998698501,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/AdminPapers.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771998715285,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/AdminResearch.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771998730817,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/AdminWrapper.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771998776741,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

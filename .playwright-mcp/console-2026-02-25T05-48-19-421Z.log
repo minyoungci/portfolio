@@ -1,0 +1,48 @@
+[     905ms] [WARNING] [tiptap warn]: Duplicate extension names found: ['link']. This can lead to issues. @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_f3530cac._.js:2297
+[  291763ms] [ERROR] WebSocket connection to 'ws://localhost:3002/_next/webpack-hmr?id=VhNVzDfBe3Mk21aU5NHlN' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10878
+[  292765ms] [ERROR] WebSocket connection to 'ws://localhost:3002/_next/webpack-hmr?id=VhNVzDfBe3Mk21aU5NHlN' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10878
+[  293768ms] [ERROR] WebSocket connection to 'ws://localhost:3002/_next/webpack-hmr?id=VhNVzDfBe3Mk21aU5NHlN' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10878
+[  294769ms] [ERROR] WebSocket connection to 'ws://localhost:3002/_next/webpack-hmr?id=VhNVzDfBe3Mk21aU5NHlN' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10878
+[  295772ms] [ERROR] WebSocket connection to 'ws://localhost:3002/_next/webpack-hmr?id=VhNVzDfBe3Mk21aU5NHlN' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_client_17643121._.js:10878
+[  314176ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3002/admin:0
+[  314368ms] Error: ./app/admin/page.tsx:3:22
+Ecmascript file had an error
+  1 | import dynamic from 'next/dynamic'
+  2 |
+> 3 | const AdminWrapper = dynamic(() => import('./AdminWrapper'), { ssr: false })
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | export default function AdminPage() {
+  6 |   return <AdminWrapper />
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+
+    at <unknown> (Error: ./app/admin/page.tsx:3:22)
+    at Object.getCompilationErrors (file:///mnt/d/portfolio/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1008:59)
+    at DevBundlerService.getCompilationError (file:///mnt/d/portfolio/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///mnt/d/portfolio/node_modules/next/dist/server/dev/next-dev-server.js:706:42)
+    at DevServer.findPageComponents (file:///mnt/d/portfolio/node_modules/next/dist/server/dev/next-dev-server.js:676:43)
+    at async DevServer.renderErrorToResponseImpl (file:///mnt/d/portfolio/node_modules/next/dist/server/base-server.js:1733:26)
+[  314390ms] [ERROR] ./app/admin/page.tsx:3:22
+Ecmascript file had an error
+  1 | import dynamic from 'next/dynamic'
+  2 |
+> 3 | const AdminWrapper = dynamic(() => import('./AdminWrapper'), { ssr: false })
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | export default function AdminPage() {
+  6 |   return <AdminWrapper />
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component. @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_b3fb3b5f._.js:1920
+[  314462ms] [ERROR] ./app/admin/page.tsx:3:22
+Ecmascript file had an error
+  1 | import dynamic from 'next/dynamic'
+  2 |
+> 3 | const AdminWrapper = dynamic(() => import('./AdminWrapper'), { ssr: false })
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | export default function AdminPage() {
+  6 |   return <AdminWrapper />
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component. @ http://localhost:3002/_next/static/chunks/node_modules_next_dist_b3fb3b5f._.js:1920
