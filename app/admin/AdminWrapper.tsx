@@ -27,7 +27,7 @@ export default function AdminWrapper() {
       )}
       {/* Tab bar */}
       <div className="flex border-b border-black px-4 shrink-0 items-center">
-        <Link href="/" className="text-xs opacity-40 hover:opacity-100 transition-opacity mr-6">
+        <Link href="/" className="text-xs border border-black px-3 py-1 hover:bg-black hover:text-white transition-colors mr-4">
           ← 홈
         </Link>
         {TABS.map(t => (

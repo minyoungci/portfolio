@@ -121,7 +121,7 @@ export default function AdminEditor() {
                 )}
                 <button onClick={save} disabled={status === 'saving' || !form.image || !form.prompt}
                   className="text-xs border border-black px-3 py-1 hover:bg-black hover:text-white transition-colors disabled:opacity-30">
-                  {status === 'saving' ? 'Saving…' : status === 'saved' ? 'Saved ✓' : status === 'error' ? 'Error ✗' : '저장'}
+                  {status === 'saving' ? 'Saving…' : status === 'saved' ? 'Saved ✓ (홈 반영 1-2분)' : status === 'error' ? 'Error ✗' : '저장'}
                 </button>
               </div>
             </div>
