@@ -9,9 +9,10 @@
   },
   {
     "id": 1772018756134,
-    "slug": "piece-1772018756134",
+    "slug": "grok2",
+    "title": "grok_2",
     "date": "2026-02",
-    "image": "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400&q=80",
-    "prompt": "Test abstract art"
+    "image": "/uploads/1772027206873-grok_2.jpg",
+    "prompt": "Create a high-fashion editorial portrait of a young woman from the reference image. A confident woman sits in a modern designer chair, wearing a sharp, tailored black power suit with a structured blazer and sleek black silk blouse, no tie, paired with elegant pointed-toe heels.Her posture is relaxed yet commanding, legs crossed with effortless poise, conveying quiet strength and self-assurance. The setting is a contemporary studio with concrete-gray walls and soft professional softbox lighting subtly visible at the edges of the frame. Behind her hangs a large expressive abstract painting of her own face, rendered in neutral beige, black, and charcoal tones, featuring bold brush strokes and subtle paint drips, and below is written the signature PROMPTX"
   }
 ]
