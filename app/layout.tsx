@@ -17,7 +17,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Minyoung KIM",
+  title: "welcome",
   description: "Medical AI / Futurist — Development Portfolio",
 };
 
