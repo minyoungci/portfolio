@@ -19,8 +19,8 @@ export default function HomePage() {
       <main className="min-h-screen">
         {/* 01 — PROJECTS */}
         <section id="projects" className="py-8 px-6">
-          <h2 className="text-[10px] tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
-            <span className="opacity-30">01</span>
+          <h2 className="text-xs tracking-[0.25em] font-normal uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
+            <span className="opacity-50">01</span>
             <span>Projects</span>
           </h2>
           <ProjectGrid projects={projects} />

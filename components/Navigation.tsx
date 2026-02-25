@@ -13,7 +13,7 @@ const SECTIONS = [
 ]
 
 export default function Navigation() {
-  const [activeSection, setActiveSection] = useState<string>('')
+  const [activeSection, setActiveSection] = useState<string>('projects')
 
   const scrollTo = useCallback((id: string) => {
     const el = document.getElementById(id)
