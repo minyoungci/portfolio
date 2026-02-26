@@ -12,7 +12,7 @@ export default function ResearchSection({ items }: Props) {
   const [openId, setOpenId] = useState<number | null>(null)
 
   return (
-    <section id="research" className="py-8 px-6">
+    <section id="research" className="py-8 px-4 sm:px-6">
       <h2 className="text-base tracking-[0.25em] font-normal uppercase italic mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
         <span className="opacity-50">03</span>
         <span>Research</span>

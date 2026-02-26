@@ -45,7 +45,7 @@ export default function Navigation() {
       {/* Row 1: Name letters spread across full width */}
       <div className="flex justify-between px-4 py-2 border-b border-black">
         {NAME_LETTERS.map((letter, i) => (
-          <span key={i} className="text-2xl font-bold">
+          <span key={i} className="text-base sm:text-2xl font-bold">
             {letter}
           </span>
         ))}
@@ -56,7 +56,7 @@ export default function Navigation() {
           <button
             key={id}
             onClick={() => scrollTo(id)}
-            className={`text-2xl transition-all duration-200 bg-transparent border-0 cursor-pointer ${
+            className={`text-sm sm:text-2xl transition-all duration-200 bg-transparent border-0 cursor-pointer ${
               activeSection === id ? 'italic' : 'not-italic opacity-60 hover:opacity-100'
             }`}
           >

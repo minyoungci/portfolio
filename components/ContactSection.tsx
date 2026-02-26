@@ -7,14 +7,14 @@ const LINKS = [
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="py-8 px-6 pb-24">
+    <section id="contact" className="py-8 px-4 sm:px-6 pb-24">
       <h2 className="text-base tracking-[0.25em] font-normal uppercase italic mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
         <span className="opacity-50">05</span>
         <span>Contact</span>
       </h2>
       <div className="space-y-4 mb-12">
         {LINKS.map(({ label, href }) => (
-          <div key={label} className="flex items-center gap-8">
+          <div key={label} className="flex items-center gap-4 sm:gap-8">
             <span className="text-xs opacity-40 w-20">{label}</span>
             <a
               href={href}
