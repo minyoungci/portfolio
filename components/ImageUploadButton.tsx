@@ -4,9 +4,10 @@ import { useRef, useState } from 'react'
 
 interface Props {
   onUpload: (url: string) => void
+  accept?: string
 }
 
-export default function ImageUploadButton({ onUpload }: Props) {
+export default function ImageUploadButton({ onUpload, accept = 'image/*' }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
 
@@ -34,7 +35,7 @@ export default function ImageUploadButton({ onUpload }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept={accept}
         className="hidden"
         onChange={handleChange}
       />

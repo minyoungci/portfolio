@@ -181,7 +181,10 @@ export default function AdminProjects() {
                     <input value={form.thumbnail} onChange={e => set('thumbnail', e.target.value)}
                       placeholder="https://... 또는 파일 선택"
                       className="flex-1 text-sm border-b border-black outline-none py-1 bg-transparent" />
-                    <ImageUploadButton onUpload={(url) => set('thumbnail', url)} />
+                    <ImageUploadButton
+                      onUpload={(url) => set('thumbnail', url)}
+                      accept="image/*,video/mp4,video/webm,video/quicktime"
+                    />
                   </div>
                 </div>
                 <div className="mt-2 pt-4 border-t border-black">

@@ -11,17 +11,28 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block">
-      {/* Image — natural aspect ratio */}
+      {/* Thumbnail — image or video */}
       <div className="overflow-hidden bg-[#F5F5F5] mb-2">
         {project.thumbnail ? (
-          <Image
-            src={project.thumbnail}
-            alt={project.title}
-            width={0}
-            height={0}
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
-            className="w-full h-auto block group-hover:opacity-90 transition-opacity duration-200"
-          />
+          /\.(mp4|webm|mov)$/i.test(project.thumbnail) ? (
+            <video
+              src={project.thumbnail}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-auto block"
+            />
+          ) : (
+            <Image
+              src={project.thumbnail}
+              alt={project.title}
+              width={0}
+              height={0}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
+              className="w-full h-auto block group-hover:opacity-90 transition-opacity duration-200"
+            />
+          )
         ) : (
           <div className="w-full aspect-[4/3] bg-[#F5F5F5]" />
         )}
