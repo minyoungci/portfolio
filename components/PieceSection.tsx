@@ -29,13 +29,24 @@ export default function PieceSection({ pieces }: Props) {
               onClick={() => setLightbox(piece)}
               className="break-inside-avoid mb-2 relative group cursor-pointer overflow-hidden"
             >
-              {/* Image */}
-              <img
-                src={piece.image}
-                alt={piece.title ?? piece.prompt.slice(0, 60)}
-                className="w-full block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                loading="lazy"
-              />
+              {/* Image or Video */}
+              {/\.(mp4|webm|mov)$/i.test(piece.image) ? (
+                <video
+                  src={piece.image}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full block transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              ) : (
+                <img
+                  src={piece.image}
+                  alt={piece.title ?? piece.prompt.slice(0, 60)}
+                  className="w-full block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+              )}
 
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
