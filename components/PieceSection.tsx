@@ -76,13 +76,25 @@ export default function PieceSection({ pieces }: Props) {
             className="relative max-w-5xl w-full flex flex-col md:flex-row gap-6 items-start"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Image */}
+            {/* Image or Video */}
             <div className="flex-1 flex items-center justify-center">
-              <img
-                src={lightbox.image}
-                alt={lightbox.title ?? lightbox.prompt.slice(0, 60)}
-                className="max-h-[80vh] w-auto object-contain"
-              />
+              {/\.(mp4|webm|mov)$/i.test(lightbox.image) ? (
+                <video
+                  src={lightbox.image}
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="max-h-[80vh] w-auto"
+                />
+              ) : (
+                <img
+                  src={lightbox.image}
+                  alt={lightbox.title ?? lightbox.prompt.slice(0, 60)}
+                  className="max-h-[80vh] w-auto object-contain"
+                />
+              )}
             </div>
 
             {/* Info panel */}
