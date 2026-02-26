@@ -18,8 +18,15 @@ export async function uploadToR2(
   buffer: Buffer,
   contentType: string,
 ): Promise<{ ok: boolean; url?: string; error?: string }> {
-  if (!ACCOUNT_ID || !BUCKET || !PUBLIC_URL) {
-    return { ok: false, error: 'R2 env vars not configured' }
+  const missing = [
+    !ACCOUNT_ID && 'R2_ACCOUNT_ID',
+    !BUCKET     && 'R2_BUCKET_NAME',
+    !PUBLIC_URL && 'R2_PUBLIC_URL',
+    !process.env.R2_ACCESS_KEY_ID     && 'R2_ACCESS_KEY_ID',
+    !process.env.R2_SECRET_ACCESS_KEY && 'R2_SECRET_ACCESS_KEY',
+  ].filter(Boolean)
+  if (missing.length > 0) {
+    return { ok: false, error: `Missing env vars: ${missing.join(', ')}` }
   }
   try {
     await client.send(new PutObjectCommand({
