@@ -43,7 +43,7 @@ export default function Navigation() {
   return (
     <header className="sticky top-0 z-50 bg-white">
       {/* Row 1: Name letters spread across full width */}
-      <div className="flex justify-between px-4 py-2 border-b border-black">
+      <div className="flex justify-center gap-2 sm:gap-3 px-4 py-2 border-b border-black">
         {NAME_LETTERS.map((letter, i) => (
           <span key={i} className="text-base sm:text-2xl font-bold">
             {letter}
