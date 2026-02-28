@@ -30,7 +30,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               width={0}
               height={0}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
-              className="w-full h-auto block group-hover:opacity-90 transition-opacity duration-200"
+              className="w-full h-auto block group-hover:opacity-90 group-hover:scale-[1.02] transition-all duration-300"
             />
           )
         ) : (

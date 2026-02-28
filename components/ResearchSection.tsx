@@ -13,7 +13,7 @@ export default function ResearchSection({ items }: Props) {
 
   return (
     <section id="research" className="py-8 px-4 sm:px-6">
-      <h2 className="text-base tracking-[0.25em] font-normal uppercase italic mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
+      <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">
         <span className="opacity-50">03</span>
         <span>Research</span>
       </h2>
@@ -41,7 +41,7 @@ export default function ResearchSection({ items }: Props) {
                   <span className={`text-xs ${item.status === 'ongoing' ? 'opacity-100' : 'opacity-30'}`}>
                     {item.status === 'ongoing' ? '● ongoing' : '○ completed'}
                   </span>
-                  <span className="text-xs opacity-40">
+                  <span className="text-sm opacity-60">
                     {openId === item.id ? '−' : '+'}
                   </span>
                 </div>

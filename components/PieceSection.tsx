@@ -13,7 +13,7 @@ export default function PieceSection({ pieces }: Props) {
 
   return (
     <section id="piece" className="py-8 px-4 sm:px-6">
-      <h2 className="text-base tracking-[0.25em] font-normal uppercase italic mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3">
+      <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">
         <span className="opacity-50">04</span>
         <span>Piece</span>
       </h2>
