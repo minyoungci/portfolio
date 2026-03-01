@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import Link from 'next/link'
 
 const NAME_LETTERS = ['M', 'I', 'N', 'Y', 'O', 'U', 'N', 'G', 'K', 'I', 'M']
 
@@ -43,13 +44,13 @@ export default function Navigation() {
   return (
     <header className="sticky top-0 z-50 bg-white">
       {/* Row 1: Name letters spread across full width */}
-      <div className="flex justify-center gap-2 sm:gap-3 px-4 py-2 border-b border-black">
+      <Link href="/" className="flex justify-center gap-2 sm:gap-3 px-4 py-2 border-b border-black hover:opacity-60 transition-opacity duration-200">
         {NAME_LETTERS.map((letter, i) => (
           <span key={i} className="text-base sm:text-2xl font-bold">
             {letter}
           </span>
         ))}
-      </div>
+      </Link>
       {/* Row 2: Section anchor links */}
       <nav className="flex justify-between px-4 py-2 border-b border-black">
         {SECTIONS.map(({ label, id }) => (
