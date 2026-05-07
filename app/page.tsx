@@ -11,6 +11,7 @@ import PostSection from '@/components/PostSection'
 import ContactSection from '@/components/ContactSection'
 import AdminAccess from '@/components/AdminAccess'
 import PageTransition from '@/components/PageTransition'
+import MobileHome from '@/components/mobile/MobileHome'
 import type { Piece } from '@/types'
 
 const pieces = piecesData as Piece[]
@@ -18,7 +19,15 @@ const pieces = piecesData as Piece[]
 export default function HomePage() {
   return (
     <PageTransition>
-      <main className="min-h-screen">
+      <MobileHome
+        projects={projects}
+        papers={papers}
+        researchItems={researchItems}
+        pieces={pieces}
+        posts={posts}
+      />
+
+      <main className="hidden min-h-screen md:block">
         {/* 01 — PROJECTS */}
         <section id="projects" className="py-8 px-4 sm:px-6">
           <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">

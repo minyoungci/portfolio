@@ -17,6 +17,53 @@ body {
   font-size: 13px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+.mobile-scrollbar-hidden {
+  scrollbar-width: none;
+}
+
+.mobile-scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 13px;
+  }
+
+  .article-body h2 {
+    margin-top: 3.25rem;
+    font-size: clamp(1.8rem, 12vw, 2.55rem);
+  }
+
+  .article-body h3 {
+    margin-top: 2.1rem;
+    font-size: 1.05rem;
+  }
+
+  .article-body p {
+    font-size: 0.96rem;
+    line-height: 1.82;
+  }
+
+  .article-body li {
+    font-size: 0.94rem;
+    line-height: 1.72;
+  }
+
+  .article-body figure {
+    margin: 2.25rem -0.25rem;
+  }
+
+  .article-body blockquote {
+    margin: 2rem 0;
+    font-size: 1.18rem;
+  }
+}
+
 .article-body {
   font-family: var(--font-inter), Helvetica Neue, Arial, sans-serif;
   color: rgba(0, 0, 0, 0.82);
