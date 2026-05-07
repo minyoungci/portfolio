@@ -10,6 +10,7 @@ const SECTIONS = [
   { label: 'Papers',   id: 'papers' },
   { label: 'Research', id: 'research' },
   { label: 'Piece',    id: 'piece' },
+  { label: 'Post',     id: 'post' },
   { label: 'Contact',  id: 'contact' },
 ]
 

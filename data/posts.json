@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "slug": "t1w-mri-preprocessing-pipeline-guide",
+    "title": "T1w MRI 전처리 파이프라인 가이드",
+    "date": "2026-05-07",
+    "summary": "Raw T1w MRI를 model-ready tensor와 anatomical ROI artifact로 변환하는 단계별 QC 가이드.",
+    "content": "",
+    "tags": [
+      "MRI",
+      "preprocessing",
+      "dementia",
+      "data-quality"
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "alzheimer-mri-roi-mask-visual-guide",
+    "title": "알츠하이머 MRI ROI mask 시각 가이드",
+    "date": "2026-05-07",
+    "summary": "해마, 내후각피질, posterior cingulate 등 AD-relevant 구조 ROI를 해석할 때 필요한 시각적·생물학적 caveat.",
+    "content": "",
+    "tags": [
+      "Alzheimer",
+      "MRI",
+      "ROI",
+      "neuroanatomy"
+    ]
+  }
+]

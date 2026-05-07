@@ -45,3 +45,13 @@ export interface Piece {
   image: string;    // artwork image URL
   prompt: string;   // AI prompt or description
 }
+
+export interface Post {
+  id: number;
+  slug: string;
+  title: string;
+  date: string;     // "2026-04-16"
+  summary: string;  // one-line preview shown in list
+  content: string;  // full body text (plain / newline-separated)
+  tags: string[];
+}

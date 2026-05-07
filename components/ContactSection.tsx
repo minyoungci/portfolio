@@ -9,7 +9,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-8 px-4 sm:px-6 pb-24">
       <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">
-        <span className="opacity-50">05</span>
+        <span className="opacity-50">06</span>
         <span>Contact</span>
       </h2>
       <div className="space-y-4 mb-12">

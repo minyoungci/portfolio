@@ -1,11 +1,13 @@
 import { projects } from '@/data/projects'
 import { papers } from '@/data/papers'
 import { researchItems } from '@/data/research'
+import { posts } from '@/data/posts'
 import piecesData from '@/data/pieces.json'
 import ProjectGrid from '@/components/ProjectGrid'
 import PapersSection from '@/components/PapersSection'
 import ResearchSection from '@/components/ResearchSection'
 import PieceSection from '@/components/PieceSection'
+import PostSection from '@/components/PostSection'
 import ContactSection from '@/components/ContactSection'
 import AdminAccess from '@/components/AdminAccess'
 import PageTransition from '@/components/PageTransition'
@@ -35,11 +37,14 @@ export default function HomePage() {
         {/* 04 — PIECE */}
         <PieceSection pieces={pieces} />
 
-        {/* 05 — CONTACT */}
+        {/* 05 — POST */}
+        <PostSection posts={posts} />
+
+        {/* 06 — CONTACT */}
         <ContactSection />
       </main>
 
-      {/* 우하단 admin 진입 버튼 (반투명) */}
+      {/* 우하단 admin 진입 버튼 */}
       <AdminAccess />
     </PageTransition>
   )
