@@ -270,3 +270,36 @@ Post·Contact 행이 1440px 폭에서 좌우 24px 여백만 두고 펼쳐진다.
 | 삭제 | `MobileHome`, `SectionHeading`, `ProjectGrid/Card`, `PostSection`, `PieceSection`, `FeaturedCoverflow/Row`, `lib/featured.ts` | → `Shelf`, `PieceShelf`, `lib/shelves.ts` |
 
 남은 폴리시: reduced-motion(코버플로우·아코디언), 커스텀 404, 프로젝트 썸네일(현재 제목 카드), 슬라이드 3개 미만 섹션(Post)은 정적 나열.
+
+---
+
+## 7. 최적화 · 인터랙션 (2026-09-06 저녁)
+
+### Lighthouse (프로덕션 빌드, 로컬 `next start`, 홈)
+
+| | 데스크톱 | 모바일 (시뮬레이션 slow 4G, 4x CPU) |
+|---|---|---|
+| 이전 | 97 / 96 / 100 / 100, LCP 1.2s | **73** / 96 / 100 / 100, LCP 6.5s, 전송 2,020KB |
+| 이후 | **100 / 100 / 100 / 100**, LCP 0.8s | **86 / 100 / 100 / 100**, LCP 3.9s, 전송 507KB |
+
+(성능 / 접근성 / 모범사례 / SEO)
+
+### 무엇을 바꿨나
+
+- 선반 카드 이미지를 `next/image`(`fill` + `sizes`, 지연 로드, AVIF/WebP)로. 허용 소스 판정은 `lib/site.ts`.
+- 화면 밖 영상은 `src` 없이 두었다가 선반이 보일 때 붙이고 재생(`preload="none"`). 초기 전송 1.4MB 감소.
+- 한글 폰트를 jsDelivr Pretendard(렌더 차단 외부 CSS)에서 `next/font` Noto Sans KR로. Inter·Noto 모두 가변 폰트 하나로 → @font-face CSS 101KB → 38KB.
+- framer-motion·tw-animate-css 제거. 아코디언은 CSS grid(`Collapse`), 페이드는 `.fade-in` 키프레임.
+- 페이지네이션 점 터치 영역 24px(접근성 target-size), 전역 `:focus-visible` 링.
+- `sitemap.xml`, `robots.txt`(admin·api 제외), 커스텀 404.
+
+### 인터랙션
+
+- 코버플로우 자동 회전: 선반이 절반 이상 보이고, 탭이 활성이고, 사용자가 만지기 전까지 6초마다 한 장. hover·포커스 중 일시정지. 만지면 그 선반은 멈춤.
+- 스크롤 등장: `[data-reveal]` 섹션이 뷰포트에 들어올 때 페이드 업. `html.js`가 붙은 뒤에만 숨기므로 JS 없는 환경·크롤러는 그대로 본다.
+- 히어로 포인터 글로우: 마우스 기기에서만, 포인터를 따라가는 라디얼 빛(`--glow` 토큰, 다크·라이트 각각).
+- Piece 라이트박스: ←/→ 이동, Esc 닫기, 프롬프트 복사, 이전/다음 버튼, 열려 있는 동안 배경 스크롤 잠금.
+- Contact에 이메일 복사 버튼.
+- 모든 모션이 `prefers-reduced-motion`을 존중한다(코버플로우 즉시 이동, 자동 회전·등장·글로우 꺼짐).
+
+남은 병목: 모바일 LCP는 한글 폰트 스왑 타이밍에 묶여 있다(`display: swap`). `optional`로 바꾸면 첫 방문에 시스템 한글 폰트가 보이는 대신 LCP가 2초대로 내려간다 — 타이포를 우선해 `swap` 유지.

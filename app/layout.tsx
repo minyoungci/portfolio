@@ -1,26 +1,30 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_KR } from "next/font/google";
 import Navigation from "@/components/Navigation";
+import RevealObserver from "@/components/RevealObserver";
 import { getHomeSections } from "@/lib/sections";
+import { siteUrl } from "@/lib/site";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
-// One sans for everything: Inter for Latin (next/font), Pretendard for Hangul (CDN, fallback in globals.css).
+// One sans for everything: Inter for Latin, Noto Sans KR for Hangul. Both self-hosted by next/font
+// (no render-blocking external stylesheet). Noto Sans KR ships as unicode-range slices, so only the
+// glyph ranges a page uses are downloaded.
+// Variable fonts: one file per script (Inter) / per slice (Noto Sans KR) instead of one per weight,
+// which keeps the generated @font-face CSS small.
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
 });
 
-const description = profile.identityEn || profile.identity;
+const notoSansKr = Noto_Sans_KR({
+  variable: "--font-noto-sans-kr",
+  display: "swap",
+  preload: false,
+});
 
-// 커스텀 도메인 연결 후 NEXT_PUBLIC_SITE_URL로 고정. 그 전에는 Vercel 프로덕션 URL을 쓴다.
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
+const description = profile.identityEn || profile.identity;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -43,16 +47,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={inter.variable}>
-      <head>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-        />
-      </head>
+    <html lang="ko" className={`${inter.variable} ${notoSansKr.variable}`}>
       <body className="bg-background text-foreground font-sans antialiased">
         <Navigation sections={getHomeSections()} />
+        <RevealObserver />
         {children}
       </body>
     </html>

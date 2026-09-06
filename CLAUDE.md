@@ -12,8 +12,8 @@
 
 | 항목 | 값 |
 |------|----|
-| 스택 | Next.js 16 (App Router, dev·build 모두 Turbopack), React 19, TypeScript, Tailwind CSS v4 (`@theme` in CSS, config 파일 없음), framer-motion (Papers·Research 아코디언에만) |
-| 폰트 | 산세리프 하나: Inter (next/font, 라틴) + Pretendard (jsDelivr CDN, 한글). 세리프 없음 |
+| 스택 | Next.js 16 (App Router, dev·build 모두 Turbopack), React 19, TypeScript, Tailwind CSS v4 (`@theme` in CSS, config 파일 없음). 애니메이션 라이브러리 없음(코버플로우는 rAF, 아코디언은 CSS grid) |
+| 폰트 | 산세리프 하나: Inter (라틴) + Noto Sans KR (한글), 둘 다 `next/font`로 셀프 호스팅. 외부 폰트 CSS 없음. 세리프 없음 |
 | 테마 | 다크 기본, 시스템이 라이트면 자동 라이트(`prefers-color-scheme`). 토글 없음 |
 | 데이터 | `data/*.json` + 얇은 `.ts` 래퍼(`raw as Type`). DB·런타임 검증 없음. **빌드 시 번들에 구워지므로 배포 후 바꾸려면 재배포** |
 | 콘텐츠 편집 | JSON 직접 편집, 또는 `/admin` (Projects · Papers · Research · Piece 탭만) |
@@ -142,13 +142,16 @@ app/
   api/upload/            이미지 → public/uploads (VERCEL: GitHub 커밋 / 로컬: 파일 쓰기), 영상 → R2 (환경 무관). 세션 필수
   opengraph-image.tsx    OG 이미지 (next/og, 내장 라틴 폰트)
   globals.css            토큰(@theme), .article-body 타이포, .page-enter
+  not-found.tsx          커스텀 404
+  sitemap.ts, robots.ts  검색엔진용 (lib/site.ts의 siteUrl)
 components/
-  Hero, AboutSection(TimelineGroup·groupTimeline export), ContactSection, PageTransition,
-  MarkdownArticle, AdminAccess                                                          ← 서버
+  Hero(+HeroGlow), AboutSection(TimelineGroup·groupTimeline export), ContactSection, PageTransition,
+  MarkdownArticle, AdminAccess, Collapse(CSS 아코디언)                                     ← 서버
   Navigation(알약 nav), Shelf(코버플로우 선반), PieceShelf(선반 + 라이트박스), PapersSection,
-  ResearchSection, ImageUploadButton, ui/coverflow-carousel, app/admin/*(page.tsx 제외)  ← 'use client'
+  ResearchSection, RevealObserver(스크롤 등장), HeroGlow(포인터 글로우), CopyButton,
+  ImageUploadButton, ui/coverflow-carousel, app/admin/*(page.tsx 제외)                     ← 'use client'
 data/        *.json + 래퍼 .ts. export 이름: projects · posts · pieces · papers · researchItems(← research 아님) · profile · timeline
-lib/         sections.ts(섹션 정본) shelves.ts(데이터 → 선반 슬라이드) utils.ts(cn) adminAuth.ts adminFetch.ts github.ts r2.ts
+lib/         sections.ts(섹션 정본) shelves.ts(데이터 → 선반 슬라이드) site.ts(siteUrl·이미지 최적화 판정) utils.ts(cn) adminAuth.ts adminFetch.ts github.ts r2.ts
 types/index.ts   모든 데이터 타입 (Project Post Piece Paper ResearchItem Profile TimelineEntry)
 content/posts/   글 본문 md          public/uploads/  admin 업로드 이미지          public/images/articles/  글 이미지
 ```
@@ -169,8 +172,8 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 - 타이포: Inter + Pretendard 하나. 섹션 제목 24~30px semibold `tracking-tight` 중앙 정렬, 카드·항목 제목 15px semibold, 보조 13px `text-muted-foreground`, 메타는 12px `dl`(라벨 좌 muted · 값 우 medium). uppercase 라벨은 11~12px `tracking-[0.18em]`~`[0.22em]`에만. serif·italic·`font-mono` 없음, 숫자는 `tabular-nums`.
 - 형태: 카드 `rounded-2xl` + `shadow-card`(코버플로우 카드는 `shadow-xl`) + `ring-1 ring-border`. 버튼·링크·nav는 `rounded-full`, 입력은 `rounded-xl`. 괘선은 `border-border`/`divide-border`만.
 - 레이아웃: 전부 중앙 정렬. 본문 카드 `max-w-3xl`(About·Contact·Papers·Research), 상세 `max-w-2xl`, 코버플로우 `max-w-5xl`. 섹션 `py-14 sm:py-20`. nav는 `fixed top-4` 알약이라 `section[id]`에 `scroll-margin-top` 5.5rem.
-- 모션: 코버플로우(드래그·rAF settle), 카드 hover `-translate-y-1`, 페이지 페이드(`.page-enter`), 아코디언 0.25s. 그 밖의 모션은 추가하지 않는다. `prefers-reduced-motion`은 페이드·smooth scroll만 대응(코버플로우·아코디언·hover 미대응).
-- 이미지: 선반 카드·글 본문·Piece 라이트박스는 `<img>`/`<video>` + `eslint-disable-next-line @next/next/no-img-element`(원격 소스 혼용). `next/image`는 프로젝트 상세 커버에만. 영상은 `<video autoPlay muted loop playsInline>`.
+- 모션: 코버플로우(드래그·rAF settle, 보이는 동안 6초마다 자동 회전하다가 사용자가 만지면 멈춤), 섹션 스크롤 등장(`[data-reveal]` + `RevealObserver`, JS 전에는 숨기지 않음), 히어로 포인터 글로우(`HeroGlow`, 마우스 있을 때만), 카드 hover `-translate-y-1`, 페이지 페이드(`.page-enter`), 아코디언 CSS grid 0.3s. **전부 `prefers-reduced-motion`을 존중한다**(코버플로우는 즉시 이동, 자동 회전·등장·글로우는 꺼짐). 새 모션을 추가하면 같은 규칙을 지킨다.
+- 이미지: 선반 카드는 `next/image`(`fill` + `sizes`)로 최적화하되, `lib/site.ts`의 `isOptimizableImage`가 허용하는 소스(로컬 경로, `next.config.ts`의 remotePatterns 호스트)만. 그 밖의 원격 URL과 글 본문·라이트박스는 `<img loading="lazy">` + `eslint-disable-next-line @next/next/no-img-element`. 영상은 `<video autoPlay muted loop playsInline preload="metadata">`.
 
 ### 3-4. 컨벤션
 
@@ -179,8 +182,9 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 - 서버 컴포넌트가 기본. `'use client'`는 상태·이벤트·framer-motion이 필요할 때만(목록은 3-1). `AboutSection`은 헬퍼를 export하므로 서버로 둔다.
 - 데이터 필드 추가 순서: `types/index.ts` → JSON → 사용처 → admin 탭의 `EMPTY`·`fromX`·`toX`. `toX`는 `...existing`을 먼저 펼쳐 폼에 없는 필드를 보존한다(이 규칙을 깨면 admin 저장이 필드를 지운다).
 - `id`는 고유 식별자로만 쓴다(admin이 `Date.now()`로 생성). 화면 번호는 항상 index에서 파생.
-- 폰트는 `app/layout.tsx`의 `next/font`(Inter) + `globals.css` `--font-sans` 체인(Pretendard 폴백)뿐이다. 세리프·모노를 추가하지 않는다(결정 사항). 새 토큰은 `globals.css`의 `:root`·라이트 블록·`@theme inline` 세 곳에 함께 넣는다.
-- 코버플로우(`components/ui/coverflow-carousel.tsx`)는 외부 소스에 `media`/`kicker`/`onActivate`/`onChange`·플레이스홀더 카드만 더한 것이다. 스타일은 props(`cardClassName` 등)로 조정하고 파일은 최소한으로만 건드린다. `lucide-react` `clsx` `tailwind-merge` `tw-animate-css`는 이 컴포넌트 전용. 새 선반은 `Shelf`에 `lib/shelves.ts`의 변환 함수를 물려 만든다.
+- 폰트는 `app/layout.tsx`의 `next/font`(Inter + Noto Sans KR, 한글은 `preload: false`) + `globals.css` `--font-sans` 체인뿐이다. 외부 폰트 CSS·세리프·모노를 추가하지 않는다(결정 사항). 새 토큰은 `globals.css`의 `:root`·라이트 블록·`@theme inline` 세 곳에 함께 넣는다.
+- 절대 URL이 필요하면 `lib/site.ts`의 `siteUrl`을 쓴다(layout 메타, sitemap, robots가 공유).
+- 코버플로우(`components/ui/coverflow-carousel.tsx`)는 외부 소스에 `media`/`kicker`/`autoAdvance`/`onActivate`/`onChange`·플레이스홀더 카드·화면 밖 영상 지연 로드만 더한 것이다. 스타일은 props(`cardClassName` 등)로 조정하고 파일은 최소한으로만 건드린다. `lucide-react` `clsx` `tailwind-merge`는 이 컴포넌트 전용(애니메이션 유틸은 `globals.css`의 `.fade-in`). 새 선반은 `Shelf`에 `lib/shelves.ts`의 변환 함수를 물려 만든다.
 - 커밋 접두사: `[FEAT]` `[FIX]` `[STYLE]` `[DATA]` `[DOCS]`. admin의 자동 커밋은 `[admin]`.
 
 ### 3-5. 환경 변수
@@ -216,7 +220,7 @@ npx next typegen && npx tsc --noEmit && npm run lint && npm run build
 
 - admin 로그인 시도 제한은 인스턴스 메모리 카운터라 서버리스에서는 느슨하다. 비밀번호를 충분히 길게 둔다.
 - admin에 Profile · Timeline · Post 탭이 없다 → JSON 직접 편집(2-8).
-- 마크다운 파서: 코드 블록·표 미지원. `prefers-reduced-motion` 부분 대응(3-3).
-- 커스텀 404 페이지 없음. Pretendard는 jsDelivr CDN 의존. `README.md` 보일러플레이트.
+- 마크다운 파서: 코드 블록·표 미지원.
+- `README.md` 보일러플레이트.
 - 선반 코버플로우는 슬라이드 3개 이상이어야 제 모습이 난다. 프로젝트 썸네일이 아직 없어 카테고리·제목 카드로 나간다.
 - `public/uploads/1772027226814-grok_2.jpg`는 어디에서도 참조되지 않는 고아 파일.

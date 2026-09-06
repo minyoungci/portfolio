@@ -1,9 +1,11 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { isOptimizableImage } from "@/lib/site";
 
 const useIsoLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -44,6 +46,8 @@ export interface CoverflowCarouselProps {
   label?: string;
   className?: string;
   cardClassName?: string;
+  /** Advance one card every N ms while in view and untouched. 0 disables. */
+  autoAdvance?: number;
   /** Fires whenever the centred slide changes (drag, keys, buttons). */
   onChange?: (index: number) => void;
   /** Fires on a tap/click of the centred card, or Enter/Space on the frame. */
@@ -66,6 +70,7 @@ export function CoverflowCarousel({
   label = "Cover carousel",
   className,
   cardClassName,
+  autoAdvance = 0,
   onChange,
   onActivate,
 }: CoverflowCarouselProps) {
@@ -89,11 +94,26 @@ export function CoverflowCarousel({
   } | null>(null);
   const onChangeRef = React.useRef(onChange);
   const onActivateRef = React.useRef(onActivate);
+  /** Set once the visitor touches the carousel; auto-advance then stays off. */
+  const touchedRef = React.useRef(false);
+  /** Hover / focus pauses auto-advance without cancelling it. */
+  const pausedRef = React.useRef(false);
+  const reduceMotionRef = React.useRef(false);
 
   React.useEffect(() => {
     onChangeRef.current = onChange;
     onActivateRef.current = onActivate;
   }, [onChange, onActivate]);
+
+  React.useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      reduceMotionRef.current = mq.matches;
+    };
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const [selected, setSelected] = React.useState(0);
 
@@ -153,6 +173,13 @@ export function CoverflowCarousel({
       targetRef.current = target;
       select(indexAt(target));
 
+      // Reduced motion: no glide, just land.
+      if (reduceMotionRef.current) {
+        posRef.current = target;
+        paint();
+        return;
+      }
+
       const step = () => {
         const remaining = target - posRef.current;
         if (Math.abs(remaining) < 0.0004) {
@@ -193,7 +220,35 @@ export function CoverflowCarousel({
     [clamp, settle],
   );
 
+  // Auto-advance: only while at least half in view, tab visible, not hovered,
+  // not yet touched, and motion allowed. One interval per carousel.
+  React.useEffect(() => {
+    if (!autoAdvance || count < 2) return;
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    let inView = false;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(frame);
+
+    const id = window.setInterval(() => {
+      if (!inView || touchedRef.current || pausedRef.current || document.hidden || reduceMotionRef.current) return;
+      nudge(1);
+    }, autoAdvance);
+
+    return () => {
+      io.disconnect();
+      window.clearInterval(id);
+    };
+  }, [autoAdvance, count, nudge]);
+
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    touchedRef.current = true;
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
@@ -281,6 +336,34 @@ export function CoverflowCarousel({
     [],
   );
 
+  // Video cards get their src and start playing only once the carousel is on
+  // screen, so an off-screen shelf never pulls a clip during the initial load.
+  React.useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    const videos = Array.from(frame.querySelectorAll<HTMLVideoElement>("video[data-src]"));
+    if (videos.length === 0) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        videos.forEach((video) => {
+          if (entry.isIntersecting) {
+            if (!video.src && video.dataset.src) video.src = video.dataset.src;
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(frame);
+    return () => io.disconnect();
+  }, [slides]);
+
+  const touch = () => {
+    touchedRef.current = true;
+  };
+
   const active = slides[selected];
 
   return (
@@ -290,6 +373,18 @@ export function CoverflowCarousel({
       role="region"
       aria-roledescription="carousel"
       aria-label={label}
+      onPointerEnter={() => {
+        pausedRef.current = true;
+      }}
+      onPointerLeave={() => {
+        pausedRef.current = false;
+      }}
+      onFocusCapture={() => {
+        pausedRef.current = true;
+      }}
+      onBlurCapture={() => {
+        pausedRef.current = false;
+      }}
     >
       <div className="relative">
         <div
@@ -302,9 +397,11 @@ export function CoverflowCarousel({
           onKeyDown={(event) => {
             if (event.key === "ArrowLeft") {
               event.preventDefault();
+              touch();
               nudge(-1);
             } else if (event.key === "ArrowRight") {
               event.preventDefault();
+              touch();
               nudge(1);
             } else if (event.key === "Enter" || event.key === " ") {
               event.preventDefault();
@@ -345,13 +442,22 @@ export function CoverflowCarousel({
                 {slide.src ? (
                   slide.media === "video" ? (
                     <video
-                      src={slide.src}
-                      autoPlay
+                      data-src={slide.src}
                       muted
                       loop
                       playsInline
+                      preload="none"
                       aria-label={slide.alt}
-                      className="pointer-events-none h-full w-full select-none object-cover"
+                      className="pointer-events-none h-full w-full select-none bg-muted object-cover"
+                    />
+                  ) : isOptimizableImage(slide.src) ? (
+                    <Image
+                      src={slide.src}
+                      alt={slide.alt}
+                      fill
+                      sizes="(max-width: 640px) 70vw, 480px"
+                      draggable={false}
+                      className="select-none object-cover"
                     />
                   ) : (
                     /* eslint-disable-next-line @next/next/no-img-element */
@@ -359,6 +465,8 @@ export function CoverflowCarousel({
                       src={slide.src}
                       alt={slide.alt}
                       draggable={false}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full select-none object-cover"
                     />
                   )
@@ -385,7 +493,10 @@ export function CoverflowCarousel({
             <button
               type="button"
               aria-label="Previous slide"
-              onClick={() => nudge(-1)}
+              onClick={() => {
+                touch();
+                nudge(-1);
+              }}
               className="absolute left-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-background"
             >
               <ChevronLeft className="size-5" />
@@ -393,7 +504,10 @@ export function CoverflowCarousel({
             <button
               type="button"
               aria-label="Next slide"
-              onClick={() => nudge(1)}
+              onClick={() => {
+                touch();
+                nudge(1);
+              }}
               className="absolute right-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-background"
             >
               <ChevronRight className="size-5" />
@@ -405,7 +519,7 @@ export function CoverflowCarousel({
       {showCaption && active?.title && (
         <div
           key={selected}
-          className="mt-2 flex flex-col items-center px-6 duration-300 animate-in fade-in"
+          className="fade-in mt-2 flex flex-col items-center px-6 motion-reduce:animate-none"
         >
           <p className="text-center text-[17px] font-semibold tracking-tight text-foreground sm:text-[19px]">
             {active.title}
@@ -436,8 +550,11 @@ export function CoverflowCarousel({
               type="button"
               aria-label={`Go to slide ${index + 1}`}
               aria-current={index === selected}
-              onClick={() => goTo(index)}
-              className="p-1.5"
+              onClick={() => {
+                touch();
+                goTo(index);
+              }}
+              className="p-2"
             >
               <span
                 className={cn(

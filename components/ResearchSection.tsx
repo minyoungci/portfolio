@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import type { ResearchItem } from '@/types'
+import Collapse from '@/components/Collapse'
 
 interface Props {
   items: ResearchItem[]
@@ -14,7 +14,7 @@ export default function ResearchSection({ items }: Props) {
   if (items.length === 0) return null
 
   return (
-    <section id="research" className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
+    <section id="research" data-reveal className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
       <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">Research</h2>
 
       <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card shadow-card">
@@ -26,7 +26,7 @@ export default function ResearchSection({ items }: Props) {
                 type="button"
                 aria-expanded={open}
                 onClick={() => setOpenId(open ? null : item.id)}
-                className="group flex w-full cursor-pointer items-start justify-between gap-4 border-0 bg-transparent p-0 text-left"
+                className="group flex w-full cursor-pointer items-start justify-between gap-4 rounded-lg border-0 bg-transparent p-0 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-[15px] font-semibold tracking-tight">{item.title}</p>
@@ -48,20 +48,9 @@ export default function ResearchSection({ items }: Props) {
                 </div>
               </button>
 
-              <AnimatePresence initial={false}>
-                {open && (
-                  <motion.div
-                    key="desc"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: 'easeInOut' }}
-                    className="overflow-hidden"
-                  >
-                    <p className="mt-4 text-[13px] leading-6 text-muted-foreground">{item.description}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <Collapse open={open}>
+                <p className="mt-4 pb-1 text-[13px] leading-6 text-muted-foreground">{item.description}</p>
+              </Collapse>
             </div>
           )
         })}

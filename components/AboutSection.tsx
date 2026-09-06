@@ -46,7 +46,7 @@ export default function AboutSection() {
   const groups = groupTimeline()
 
   return (
-    <section id="about" className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
+    <section id="about" data-reveal className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
       <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">About</h2>
 
       <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-card sm:p-10">

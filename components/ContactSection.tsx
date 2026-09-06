@@ -1,8 +1,9 @@
 import { profile } from '@/data/profile'
+import CopyButton from '@/components/CopyButton'
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="mx-auto max-w-3xl px-6 py-14 text-center sm:py-20">
+    <section id="contact" data-reveal className="mx-auto max-w-3xl px-6 py-14 text-center sm:py-20">
       <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Contact</h2>
 
       <a
@@ -16,6 +17,7 @@ export default function ContactSection() {
       )}
 
       <div className="mt-8 flex flex-wrap justify-center gap-2">
+        <CopyButton text={profile.email} label="Copy email" copiedLabel="Copied ✓" />
         {profile.links.map((link) => (
           <a
             key={link.label}
