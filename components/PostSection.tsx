@@ -1,51 +1,38 @@
 import Link from 'next/link'
 import type { Post } from '@/types'
+import SectionHeading from '@/components/SectionHeading'
 
 interface Props {
   posts: Post[]
+  number: string
 }
 
-export default function PostSection({ posts }: Props) {
+export default function PostSection({ posts, number }: Props) {
+  if (posts.length === 0) return null
+
   return (
-    <section id="post" className="py-8 px-4 sm:px-6">
-      <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">
-        <span className="opacity-50">05</span>
-        <span>Post</span>
-      </h2>
+    <section id="post" className="px-4 py-8 sm:px-6">
+      <SectionHeading number={number} title="Post" />
 
-      {posts.length === 0 ? (
-        <p className="text-xs opacity-20">No posts yet.</p>
-      ) : (
-        <div className="divide-y divide-black/10 border-b border-black/10">
-          {posts.map((post) => {
-            const hash = post.id.toString(16).padStart(7, '0').slice(0, 7)
-
-            return (
-              <Link
-                key={post.id}
-                href={`/posts/${post.slug}`}
-                className="group block py-5 px-1 hover:bg-black/[0.02] transition-colors"
-              >
-                <div className="flex items-baseline gap-3 sm:gap-5">
-                  <span className="text-black/25 text-[10px] shrink-0">●</span>
-                  <span className="font-mono text-[11px] text-black/30 shrink-0 w-14">{hash}</span>
-                  <span className="text-[13px] italic flex-1 min-w-0 truncate group-hover:opacity-60 transition-opacity">
-                    {post.title}
-                  </span>
-                  <span className="text-[11px] text-black/40 hidden sm:block shrink-0 w-32 truncate text-right">
-                    {post.tags[0] ?? ''}
-                  </span>
-                  <span className="text-[11px] text-black/30 shrink-0">{post.date.slice(0, 4)}</span>
-                  <span className="text-xs text-black/20 group-hover:text-black/70 transition-colors shrink-0">→</span>
-                </div>
-                <p className="mt-3 ml-[5.2rem] max-w-2xl text-sm leading-6 text-black/45 hidden sm:block">
-                  {post.summary}
-                </p>
-              </Link>
-            )
-          })}
-        </div>
-      )}
+      <div className="max-w-3xl divide-y divide-black/10 border-b border-black/10">
+        {posts.map((post, index) => (
+          <Link key={post.id} href={`/posts/${post.slug}`} className="group block py-5">
+            <div className="flex items-baseline gap-4">
+              <span className="w-8 shrink-0 tabular-nums text-[12px] text-black/60">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className="min-w-0 flex-1 text-[15px] italic leading-snug transition-colors group-hover:text-black/60">
+                {post.title}
+              </span>
+              <span className="hidden shrink-0 text-[11px] uppercase tracking-[0.16em] text-black/60 sm:inline">
+                {post.tags[0] ?? ''}
+              </span>
+              <span className="shrink-0 tabular-nums text-[12px] text-black/60">{post.date}</span>
+            </div>
+            <p className="mt-2 pl-12 text-[13px] leading-6 text-black/60">{post.summary}</p>
+          </Link>
+        ))}
+      </div>
     </section>
   )
 }

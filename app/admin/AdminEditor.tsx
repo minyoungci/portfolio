@@ -16,12 +16,15 @@ function fromPiece(p: Piece): Form {
   return { title: p.title ?? '', date: p.date, image: p.image, prompt: p.prompt }
 }
 
-function toPiece(form: Form, id: number): Piece {
+// existing을 먼저 펼쳐 폼에 없는 필드(featured 등)와 기존 slug를 보존한다.
+function toPiece(form: Form, id: number, existing?: Piece): Piece {
+  const derivedSlug = form.title
+    ? form.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    : ''
   return {
+    ...existing,
     id,
-    slug: form.title
-      ? form.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-      : `piece-${id}`,
+    slug: existing?.slug || derivedSlug || `piece-${id}`,
     title: form.title || undefined,
     date: form.date,
     image: form.image,
@@ -61,7 +64,7 @@ export default function AdminEditor() {
     if (!form.image || !form.prompt) return
     setStatus('saving')
     const id = selectedId === -1 ? Date.now() : selectedId!
-    const updated = toPiece(form, id)
+    const updated = toPiece(form, id, pieces.find(p => p.id === id))
     const next = pieces.some(p => p.id === id)
       ? pieces.map(p => p.id === id ? updated : p)
       : [...pieces, updated]
@@ -95,6 +98,7 @@ export default function AdminEditor() {
                 {/* Thumbnail preview */}
                 {p.image && (
                   <div className="w-full aspect-video mb-1 overflow-hidden bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={p.image} alt="" className="w-full h-full object-cover" />
                   </div>
                 )}
@@ -135,7 +139,7 @@ export default function AdminEditor() {
                     <input value={form.image} onChange={e => set('image', e.target.value)}
                       placeholder="https://... 또는 파일 선택"
                       className="flex-1 text-sm border-b border-black outline-none py-1 bg-transparent" />
-                    <ImageUploadButton onUpload={(url) => set('image', url)} />
+                    <ImageUploadButton accept="image/*,video/mp4,video/webm,video/quicktime" onUpload={(url) => set('image', url)} />
                   </div>
                 </div>
                 <div>
@@ -163,6 +167,7 @@ export default function AdminEditor() {
               {form.image && (
                 <div className="w-64 shrink-0">
                   <p className="text-xs opacity-40 mb-2">Preview</p>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={form.image} alt="preview"
                     className="w-full object-cover border border-black/10"
                     onError={e => (e.currentTarget.style.display = 'none')} />

@@ -36,7 +36,8 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude / dev tools
+# claude / dev tools (worktrees, launch config, local agent state)
+.claude/
 .omc/
 .playwright-mcp/
 claudedocs/
@@ -44,8 +45,3 @@ claudedocs/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# claude / dev tools
-.omc/
-.playwright-mcp/
-claudedocs/

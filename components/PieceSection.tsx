@@ -1,84 +1,79 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import type { Piece } from '@/types'
+import SectionHeading from '@/components/SectionHeading'
 
 interface Props {
   pieces: Piece[]
+  number: string
 }
 
-export default function PieceSection({ pieces }: Props) {
+const isVideo = (src: string) => /\.(mp4|webm|mov)(\?|$)/i.test(src)
+
+export default function PieceSection({ pieces, number }: Props) {
   const [lightbox, setLightbox] = useState<Piece | null>(null)
 
+  if (pieces.length === 0) return null
+
   return (
-    <section id="piece" className="py-8 px-4 sm:px-6">
-      <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">
-        <span className="opacity-50">04</span>
-        <span>Piece</span>
-      </h2>
+    <section id="piece" className="px-4 py-8 sm:px-6">
+      <SectionHeading number={number} title="Piece" aside={`${pieces.length} works`} />
 
-      {pieces.length === 0 ? (
-        <p className="text-xs opacity-20">No pieces yet.</p>
-      ) : (
-        /* CSS columns masonry — 이미지 비율에 따라 자연스럽게 다양한 높이 */
-        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-2">
-          {pieces.map((piece) => (
-            <div
-              key={piece.id}
-              onClick={() => setLightbox(piece)}
-              className="break-inside-avoid mb-2 relative group cursor-pointer overflow-hidden"
-            >
-              {/* Image or Video */}
-              {/\.(mp4|webm|mov)$/i.test(piece.image) ? (
-                <video
-                  src={piece.image}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full block transition-transform duration-500 group-hover:scale-[1.02]"
-                />
-              ) : (
-                <img
-                  src={piece.image}
-                  alt={piece.title ?? piece.prompt.slice(0, 60)}
-                  className="w-full block object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  loading="lazy"
-                />
+      {/* CSS columns masonry — 이미지 비율에 따라 자연스럽게 다양한 높이 */}
+      <div className="columns-2 gap-3 lg:columns-3">
+        {pieces.map((piece) => (
+          <button
+            key={piece.id}
+            type="button"
+            onClick={() => setLightbox(piece)}
+            aria-label={piece.title ?? 'Open piece'}
+            className="group relative mb-3 block w-full cursor-pointer overflow-hidden border-0 bg-transparent p-0 text-left break-inside-avoid"
+          >
+            {isVideo(piece.image) ? (
+              <video
+                src={piece.image}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="block w-full transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={piece.image}
+                alt={piece.title ?? piece.prompt.slice(0, 60)}
+                loading="lazy"
+                className="block w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+            )}
+
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-black opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
+            <div className="absolute inset-0 flex translate-y-2 flex-col justify-end p-3 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+              {piece.title && (
+                <p className="mb-1 text-xs font-bold leading-snug text-white">{piece.title}</p>
               )}
-
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
-              <div className="absolute inset-0 flex flex-col justify-end p-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                {piece.title && (
-                  <p className="text-white text-xs font-bold mb-1 leading-snug">
-                    {piece.title}
-                  </p>
-                )}
-                <p className="text-white/80 text-[11px] leading-relaxed line-clamp-3">
-                  {piece.prompt}
-                </p>
-                <p className="text-white/40 text-[10px] mt-1">{piece.date}</p>
-              </div>
+              <p className="line-clamp-3 text-[11px] leading-relaxed text-white/80">{piece.prompt}</p>
+              <p className="mt-1 text-[10px] text-white/60">{piece.date}</p>
             </div>
-          ))}
-        </div>
-      )}
+          </button>
+        ))}
+      </div>
 
       {/* Lightbox */}
       {lightbox && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 md:p-10"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-10"
           onClick={() => setLightbox(null)}
         >
           <div
-            className="relative max-w-5xl w-full flex flex-col md:flex-row gap-6 items-start"
+            className="relative flex w-full max-w-5xl flex-col items-start gap-6 md:flex-row"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Image or Video */}
-            <div className="flex-1 flex items-center justify-center">
-              {/\.(mp4|webm|mov)$/i.test(lightbox.image) ? (
+            <div className="flex flex-1 items-center justify-center">
+              {isVideo(lightbox.image) ? (
                 <video
                   src={lightbox.image}
                   controls
@@ -89,6 +84,7 @@ export default function PieceSection({ pieces }: Props) {
                   className="max-h-[80vh] w-auto"
                 />
               ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={lightbox.image}
                   alt={lightbox.title ?? lightbox.prompt.slice(0, 60)}
@@ -97,22 +93,20 @@ export default function PieceSection({ pieces }: Props) {
               )}
             </div>
 
-            {/* Info panel */}
-            <div className="md:w-72 shrink-0 text-white">
-              {lightbox.title && (
-                <h3 className="text-lg font-serif mb-2">{lightbox.title}</h3>
-              )}
-              <p className="text-xs opacity-40 mb-4">{lightbox.date}</p>
+            <div className="shrink-0 text-white md:w-72">
+              {lightbox.title && <h3 className="mb-2 font-serif text-2xl">{lightbox.title}</h3>}
+              <p className="mb-4 text-xs text-white/60">{lightbox.date}</p>
               <div className="border-t border-white/20 pt-4">
-                <p className="text-[11px] text-white/50 uppercase tracking-widest mb-2">Prompt</p>
-                <p className="text-sm text-white/80 leading-relaxed">{lightbox.prompt}</p>
+                <p className="mb-2 text-[11px] uppercase tracking-widest text-white/60">Prompt</p>
+                <p className="text-sm leading-relaxed text-white/80">{lightbox.prompt}</p>
               </div>
             </div>
 
-            {/* Close button */}
             <button
+              type="button"
               onClick={() => setLightbox(null)}
-              className="absolute top-0 right-0 text-white/50 hover:text-white text-2xl leading-none transition-colors"
+              aria-label="Close"
+              className="absolute right-0 top-0 text-2xl leading-none text-white/60 transition-colors hover:text-white"
             >
               ×
             </button>

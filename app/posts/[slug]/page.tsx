@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {}
 
   return {
-    title: `${post.title} — Minyoung KIM`,
+    title: post.title,
     description: post.summary,
   }
 }
@@ -51,33 +51,33 @@ export default async function PostPage({ params }: Props) {
         <article className="mx-auto max-w-[760px] px-5 sm:px-8 pt-20 pb-24">
           <Link
             href="/#post"
-            className="font-mono text-[11px] uppercase tracking-[0.22em] text-black/45 hover:text-black transition-colors"
+            className="text-[11px] uppercase tracking-[0.22em] text-black/60 hover:text-black transition-colors"
           >
             ← Back to posts
           </Link>
 
           <header className="mt-12 mb-12 border-b border-black/10 pb-10">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-black/45">
+            <div className="text-[11px] uppercase tracking-[0.22em] text-black/60">
               Post / {post.date} / {post.tags.join(', ')}
             </div>
-            <h1 className="font-serif text-[42px] sm:text-[58px] leading-[0.95] tracking-[-0.03em] mt-5">
+            <h1 className="font-serif text-[clamp(2.5rem,6vw,3.75rem)] leading-[0.95] tracking-[-0.03em] mt-5">
               {post.title}
             </h1>
-            <p className="text-[17px] sm:text-[19px] leading-8 text-black/55 mt-7 font-serif">
+            <p className="text-[17px] sm:text-[19px] leading-8 text-black/60 mt-7 font-serif">
               {post.summary}
             </p>
           </header>
 
           <MarkdownArticle content={content} />
 
-          <nav className="mt-20 pt-8 border-t border-black/20 flex justify-between gap-6 font-mono text-[11px] uppercase tracking-[0.18em]">
+          <nav className="mt-20 pt-8 border-t border-black/20 flex justify-between gap-6 text-[11px] uppercase tracking-[0.18em]">
             {prev ? (
-              <Link href={`/posts/${prev.slug}`} className="hover:opacity-45 transition-opacity">
+              <Link href={`/posts/${prev.slug}`} className="hover:opacity-60 transition-opacity">
                 ← {prev.title}
               </Link>
             ) : <span />}
             {next ? (
-              <Link href={`/posts/${next.slug}`} className="text-right hover:opacity-45 transition-opacity">
+              <Link href={`/posts/${next.slug}`} className="text-right hover:opacity-60 transition-opacity">
                 {next.title} →
               </Link>
             ) : <span />}

@@ -1,76 +1,83 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import type { HomeSection } from '@/lib/sections'
+import { profile } from '@/data/profile'
 
-const NAME_LETTERS = ['M', 'I', 'N', 'Y', 'O', 'U', 'N', 'G', 'K', 'I', 'M']
+// 워드마크는 profile.name에서 파생 ("Minyoung KIM" → M I N Y O U N G K I M)
+const NAME_LETTERS = profile.name.replace(/\s+/g, '').toUpperCase().split('')
 
-const SECTIONS = [
-  { label: 'Projects', id: 'projects', mobileId: 'mobile-projects' },
-  { label: 'Papers',   id: 'papers', mobileId: 'mobile-papers' },
-  { label: 'Research', id: 'research', mobileId: 'mobile-research' },
-  { label: 'Piece',    id: 'piece', mobileId: 'mobile-piece' },
-  { label: 'Post',     id: 'post', mobileId: 'mobile-post' },
-  { label: 'Contact',  id: 'contact', mobileId: 'mobile-contact' },
-]
+interface NavigationProps {
+  sections: HomeSection[]
+}
 
-export default function Navigation() {
-  const [activeSection, setActiveSection] = useState<string>('projects')
-
-  const scrollTo = useCallback((id: string) => {
-    const section = SECTIONS.find((item) => item.id === id)
-    const targetId = window.matchMedia('(max-width: 767px)').matches
-      ? section?.mobileId ?? id
-      : id
-    const el = document.getElementById(targetId)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }, [])
+export default function Navigation({ sections }: NavigationProps) {
+  const pathname = usePathname()
+  const isHome = pathname === '/'
+  const [activeId, setActiveId] = useState<string | null>(null)
+  // 홈 밖에서는 활성 표시를 하지 않는다 (상태를 지우는 대신 파생값으로 처리).
+  const shownActive = isHome ? activeId : null
 
   useEffect(() => {
+    if (!isHome) return
+
+    const options: IntersectionObserverInit = { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
     const observers: IntersectionObserver[] = []
 
-    SECTIONS.forEach(({ id, mobileId }) => {
-      const elements = [document.getElementById(id), document.getElementById(mobileId)].filter(
-        (el): el is HTMLElement => Boolean(el)
-      )
+    const hero = document.getElementById('hero')
+    if (hero) {
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) setActiveId(null)
+      }, options)
+      observer.observe(hero)
+      observers.push(observer)
+    }
 
-      elements.forEach((el) => {
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (entry.isIntersecting) setActiveSection(id)
-          },
-          { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
-        )
-        observer.observe(el)
-        observers.push(observer)
-      })
+    sections.forEach(({ id }) => {
+      const el = document.getElementById(id)
+      if (!el) return
+      const observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) setActiveId(id)
+      }, options)
+      observer.observe(el)
+      observers.push(observer)
     })
 
-    return () => observers.forEach(o => o.disconnect())
-  }, [])
+    return () => observers.forEach((o) => o.disconnect())
+  }, [isHome, sections])
 
   return (
     <header className="sticky top-0 z-50 bg-white">
-      {/* Row 1: Name letters spread across full width */}
-      <Link href="/" className="flex justify-center gap-1.5 px-4 py-2 border-b border-black hover:opacity-60 transition-opacity duration-200 sm:gap-3 sm:py-2">
+      {/* Row 1: name letters spread across the width */}
+      <Link
+        href="/"
+        aria-label="Home"
+        className="flex justify-center gap-1.5 border-b border-black px-4 py-2.5 transition-opacity hover:opacity-60 sm:gap-2.5"
+      >
         {NAME_LETTERS.map((letter, i) => (
-          <span key={i} className="text-[13px] font-bold leading-none sm:text-2xl">
+          <span key={i} className="text-[12px] font-bold leading-none sm:text-[14px]">
             {letter}
           </span>
         ))}
       </Link>
-      {/* Row 2: Section anchor links */}
-      <nav className="mobile-scrollbar-hidden flex gap-5 overflow-x-auto whitespace-nowrap border-b border-black px-4 py-2 sm:justify-between sm:gap-0">
-        {SECTIONS.map(({ label, id }) => (
-          <button
+
+      {/* Row 2: section anchors. Wraps instead of clipping on narrow screens. */}
+      <nav
+        aria-label="Sections"
+        className="flex flex-wrap gap-x-5 gap-y-1 border-b border-black px-4 py-2 sm:justify-between sm:px-6"
+      >
+        {sections.map(({ id, label }) => (
+          <Link
             key={id}
-            onClick={() => scrollTo(id)}
-            className={`shrink-0 bg-transparent border-0 cursor-pointer text-[11px] uppercase tracking-[0.14em] transition-all duration-200 sm:text-2xl sm:normal-case sm:tracking-normal ${
-              activeSection === id ? 'italic' : 'not-italic opacity-60 hover:opacity-100'
+            href={`/#${id}`}
+            className={`text-[11px] uppercase tracking-[0.18em] transition-colors sm:text-[12px] ${
+              shownActive === id ? 'italic text-black' : 'text-black/60 hover:text-black'
             }`}
           >
             {label}
-          </button>
+          </Link>
         ))}
       </nav>
     </header>

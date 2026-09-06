@@ -10,18 +10,10 @@
 
 ---
 
-## next.config.js (Vercel 기준)
+## next.config.ts (Vercel 기준)
 
-GitHub Pages와 달리 `output: 'export'` 불필요.
-
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // 아무 제약 없음 — 기본 설정으로 충분
-};
-
-module.exports = nextConfig;
-```
+GitHub Pages와 달리 `output: 'export'`는 쓰지 않는다 (API 라우트·OG 이미지·fs로 읽는 글 본문이 있어 정적 export가 성립하지 않음).
+실제 설정 파일은 `next.config.ts`이며 `images.remotePatterns`(unsplash, picsum, `*.r2.dev`)만 들어 있다.
 
 `next/image`도 그대로 사용 가능:
 ```tsx
@@ -38,7 +30,7 @@ import Image from 'next/image';
 ```bash
 git init
 git remote add origin https://github.com/minyoungci/portfolio.git
-git push -u origin main
+git push -u origin master
 ```
 
 ### 2. Vercel 연결
@@ -73,7 +65,7 @@ git push -u origin main
 ```bash
 git add .
 git commit -m "[FEAT] ..."
-git push origin main
+git push origin master
 # → Vercel이 자동으로 감지, 빌드, 배포
 ```
 
@@ -92,7 +84,12 @@ Vercel 배포 전에 npm run build가 로컬에서 통과하는지 확인하는 
 
 ---
 
-## 환경변수 (현재 불필요, 향후 참고)
+## 환경변수 (admin을 쓰려면 필수)
 
-현재 포트폴리오는 정적 데이터만 사용하므로 불필요.
-contact form 등 추가 시: Vercel 프로젝트 → Settings → Environment Variables
+Vercel 프로젝트 → Settings → Environment Variables 에 등록한다. 목록과 용도는 `CLAUDE.md` 3-5절.
+
+- `GITHUB_TOKEN` (+ 선택 `GITHUB_OWNER`, `GITHUB_REPO`) — admin 저장·이미지 업로드를 GitHub 커밋으로
+- `R2_ACCOUNT_ID` `R2_BUCKET_NAME` `R2_PUBLIC_URL` `R2_ACCESS_KEY_ID` `R2_SECRET_ACCESS_KEY` — 영상 업로드
+- `NEXT_PUBLIC_SITE_URL` — 커스텀 도메인 연결 후 OG 절대 URL
+
+주의: Vercel 프리뷰 배포에서도 admin 저장은 `master`에 커밋된다. 실험은 로컬에서만.

@@ -1,0 +1,24 @@
+{
+  "name": "Minyoung KIM",
+  "nameLines": ["Minyoung", "Kim"],
+  "nameKo": "",
+  "tagline": "Medical AI / Futurist",
+  "identity": "[한 줄 정체성 — 직함이 아니라 하는 일로, 10~15 단어]",
+  "identityEn": "Research-oriented portfolio for medical AI, structural MRI, GBD analytics, and visual knowledge work.",
+  "affiliation": "",
+  "location": "",
+  "email": "dbssus123@gmail.com",
+  "bio": [
+    "[지금 무엇을 하고 있나 — 연구 주제, 직무, 진행 중인 것. 2~3문장]",
+    "[왜 이 분야인가 — 문제의식, 계기. 2~3문장]",
+    "[어디로 가고 싶나 — 1~3년 방향. 1~2문장]"
+  ],
+  "contactTitle": "Work Together",
+  "contactLine": "For research collaboration, medical AI projects, and knowledge architecture.",
+  "links": [
+    { "label": "Email", "handle": "dbssus123@gmail.com", "href": "mailto:dbssus123@gmail.com" },
+    { "label": "GitHub", "handle": "minyoungci", "href": "https://github.com/minyoungci" },
+    { "label": "LinkedIn", "handle": "minyoung-kim", "href": "https://www.linkedin.com/in/minyoung-kim-327a5b223/" },
+    { "label": "Blog", "handle": "minyoungxi.tistory.com", "href": "https://minyoungxi.tistory.com/" }
+  ]
+}

@@ -1,7 +1,8 @@
 # SCRATCHPAD.md — Portfolio Site 작업 로그
 
-> 매 작업 세션 후 `/daily` 명령어로 자동 업데이트
-> 최신 날짜가 상단에 위치
+> 세션 끝에 손으로 갱신한다 (`/daily` 같은 자동 명령은 없다). 최신 날짜가 상단에 위치.
+> 2026-09-06 리빌드(히어로·섹션 정본·profile/timeline 데이터·한글 폰트)는 `docs/design-audit.md` §5에 기록됨.
+> 아래 2026-02-25 기록 중 `.claude/commands/*`, `.claude/skills/*`, `docs/design-system.md` 등은 현재 저장소에 없다.
 
 ---
 

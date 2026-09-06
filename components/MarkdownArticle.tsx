@@ -9,6 +9,7 @@ type Block =
   | { type: 'paragraph'; lines: string[] }
   | { type: 'quote'; lines: string[] }
   | { type: 'list'; items: string[] }
+  | { type: 'olist'; items: string[] }
   | { type: 'image'; alt: string; src: string }
   | { type: 'hr' }
 
@@ -95,6 +96,17 @@ function parseMarkdown(content: string): Block[] {
       continue
     }
 
+    // 번호 목록: "1. " / "1) " — 번호는 버리고 순서대로 <ol>에 넣는다
+    if (/^\d+[.)]\s+/.test(trimmed)) {
+      const items: string[] = []
+      while (i < lines.length && /^\d+[.)]\s+/.test(lines[i].trim())) {
+        items.push(lines[i].trim().replace(/^\d+[.)]\s+/, ''))
+        i += 1
+      }
+      blocks.push({ type: 'olist', items })
+      continue
+    }
+
     const paragraph: string[] = []
     while (
       i < lines.length &&
@@ -103,7 +115,8 @@ function parseMarkdown(content: string): Block[] {
       !/^-{3,}$/.test(lines[i].trim()) &&
       !/^!\[([^\]]*)\]\(([^)]+)\)$/.test(lines[i].trim()) &&
       !/^>/.test(lines[i].trim()) &&
-      !/^-\s+/.test(lines[i].trim())
+      !/^-\s+/.test(lines[i].trim()) &&
+      !/^\d+[.)]\s+/.test(lines[i].trim())
     ) {
       paragraph.push(lines[i].trim())
       i += 1
@@ -143,9 +156,14 @@ export default function MarkdownArticle({ content }: Props) {
           return <ul key={index}>{block.items.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ul>
         }
 
+        if (block.type === 'olist') {
+          return <ol key={index}>{block.items.map((item, i) => <li key={i}>{renderInline(item)}</li>)}</ol>
+        }
+
         if (block.type === 'image') {
           return (
             <figure key={index}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- 본문 이미지는 크기를 미리 알 수 없어 <img> 사용 */}
               <img src={block.src} alt={block.alt} loading="lazy" />
               {block.alt && <figcaption>{block.alt}</figcaption>}
             </figure>

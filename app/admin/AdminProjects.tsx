@@ -12,10 +12,14 @@ const EMPTY = {
 
 type Form = typeof EMPTY
 
-function toProject(form: Form, id: number): Project {
+// existing을 먼저 펼쳐 폼에 없는 필드(images 등)와 기존 slug를 보존한다.
+// slug는 최초 저장 때만 제목에서 만들고, 이후에는 URL이 끊기지 않게 유지한다.
+function toProject(form: Form, id: number, existing?: Project): Project {
+  const derivedSlug = form.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
   return {
+    ...existing,
     id,
-    slug: form.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+    slug: existing?.slug || derivedSlug,
     title: form.title,
     subtitle: form.subtitle,
     year: Number(form.year),
@@ -23,7 +27,7 @@ function toProject(form: Form, id: number): Project {
     stack: form.stackStr.split(',').map(s => s.trim()).filter(Boolean),
     description: form.description,
     thumbnail: form.thumbnail,
-    images: [],
+    images: existing?.images ?? [],
     links: {
       ...(form.github && { github: form.github }),
       ...(form.demo && { demo: form.demo }),
@@ -77,7 +81,7 @@ export default function AdminProjects() {
   const save = async () => {
     setStatus('saving')
     const id = selectedId === -1 ? Date.now() : selectedId!
-    const updated = toProject(form, id)
+    const updated = toProject(form, id, items.find(p => p.id === id))
     const next = items.some(p => p.id === id)
       ? items.map(p => p.id === id ? updated : p)
       : [...items, updated]

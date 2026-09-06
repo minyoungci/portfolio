@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme {
   /* Colors */
@@ -6,27 +7,56 @@
   --color-white: #ffffff;
   --color-gray: #F5F5F5;
 
-  /* Font family — Inter via next/font */
-  --font-sans: var(--font-inter), Helvetica Neue, Arial, sans-serif;
-  --font-serif: var(--font-cormorant), Georgia, serif;
+  /* shadcn-compatible aliases, mapped onto the B&W palette */
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-muted: #F5F5F5;
+  --color-muted-foreground: #666666;
+  --color-ring: #000000;
+
+  /* Fonts — Latin from next/font, Hangul from the paired Korean face */
+  --font-sans: var(--font-inter), "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--font-cormorant), var(--font-noto-serif-kr), "Apple Myungjo", Batang, Georgia, serif;
 }
 
 body {
   background-color: var(--color-white);
   color: var(--color-black);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-.mobile-scrollbar-hidden {
-  scrollbar-width: none;
+/* Anchored sections clear the sticky two-row header */
+section[id] {
+  scroll-margin-top: 4.5rem;
 }
 
-.mobile-scrollbar-hidden::-webkit-scrollbar {
-  display: none;
+/* Page enter — CSS only, so server HTML is visible before hydration */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.45s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .page-enter {
+    animation: none;
+  }
 }
 
 @media (max-width: 767px) {
@@ -65,7 +95,7 @@ html {
 }
 
 .article-body {
-  font-family: var(--font-inter), Helvetica Neue, Arial, sans-serif;
+  font-family: var(--font-sans);
   color: rgba(0, 0, 0, 0.82);
 }
 
@@ -73,7 +103,7 @@ html {
   margin-top: 4.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid rgba(0, 0, 0, 0.14);
-  font-family: var(--font-cormorant), Georgia, serif;
+  font-family: var(--font-serif);
   font-size: clamp(2rem, 5vw, 3.25rem);
   line-height: 1;
   letter-spacing: -0.035em;
@@ -110,7 +140,7 @@ html {
   padding: 0.15rem 0 0.15rem 1.25rem;
   border-left: 3px solid #000;
   color: rgba(0, 0, 0, 0.6);
-  font-family: var(--font-cormorant), Georgia, serif;
+  font-family: var(--font-serif);
   font-size: 1.35rem;
 }
 
@@ -171,4 +201,10 @@ html {
   margin: 3.5rem 0;
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.article-body ol {
+  margin-top: 1.3rem;
+  padding-left: 1.35rem;
+  list-style: decimal;
 }

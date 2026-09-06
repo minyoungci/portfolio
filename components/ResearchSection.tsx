@@ -3,69 +3,79 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { ResearchItem } from '@/types'
+import SectionHeading from '@/components/SectionHeading'
 
 interface Props {
   items: ResearchItem[]
+  number: string
 }
 
-export default function ResearchSection({ items }: Props) {
+export default function ResearchSection({ items, number }: Props) {
   const [openId, setOpenId] = useState<number | null>(null)
 
+  if (items.length === 0) return null
+
   return (
-    <section id="research" className="py-8 px-4 sm:px-6">
-      <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">
-        <span className="opacity-50">03</span>
-        <span>Research</span>
-      </h2>
-      <div className="divide-y divide-black">
-        {items.map((item) => (
-          <div key={item.id} className="py-6">
-            <button
-              onClick={() => setOpenId(openId === item.id ? null : item.id)}
-              className="w-full text-left group bg-transparent border-0 cursor-pointer"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <p className="text-[13px] leading-snug group-hover:opacity-60 transition-opacity">
-                    {item.title}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {item.tags.map((tag) => (
-                      <span key={tag} className="text-[11px] border border-black px-2 py-0.5">
-                        {tag}
-                      </span>
-                    ))}
+    <section id="research" className="px-4 py-8 sm:px-6">
+      <SectionHeading number={number} title="Research" />
+
+      <div className="max-w-3xl divide-y divide-black/10 border-b border-black/10">
+        {items.map((item, index) => {
+          const open = openId === item.id
+          return (
+            <div key={item.id} className="py-5">
+              <button
+                type="button"
+                aria-expanded={open}
+                onClick={() => setOpenId(open ? null : item.id)}
+                className="group w-full cursor-pointer border-0 bg-transparent p-0 text-left"
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="w-8 shrink-0 tabular-nums text-[12px] text-black/60">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[15px] italic leading-snug transition-colors group-hover:text-black/60">
+                      {item.title}
+                    </p>
+                    {item.tags.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {item.tags.map((tag) => (
+                          <span key={tag} className="border border-black px-2 py-0.5 text-[11px]">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex shrink-0 items-baseline gap-4">
+                    <span className={`text-[11px] uppercase tracking-[0.16em] ${item.status === 'ongoing' ? 'text-black' : 'text-black/60'}`}>
+                      {item.status === 'ongoing' ? '● ongoing' : '○ completed'}
+                    </span>
+                    <span className="text-sm text-black/60" aria-hidden="true">
+                      {open ? '−' : '+'}
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 shrink-0 mt-0.5">
-                  <span className={`text-xs ${item.status === 'ongoing' ? 'opacity-100' : 'opacity-30'}`}>
-                    {item.status === 'ongoing' ? '● ongoing' : '○ completed'}
-                  </span>
-                  <span className="text-sm opacity-60">
-                    {openId === item.id ? '−' : '+'}
-                  </span>
-                </div>
-              </div>
-            </button>
+              </button>
 
-            <AnimatePresence initial={false}>
-              {openId === item.id && (
-                <motion.div
-                  key="desc"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
-                  className="overflow-hidden"
-                >
-                  <p className="text-sm leading-relaxed mt-4 opacity-70 max-w-2xl">
-                    {item.description}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
+              <AnimatePresence initial={false}>
+                {open && (
+                  <motion.div
+                    key="desc"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <p className="mt-4 max-w-2xl pl-12 text-[13px] leading-6 text-black/80">{item.description}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )
+        })}
       </div>
     </section>
   )

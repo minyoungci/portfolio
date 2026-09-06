@@ -2,55 +2,52 @@ import { projects } from '@/data/projects'
 import { papers } from '@/data/papers'
 import { researchItems } from '@/data/research'
 import { posts } from '@/data/posts'
-import piecesData from '@/data/pieces.json'
+import { pieces } from '@/data/pieces'
+import { getHomeSections } from '@/lib/sections'
+import Hero from '@/components/Hero'
+import AboutSection from '@/components/AboutSection'
+import SectionHeading from '@/components/SectionHeading'
 import ProjectGrid from '@/components/ProjectGrid'
-import PapersSection from '@/components/PapersSection'
-import ResearchSection from '@/components/ResearchSection'
-import PieceSection from '@/components/PieceSection'
 import PostSection from '@/components/PostSection'
+import PieceSection from '@/components/PieceSection'
+import ResearchSection from '@/components/ResearchSection'
+import PapersSection from '@/components/PapersSection'
 import ContactSection from '@/components/ContactSection'
 import AdminAccess from '@/components/AdminAccess'
 import PageTransition from '@/components/PageTransition'
-import MobileHome from '@/components/mobile/MobileHome'
-import type { Piece } from '@/types'
-
-const pieces = piecesData as Piece[]
 
 export default function HomePage() {
+  // 섹션 순서·번호·표시 여부의 정본은 lib/sections.ts. nav도 같은 목록을 쓴다.
+  // 렌더 순서는 아래 JSX 순서이므로 ORDER를 바꾸면 여기도 같이 옮긴다.
+  const sections = getHomeSections()
+  const numberOf = (id: string) => sections.find((s) => s.id === id)?.number ?? ''
+  const visible = (id: string) => sections.some((s) => s.id === id)
+
   return (
     <PageTransition>
-      <MobileHome
-        projects={projects}
-        papers={papers}
-        researchItems={researchItems}
-        pieces={pieces}
-        posts={posts}
-      />
+      <main className="min-h-screen">
+        <Hero />
 
-      <main className="hidden min-h-screen md:block">
-        {/* 01 — PROJECTS */}
-        <section id="projects" className="py-8 px-4 sm:px-6">
-          <h2 className="text-xl tracking-[0.2em] font-medium uppercase mt-0 mb-6 pt-3 border-t border-black flex items-baseline gap-3 hover:italic transition-all duration-200">
-            <span className="opacity-50">01</span>
-            <span>Projects</span>
-          </h2>
-          <ProjectGrid projects={projects} />
-        </section>
+        <AboutSection number={numberOf('about')} />
 
-        {/* 02 — PAPERS */}
-        <PapersSection papers={papers} />
+        {visible('projects') && (
+          <section id="projects" className="px-4 py-8 sm:px-6">
+            <SectionHeading number={numberOf('projects')} title="Projects" />
+            <ProjectGrid projects={projects} />
+          </section>
+        )}
 
-        {/* 03 — RESEARCH */}
-        <ResearchSection items={researchItems} />
+        {visible('post') && <PostSection posts={posts} number={numberOf('post')} />}
 
-        {/* 04 — PIECE */}
-        <PieceSection pieces={pieces} />
+        {visible('piece') && <PieceSection pieces={pieces} number={numberOf('piece')} />}
 
-        {/* 05 — POST */}
-        <PostSection posts={posts} />
+        {visible('research') && (
+          <ResearchSection items={researchItems} number={numberOf('research')} />
+        )}
 
-        {/* 06 — CONTACT */}
-        <ContactSection />
+        {visible('papers') && <PapersSection papers={papers} number={numberOf('papers')} />}
+
+        <ContactSection number={numberOf('contact')} />
       </main>
 
       {/* 우하단 admin 진입 버튼 */}

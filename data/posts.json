@@ -11,7 +11,8 @@
       "preprocessing",
       "dementia",
       "data-quality"
-    ]
+    ],
+    "cover": "/images/articles/mri-gallery-20260507/00_stage_montage.jpg"
   },
   {
     "id": 2,
@@ -25,6 +26,7 @@
       "MRI",
       "ROI",
       "neuroanatomy"
-    ]
+    ],
+    "cover": "/images/articles/mri-gallery-20260507/ad_roi_masks/ad_relevant_roi_montage.jpg"
   }
 ]
