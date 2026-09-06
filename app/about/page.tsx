@@ -39,6 +39,17 @@ export default function AboutPage() {
             ))}
           </section>
 
+          {profile.bioEn && profile.bioEn.length > 0 && (
+            <section className="mb-16">
+              <p className="mb-3 border-t border-black pt-3 text-[11px] uppercase tracking-[0.22em]">In English</p>
+              <div className="space-y-5 text-[14px] leading-7 text-black/80">
+                {profile.bioEn.map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
+                ))}
+              </div>
+            </section>
+          )}
+
           {groups.length > 0 && (
             <section className="mb-16 space-y-10">
               {groups.map((group) => (

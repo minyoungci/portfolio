@@ -74,13 +74,14 @@ export interface Profile {
   affiliation?: string;
   location?: string;
   email: string;
-  bio: string[];         // 문단 배열
+  bio: string[];         // 문단 배열 (국문)
+  bioEn?: string[];      // 영문 bio. /about에만 표시
   contactTitle?: string; // Contact 섹션 큰 글자
   contactLine?: string;  // Contact 섹션 한 줄
   links: ProfileLink[];
 }
 
-export type TimelineKind = 'career' | 'education' | 'award' | 'activity';
+export type TimelineKind = 'career' | 'education' | 'award' | 'scholarship' | 'activity';
 
 export interface TimelineEntry {
   year: string;          // "2024–", "2022–2024"

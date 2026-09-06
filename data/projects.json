@@ -1,16 +1,44 @@
 [
   {
-    "id": 1772094230064,
-    "slug": "ddaaa",
-    "title": "ddaaa",
-    "subtitle": "dda",
+    "id": 1,
+    "slug": "cardiac-output-ppg-ecg",
+    "title": "Non-invasive Cardiac Output from PPG & ECG",
+    "subtitle": "PPG·ECG 생체신호로 심박출량(CO)을 비침습적으로 예측하는 SMC–SKKU 공동 연구",
     "year": 2026,
-    "category": [],
+    "category": ["Medical AI", "Biosignal"],
     "stack": [],
-    "description": "",
+    "description": "PPG(광용적맥파)와 ECG(심전도)처럼 비침습적으로 얻는 생체신호에서 심박출량(Cardiac Output)을 예측하는 연구입니다. 심박출량은 보통 침습적 카테터로 측정하기 때문에, 일상적으로 확보할 수 있는 신호만으로 이를 추정할 수 있는지가 핵심 질문입니다.\n\n삼성서울병원 흉부외과 조양현 교수 연구팀과 성균관대학교가 함께 진행하는 SMC–SKKU 공동 연구입니다.",
     "thumbnail": "",
     "images": [],
     "links": {},
-    "featured": false
+    "featured": true
+  },
+  {
+    "id": 2,
+    "slug": "gbd-epidemiology",
+    "title": "GBD Epidemiology",
+    "subtitle": "GBD(Global Burden of Disease) 데이터를 활용한 역학 연구",
+    "year": 2026,
+    "category": ["Epidemiology", "Data"],
+    "stack": [],
+    "description": "GBD(Global Burden of Disease) 데이터를 이용한 역학 연구입니다. 질병과 위험요인의 부담을 나타내는 지표를 바탕으로, 인구집단 수준의 역학 질문을 데이터로 분석합니다.",
+    "thumbnail": "",
+    "images": [],
+    "links": {},
+    "featured": true
+  },
+  {
+    "id": 3,
+    "slug": "brain-mri-foundation-model",
+    "title": "Brain MRI Foundation Model",
+    "subtitle": "대규모 뇌 MRI 데이터로 파운데이션 모델을 만들고 여러 brain task에 적용하는 연구",
+    "year": 2026,
+    "category": ["Medical AI", "Brain MRI"],
+    "stack": [],
+    "description": "대규모 뇌 MRI 데이터로 파운데이션 모델을 학습하고, 이를 여러 뇌 관련 과제(brain task)에 적용하는 연구입니다.\n\n연구의 바탕이 되는 T1w MRI 전처리 파이프라인과 알츠하이머 ROI 해석에 관한 정리는 Post 섹션의 글에서 볼 수 있습니다.",
+    "thumbnail": "",
+    "images": [],
+    "links": {},
+    "featured": true
   }
 ]

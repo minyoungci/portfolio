@@ -62,10 +62,10 @@
 - `identity`: 직함이 아니라 하는 일. 10~15 단어(국문). `identityEn`은 보조 문장이면서 **검색·공유 미리보기 설명(meta/OG description)** 으로도 쓰인다. 비우면 화면에서 숨고 메타는 `identity`로 대체된다.
 - `tagline`: hero 상단 라벨, 모든 페이지 `<title>`(`이름 — tagline`), OG 이미지. `nameLines`: hero 줄바꿈 단위 `["Minyoung", "Kim"]`. `name`에서 상단 워드마크(M I N Y O U N G K I M)가 자동 파생된다.
 - **OG 이미지(`app/opengraph-image.tsx`)는 내장 라틴 폰트만 쓴다.** `tagline`·`nameLines`·`email`에 한글을 넣지 않는다. 한글 이름은 `nameKo`(`/about`에만 표시).
-- `bio[]`: 문단 배열. 3문단(지금 / 왜 / 어디로) 권장. 홈 About과 `/about`에 같은 전체가 나온다(요약본 없음).
+- `bio[]`: 국문 문단 배열. 3문단(지금 / 왜 / 어디로) 권장. 홈 About과 `/about`에 같은 전체가 나온다(요약본 없음). `bioEn[]`(선택)은 영문 bio로 `/about`의 "In English" 블록에만 표시.
 - `links[]`: `label`은 서로 다르게 한두 단어(칸이 좁아 `Scholar`처럼 짧게), `handle`이 화면 표기(raw URL 노출 금지), `mailto:` 외 링크는 새 탭.
 - `affiliation`·`location`: hero 우측과 `/about` 상단에 소문구로. `contactTitle`·`contactLine`: Contact 섹션.
-- 타임라인 `kind`: `career` · `education` · `award` · `activity`. 같은 kind끼리 묶여 이 순서로 나오고(라벨 Career / Education / Awards / Activities, 정본은 `components/AboutSection.tsx`), **kind 안에서는 연도로 정렬하지 않으니 최신 항목을 배열 앞에** 둔다. `year`는 문자열(`"2022–2024"`, `"2025–"`, 이 길이를 넘기지 않는다). `org`·`description` 선택.
+- 타임라인 `kind`: `career` · `education` · `award` · `scholarship` · `activity`. 같은 kind끼리 묶여 이 순서로 나오고(라벨 Career / Education / Awards / Scholarships / Activities, 정본은 `components/AboutSection.tsx`), **kind 안에서는 연도로 정렬하지 않으니 최신 항목을 배열 앞에** 둔다. `year`는 문자열(`"2022–2024"`, `"2025–"`, 이 길이를 넘기지 않는다). `org`·`description` 선택.
 
 ### 2-3. 프로젝트 추가 (`projects.json`)
 

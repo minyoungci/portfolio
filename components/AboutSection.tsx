@@ -4,11 +4,12 @@ import { timeline } from '@/data/timeline'
 import type { TimelineKind } from '@/types'
 import SectionHeading from '@/components/SectionHeading'
 
-export const KIND_ORDER: TimelineKind[] = ['career', 'education', 'award', 'activity']
+export const KIND_ORDER: TimelineKind[] = ['career', 'education', 'award', 'scholarship', 'activity']
 export const KIND_LABEL: Record<TimelineKind, string> = {
   career: 'Career',
   education: 'Education',
   award: 'Awards',
+  scholarship: 'Scholarships',
   activity: 'Activities',
 }
 

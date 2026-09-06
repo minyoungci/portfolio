@@ -1,17 +1,20 @@
 {
-  "name": "Minyoung KIM",
+  "name": "Minyoung Kim",
   "nameLines": ["Minyoung", "Kim"],
   "nameKo": "",
   "tagline": "Medical AI / Futurist",
-  "identity": "[한 줄 정체성 — 직함이 아니라 하는 일로, 10~15 단어]",
-  "identityEn": "Research-oriented portfolio for medical AI, structural MRI, GBD analytics, and visual knowledge work.",
-  "affiliation": "",
-  "location": "",
+  "identity": "뇌 MRI와 파운데이션 모델을 중심으로, 새로운 AI 기술을 견고한 의료 연구와 응용으로 옮기는 의료 AI 연구자입니다.",
+  "identityEn": "PhD researcher in Medical AI, working on brain MRI and foundation models.",
+  "affiliation": "Sungkyunkwan University · MetaBioHealth",
+  "location": "Suwon, South Korea",
   "email": "dbssus123@gmail.com",
   "bio": [
-    "[지금 무엇을 하고 있나 — 연구 주제, 직무, 진행 중인 것. 2~3문장]",
-    "[왜 이 분야인가 — 문제의식, 계기. 2~3문장]",
-    "[어디로 가고 싶나 — 1~3년 방향. 1~2문장]"
+    "성균관대학교 메타바이오헬스학과 석박통합과정에서 의료 인공지능을 연구하고 있습니다. 뇌 MRI와 파운데이션 모델이 중심 주제이고, 질병부담(GBD) 역학 분석과 UK Biobank 데이터를 활용한 연구도 함께 진행합니다.",
+    "새롭게 등장하는 AI 기술이 의미 있는 의학 연구에 어떻게 쓰일 수 있는지를 탐구합니다.",
+    "빠르게 변화하는 AI의 발전을 견고하고 실용적인 의료 응용으로 옮기는 일에 특히 관심이 있습니다."
+  ],
+  "bioEn": [
+    "I am a PhD researcher in Medical AI, focusing on brain MRI and foundation models. My work explores how emerging AI technologies can be applied to meaningful medical research. I am particularly interested in translating fast-moving AI advances into robust and practical healthcare applications."
   ],
   "contactTitle": "Work Together",
   "contactLine": "For research collaboration, medical AI projects, and knowledge architecture.",
