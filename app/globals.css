@@ -1,27 +1,53 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@theme {
-  /* Colors */
-  --color-black: #000000;
-  --color-white: #ffffff;
-  --color-gray: #F5F5F5;
+/*
+ * Design tokens — reference idiom (rounded cards, soft shadows, one sans).
+ * Dark is the default; the light set applies when the system prefers light.
+ */
+:root {
+  color-scheme: dark;
+  --background: #0b0b0c;
+  --foreground: #f4f4f5;
+  --card: #141416;
+  --muted: #1d1d21;
+  --muted-foreground: #a1a1aa;
+  --border: rgba(255, 255, 255, 0.1);
+  --ring: #f4f4f5;
+  --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.8);
+}
 
-  /* shadcn-compatible aliases, mapped onto the B&W palette */
-  --color-background: #ffffff;
-  --color-foreground: #000000;
-  --color-muted: #F5F5F5;
-  --color-muted-foreground: #666666;
-  --color-ring: #000000;
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --background: #f7f7f8;
+    --foreground: #131316;
+    --card: #ffffff;
+    --muted: #ebebef;
+    --muted-foreground: #6e6e76;
+    --border: rgba(0, 0, 0, 0.08);
+    --ring: #131316;
+    --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.35);
+  }
+}
 
-  /* Fonts — Latin from next/font, Hangul from the paired Korean face */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --shadow-card: var(--shadow-card);
+
+  /* Latin from next/font (Inter), Hangul from Pretendard (CDN) */
   --font-sans: var(--font-inter), "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: var(--font-cormorant), var(--font-noto-serif-kr), "Apple Myungjo", Batang, Georgia, serif;
 }
 
 body {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: var(--background);
+  color: var(--foreground);
   font-size: 14px;
 }
 
@@ -29,9 +55,9 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Anchored sections clear the sticky two-row header */
+/* Anchored sections clear the floating pill nav */
 section[id] {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: 5.5rem;
 }
 
 /* Page enter — CSS only, so server HTML is visible before hydration */
@@ -65,13 +91,8 @@ section[id] {
   }
 
   .article-body h2 {
-    margin-top: 3.25rem;
-    font-size: clamp(1.8rem, 12vw, 2.55rem);
-  }
-
-  .article-body h3 {
-    margin-top: 2.1rem;
-    font-size: 1.05rem;
+    margin-top: 3rem;
+    font-size: 1.6rem;
   }
 
   .article-body p {
@@ -79,75 +100,69 @@ section[id] {
     line-height: 1.82;
   }
 
-  .article-body li {
-    font-size: 0.94rem;
-    line-height: 1.72;
-  }
-
   .article-body figure {
-    margin: 2.25rem -0.25rem;
-  }
-
-  .article-body blockquote {
-    margin: 2rem 0;
-    font-size: 1.18rem;
+    margin: 2.25rem 0;
   }
 }
 
+/* Article typography (posts). Tokens so it follows dark/light. */
 .article-body {
-  font-family: var(--font-sans);
-  color: rgba(0, 0, 0, 0.82);
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
 }
 
 .article-body h2 {
-  margin-top: 4.5rem;
+  margin-top: 4rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.14);
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
-  color: #000;
+  border-top: 1px solid var(--border);
+  font-size: clamp(1.6rem, 3.6vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
 }
 
 .article-body h3 {
-  margin-top: 2.75rem;
-  font-size: 1.18rem;
+  margin-top: 2.5rem;
+  font-size: 1.15rem;
   line-height: 1.35;
-  font-weight: 700;
-  color: #000;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
 }
 
 .article-body h4 {
   margin-top: 2rem;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   line-height: 1.4;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(0, 0, 0, 0.62);
+  letter-spacing: 0.14em;
+  color: var(--muted-foreground);
 }
 
 .article-body p {
-  margin-top: 1.35rem;
+  margin-top: 1.3rem;
   font-size: 1.02rem;
-  line-height: 1.95;
-  letter-spacing: -0.004em;
+  line-height: 1.9;
 }
 
 .article-body blockquote {
-  margin: 2.5rem 0;
-  padding: 0.15rem 0 0.15rem 1.25rem;
-  border-left: 3px solid #000;
-  color: rgba(0, 0, 0, 0.6);
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
+  margin: 2.25rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
 }
 
 .article-body blockquote p {
-  font-size: inherit;
-  line-height: 1.65;
-  margin-top: 0.9rem;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  margin-top: 0.6rem;
+}
+
+.article-body blockquote p:first-child {
+  margin-top: 0;
 }
 
 .article-body ul {
@@ -156,55 +171,74 @@ section[id] {
   list-style: disc;
 }
 
+.article-body ol {
+  margin-top: 1.3rem;
+  padding-left: 1.35rem;
+  list-style: decimal;
+}
+
 .article-body li {
-  margin-top: 0.55rem;
+  margin-top: 0.5rem;
   font-size: 1rem;
   line-height: 1.8;
 }
 
 .article-body figure {
-  margin: 3rem -1rem;
+  margin: 2.75rem 0;
 }
 
 .article-body img {
   width: 100%;
   height: auto;
   display: block;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #f5f5f5;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--muted);
+  box-shadow: var(--shadow-card);
 }
 
 .article-body figcaption {
-  margin-top: 0.7rem;
-  font-size: 0.72rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
   line-height: 1.45;
-  color: rgba(0, 0, 0, 0.42);
+  color: var(--muted-foreground);
   text-align: center;
 }
 
 .article-body a {
-  color: #000;
+  color: var(--foreground);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
+  text-decoration-color: var(--muted-foreground);
 }
 
 .article-body code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.88em;
-  background: rgba(0, 0, 0, 0.05);
-  padding: 0.12em 0.34em;
-  border-radius: 0.18rem;
+  font-size: 0.86em;
+  background: var(--muted);
+  padding: 0.12em 0.4em;
+  border-radius: 0.4rem;
 }
 
 .article-body hr {
-  margin: 3.5rem 0;
+  margin: 3rem 0;
   border: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.14);
+  border-top: 1px solid var(--border);
 }
 
-.article-body ol {
-  margin-top: 1.3rem;
-  padding-left: 1.35rem;
-  list-style: decimal;
+/* Horizontal scroll without a visible bar (pill nav on narrow screens) */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Long unbreakable strings (paths, ids) must wrap on narrow screens, or the page grows sideways */
+.article-body {
+  overflow-wrap: anywhere;
+}
+.article-body code {
+  word-break: break-all;
 }

@@ -7,7 +7,7 @@ export default function AdminAccess() {
       href="/admin"
       title="Admin"
       aria-label="Admin"
-      className="fixed bottom-5 right-5 text-[10px] text-black opacity-10 transition-opacity duration-300 hover:opacity-40"
+      className="fixed bottom-5 right-5 text-[11px] text-muted-foreground opacity-30 transition-opacity duration-300 hover:opacity-100"
     >
       ⌗
     </Link>

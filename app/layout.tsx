@@ -1,32 +1,16 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond, Noto_Serif_KR } from "next/font/google";
+import { Inter } from "next/font/google";
 import Navigation from "@/components/Navigation";
 import { getHomeSections } from "@/lib/sections";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
-// Latin faces via next/font. Hangul: Pretendard (CDN, dynamic subset) for sans,
-// Noto Serif KR for serif — both declared as fallbacks in globals.css.
+// One sans for everything: Inter for Latin (next/font), Pretendard for Hangul (CDN, fallback in globals.css).
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
   display: "swap",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
-const notoSerifKr = Noto_Serif_KR({
-  weight: ["300", "400"],
-  variable: "--font-noto-serif-kr",
-  display: "swap",
-  preload: false,
 });
 
 const description = profile.identityEn || profile.identity;
@@ -59,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${inter.variable} ${cormorant.variable} ${notoSerifKr.variable}`}>
+    <html lang="ko" className={inter.variable}>
       <head>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
@@ -67,7 +51,7 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
       </head>
-      <body className="bg-white text-black font-sans antialiased">
+      <body className="bg-background text-foreground font-sans antialiased">
         <Navigation sections={getHomeSections()} />
         {children}
       </body>

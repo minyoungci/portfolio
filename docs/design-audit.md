@@ -250,3 +250,23 @@ Post·Contact 행이 1440px 폭에서 좌우 24px 여백만 두고 펼쳐진다.
 - `data/pieces.json` — `featured: true` 피스가 히어로에 노출 (영상 가능)
 - Research / Papers — 항목이 생기면 섹션과 nav 항목이 자동으로 나타남
 - 배포 후 `NEXT_PUBLIC_SITE_URL`(커스텀 도메인)을 Vercel 환경변수에 넣으면 OG 절대 URL이 고정됨
+
+---
+
+## 6. 레퍼런스 리디자인 (2026-09-06 오후)
+
+5절의 하이브리드(흑백 편집형)는 사용자 피드백으로 폐기됐다. 레퍼런스(코버플로우 데모)는 "히어로에 넣을 부품"이 아니라 **사이트 전체의 디자인 언어**여야 했다.
+
+결정: 섹션마다 코버플로우 선반 / 다크 기본 + 시스템 라이트 자동 / 산세리프 하나.
+
+| 항목 | 이전(5절) | 현재 |
+|------|-----------|------|
+| 톤 | 흑백 플랫 + serif 히어로, 1px 괘선 | 둥근 카드 + 그림자 + 중앙 정렬 + 알약 UI, 다크 기본 |
+| 토큰 | `#000/#fff/#F5F5F5`, opacity 위계 | CSS 변수 `--background … --shadow-card` 다크/라이트 세트, `@theme inline` |
+| 타이포 | Inter + Cormorant + Noto Serif KR, italic 제목, 번호 헤딩 | Inter + Pretendard 하나, semibold 제목, 번호 없음 |
+| 홈 | hero 코버플로우 + 번호형 섹션 | 텍스트 hero + Projects/Post/Piece 코버플로우 선반 + About/Contact 카드 |
+| nav | sticky 2단(낱글자 워드마크) | fixed 알약, backdrop-blur, 활성 pill |
+| 상세 | 좌정렬, 괘선, 스택 칩 | 중앙 max-w-2xl, 커버 카드, dl 메타 카드 |
+| 삭제 | `MobileHome`, `SectionHeading`, `ProjectGrid/Card`, `PostSection`, `PieceSection`, `FeaturedCoverflow/Row`, `lib/featured.ts` | → `Shelf`, `PieceShelf`, `lib/shelves.ts` |
+
+남은 폴리시: reduced-motion(코버플로우·아코디언), 커스텀 404, 프로젝트 썸네일(현재 제목 카드), 슬라이드 3개 미만 섹션(Post)은 정적 나열.

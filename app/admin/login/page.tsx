@@ -48,12 +48,15 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="min-h-screen px-4 pt-24 sm:px-6">
-      <form onSubmit={submit} className="max-w-sm">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-black/60">Admin</p>
-        <h1 className="mt-3 font-serif text-4xl font-light">Sign in</h1>
+    <main className="flex min-h-screen items-center justify-center px-6 py-24">
+      <form
+        onSubmit={submit}
+        className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-card"
+      >
+        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">Admin</p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight">Sign in</h1>
 
-        <label htmlFor="password" className="mt-8 block text-[11px] uppercase tracking-[0.18em] text-black/60">
+        <label htmlFor="password" className="mt-8 block text-[12px] font-medium text-muted-foreground">
           Password
         </label>
         <input
@@ -62,24 +65,24 @@ export default function AdminLoginPage() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-2 w-full border-b border-black bg-transparent py-2 text-[15px] outline-none"
+          className="mt-2 w-full rounded-xl border border-border bg-background px-3 py-2 text-[15px] outline-none transition-colors focus:border-foreground"
         />
 
         {message && (
-          <p role="alert" className="mt-3 text-[13px] text-black/60">
+          <p role="alert" className="mt-3 text-[13px] text-muted-foreground">
             {message}
           </p>
         )}
 
-        <div className="mt-8 flex items-center gap-5">
+        <div className="mt-8 flex items-center justify-between gap-4">
           <button
             type="submit"
             disabled={status === 'loading' || !password}
-            className="border border-black px-4 py-2 text-[11px] uppercase tracking-[0.18em] transition-colors hover:bg-black hover:text-white disabled:opacity-40"
+            className="rounded-full bg-foreground px-5 py-2 text-[13px] font-semibold text-background transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             {status === 'loading' ? 'Signing in…' : 'Sign in'}
           </button>
-          <Link href="/" className="text-[11px] uppercase tracking-[0.18em] text-black/60 transition-colors hover:text-black">
+          <Link href="/" className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
             ← Home
           </Link>
         </div>

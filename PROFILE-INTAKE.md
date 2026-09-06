@@ -192,20 +192,20 @@
 
 ---
 
-## 12. 정보 구조 (2026-09-06 확정, 구현됨)
+## 12. 정보 구조 (2026-09-06 오후 확정, 구현됨 — 레퍼런스 리디자인)
 
 ```
-HERO         이름 + 한 줄 정체성 + Selected work (코버플로우, 3개 미만이면 정적 나열)
-01 ABOUT     bio + 타임라인       ← /about 페이지는 상세 유지
-02 PROJECTS  만든 것
-03 POST      글
-04 PIECE     시각 작업
-05 RESEARCH  지금 파는 것         (비어 있으면 숨김)
-06 PAPERS    논문                 (비어 있으면 숨김)
-07 CONTACT   연락처
+HERO       이름 + 한 줄 정체성 + 소속 + 링크 알약 (중앙 정렬)
+PROJECTS   코버플로우 선반 (카드 → 상세)
+POST       코버플로우 선반 (cover가 카드 이미지, 3개 미만이면 정적 나열)
+PIECE      코버플로우 선반 (카드 → 라이트박스)
+RESEARCH   중앙 카드 아코디언   (비어 있으면 숨김)
+PAPERS     중앙 카드 아코디언   (비어 있으면 숨김)
+ABOUT      bio + 타임라인 카드  ← /about 페이지는 상세 유지
+CONTACT    중앙 정렬 + 링크 알약
 ```
 
-- 톤: 하이브리드 (에디토리얼 히어로 + 플랫 섹션, 반전 블록 없음). 데스크톱/모바일 단일 레이아웃.
-- 순서·번호·표시 여부의 정본: `lib/sections.ts`. nav와 홈이 같은 목록을 쓴다.
+- 톤: 레퍼런스(코버플로우 데모)의 언어. 둥근 카드·그림자·중앙 정렬·알약 UI, 다크 기본 + 시스템 라이트 자동, 산세리프 하나. 번호형 헤딩·세리프 없음.
+- 순서·표시 여부의 정본: `lib/sections.ts`. nav와 홈이 같은 목록을 쓴다. 데이터 → 슬라이드 변환은 `lib/shelves.ts`.
 - 이 시트의 답은 `data/profile.json`(1·2·10절), `data/timeline.json`(3절), `data/projects.json`(4절)로 옮긴다.
-- hero Selected work 노출 규칙: `featured: true` 프로젝트 → `cover`가 있는 포스트 → `featured: true` 피스. featured 프로젝트가 없으면 앞 3개 프로젝트로 대체.
+- `featured` 플래그는 현재 화면에 쓰이지 않는다. 항목 순서 = JSON 배열 순서.

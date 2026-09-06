@@ -14,6 +14,8 @@ export interface CoverflowSlide {
   media?: "image" | "video";
   alt: string;
   title?: string;
+  /** Short label printed on the placeholder card. Falls back to subtitle. */
+  kicker?: string;
   subtitle?: string;
   meta?: { label: string; value: string }[];
 }
@@ -363,13 +365,13 @@ export function CoverflowCarousel({
                 ) : (
                   <div
                     aria-label={slide.alt}
-                    className="flex h-full w-full flex-col justify-between p-4 text-foreground"
+                    className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted-foreground/25 via-muted to-card p-5"
                   >
-                    <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                      {slide.subtitle}
+                    <span className="line-clamp-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                      {slide.kicker ?? slide.subtitle}
                     </span>
-                    <span className="font-serif text-4xl font-light leading-none">
-                      {String(index + 1).padStart(2, "0")}
+                    <span className="mt-2 line-clamp-3 text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
+                      {slide.title}
                     </span>
                   </div>
                 )}
@@ -384,17 +386,17 @@ export function CoverflowCarousel({
               type="button"
               aria-label="Previous slide"
               onClick={() => nudge(-1)}
-              className="absolute left-2 top-1/2 z-[200] -translate-y-1/2 border border-foreground/20 bg-background/85 p-2 text-foreground backdrop-blur transition-colors hover:border-foreground"
+              className="absolute left-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-background"
             >
-              <ChevronLeft className="size-4" />
+              <ChevronLeft className="size-5" />
             </button>
             <button
               type="button"
               aria-label="Next slide"
               onClick={() => nudge(1)}
-              className="absolute right-2 top-1/2 z-[200] -translate-y-1/2 border border-foreground/20 bg-background/85 p-2 text-foreground backdrop-blur transition-colors hover:border-foreground"
+              className="absolute right-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-background"
             >
-              <ChevronRight className="size-4" />
+              <ChevronRight className="size-5" />
             </button>
           </>
         )}
@@ -409,16 +411,16 @@ export function CoverflowCarousel({
             {active.title}
           </p>
           {active.subtitle && (
-            <p className="mt-1 text-[13px] text-muted-foreground">
+            <p className="mt-1 text-center text-[13px] text-muted-foreground">
               {active.subtitle}
             </p>
           )}
           {active.meta && active.meta.length > 0 && (
             <dl className="mt-10 w-full max-w-[230px] text-[12px]">
               {active.meta.map((row) => (
-                <div key={row.label} className="flex justify-between py-[5px]">
-                  <dt className="text-muted-foreground">{row.label}</dt>
-                  <dd className="font-medium text-foreground">{row.value}</dd>
+                <div key={row.label} className="flex justify-between gap-4 py-[5px]">
+                  <dt className="shrink-0 text-muted-foreground">{row.label}</dt>
+                  <dd className="truncate text-right font-medium text-foreground">{row.value}</dd>
                 </div>
               ))}
             </dl>
@@ -427,7 +429,7 @@ export function CoverflowCarousel({
       )}
 
       {showPagination && (
-        <div className="mt-4 flex items-center justify-center">
+        <div className="mt-6 flex items-center justify-center">
           {slides.map((_, index) => (
             <button
               key={index}
@@ -439,7 +441,7 @@ export function CoverflowCarousel({
             >
               <span
                 className={cn(
-                  "block size-1.5 bg-foreground transition-opacity",
+                  "block size-2 rounded-full bg-foreground transition-opacity",
                   index === selected ? "opacity-100" : "opacity-30",
                 )}
               />

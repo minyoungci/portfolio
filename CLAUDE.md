@@ -2,7 +2,7 @@
 
 퍼스널 브랜딩·아카이브용 포트폴리오 사이트. 영문 골격(섹션명·메타·라벨) + 국문 본문.
 이 문서의 독자는 둘이다. **포트폴리오 매니저**(콘텐츠를 넣는 사람)는 1·2절, **개발자**(코드를 바꾸는 사람)는 1·3절을 본다.
-사실이 코드와 어긋나면 코드가 정본이고, 이 문서를 고친다. (마지막 대조: 2026-09-06)
+사실이 코드와 어긋나면 코드가 정본이고, 이 문서를 고친다. (마지막 대조: 2026-09-06, 레퍼런스 리디자인 반영)
 
 ---
 
@@ -13,7 +13,8 @@
 | 항목 | 값 |
 |------|----|
 | 스택 | Next.js 16 (App Router, dev·build 모두 Turbopack), React 19, TypeScript, Tailwind CSS v4 (`@theme` in CSS, config 파일 없음), framer-motion (Papers·Research 아코디언에만) |
-| 폰트 | Inter + Cormorant Garamond (next/font, 라틴), Pretendard (jsDelivr CDN, 한글 산세리프), Noto Serif KR (next/font, 한글 세리프) |
+| 폰트 | 산세리프 하나: Inter (next/font, 라틴) + Pretendard (jsDelivr CDN, 한글). 세리프 없음 |
+| 테마 | 다크 기본, 시스템이 라이트면 자동 라이트(`prefers-color-scheme`). 토글 없음 |
 | 데이터 | `data/*.json` + 얇은 `.ts` 래퍼(`raw as Type`). DB·런타임 검증 없음. **빌드 시 번들에 구워지므로 배포 후 바꾸려면 재배포** |
 | 콘텐츠 편집 | JSON 직접 편집, 또는 `/admin` (Projects · Papers · Research · Piece 탭만) |
 | 배포 | Vercel. `master` push → 프로덕션, 다른 브랜치 push → 프리뷰 URL. 정적 export 아님 |
@@ -24,7 +25,7 @@
 | 파일 | 역할 |
 |------|------|
 | `PROFILE-INTAKE.md` | 콘텐츠 입력 시트. 여기 답을 `data/*.json`으로 옮긴다. 12절이 확정된 정보 구조 |
-| `docs/design-audit.md` | 1~4절은 **리빌드 전(2026-09-06 오전) 상태 기록**, 5절이 현재 반영 상태. 현재 수치는 5절과 코드만 믿는다 |
+| `docs/design-audit.md` | 1~5절은 이전 디자인(흑백 편집형)의 기록, 6절이 현재 레퍼런스 리디자인. 현재 수치는 6절과 코드만 믿는다 |
 | `SPEC.md` | 최초 명세(2026-02). 비목표에 admin·static export·로그인/인증이 있으나 셋 다 뒤집힘. 참고용 |
 | `DEPLOY.md` | Vercel 최초 연결·도메인 절차. 2026-09에 브랜치(`master`)·env·`next.config.ts`로 갱신 |
 | `SCRATCHPAD.md` | 작업 로그. 세션 끝에 손으로 갱신. 2026-02 기록의 `.claude/commands/*`, `docs/design-system.md` 등은 현재 없다 |
@@ -33,12 +34,11 @@
 
 ### 1-3. 홈 구조 (한 번만 이해하면 되는 규칙)
 
-- HERO: 이름 + 한 줄 정체성 + Selected work(코버플로우)
-- 섹션 순서: 01 About → 02 Projects → 03 Post → 04 Piece → 05 Research → 06 Papers → 07 Contact
-- **섹션 번호·표시 여부·nav 목록의 정본은 `lib/sections.ts`의 `ORDER`.** 데이터가 빈 섹션(Projects·Post·Piece·Research·Papers)은 페이지와 nav에서 함께 사라지고 번호가 다시 매겨진다. About·Contact는 항상 보인다.
-- **항목 번호(프로젝트·포스트·논문·연구)는 각 JSON 배열의 순서에서 나온다.** 순서를 바꾸려면 항목을 옮긴다. `id`는 화면에 쓰지 않는다.
-- Selected work 노출 규칙(`lib/featured.ts`): `featured: true` 프로젝트 전부 → `cover`가 있는 포스트 전부 → `featured: true` 피스 전부, 이 순서로 모두 올린다(상한 없음, 3~6개 권장). featured 프로젝트가 하나도 없으면 앞의 프로젝트 3개로 대체. 슬라이드가 3개 미만이면 코버플로우 대신 정적 그리드(`FeaturedRow`, 1→2→3열 반응형).
-- 슬라이드 클릭: 프로젝트·포스트는 상세로, 피스는 상세가 없어 홈 Piece 섹션으로 스크롤. 썸네일 없는 프로젝트는 번호만 있는 회색 카드로 나온다.
+- 레퍼런스(코버플로우 데모)의 언어로 만든 "앨범 선반" 홈. HERO는 이름 + 한 줄 정체성 + 소속 + 링크 알약(중앙 정렬, 작게).
+- 섹션 순서: Projects → Post → Piece → Research → Papers → About → Contact. Projects·Post·Piece는 **코버플로우 선반**(`components/Shelf.tsx`), Research·Papers·About는 중앙 카드, Contact는 중앙 정렬. 번호는 쓰지 않는다.
+- **표시 여부·nav 목록의 정본은 `lib/sections.ts`의 `ORDER`.** 데이터가 빈 섹션(Projects·Post·Piece·Research·Papers)은 페이지와 nav에서 함께 사라진다. About·Contact는 항상 보인다.
+- 선반 규칙: 슬라이드가 3개 이상이면 코버플로우, 미만이면 같은 카드의 정적 나열(`ShelfRow`). 가운데 카드를 누르면 프로젝트·글은 상세로, 피스는 라이트박스. 데이터 → 슬라이드 변환은 `lib/shelves.ts`. **항목 순서는 각 JSON 배열의 순서.** `id`는 화면에 쓰지 않는다.
+- 썸네일 없는 프로젝트는 카테고리 + 제목이 적힌 그라데이션 카드로 나온다. `featured` 플래그는 현재 화면에 쓰이지 않는다.
 
 ---
 
@@ -48,23 +48,23 @@
 
 | 콘텐츠 | 파일 | 편집 | 반영되는 곳 |
 |--------|------|------|-------------|
-| 이름·태그라인·한 줄 정체성·bio·소속·링크·Contact 문구 | `data/profile.json` | JSON | hero, About, `/about`, Contact, 상단 워드마크, 페이지 제목·메타·OG |
-| 학력·경력·수상·활동 | `data/timeline.json` | JSON | About(홈), `/about` |
-| 프로젝트 | `data/projects.json` | admin 또는 JSON | 02 Projects, `/projects/[slug]`, hero |
-| 글 | `data/posts.json` + `content/posts/<slug>.md` | JSON + md | 03 Post, `/posts/[slug]`, hero(`cover`) |
-| 시각 작업 | `data/pieces.json` (+ 업로드) | admin 또는 JSON (`featured`는 JSON) | 04 Piece, hero(`featured`) |
-| 연구 · 논문 | `data/research.json`, `data/papers.json` | admin 또는 JSON | 05 Research · 06 Papers |
+| 이름·태그라인·한 줄 정체성·bio·소속·링크·Contact 문구 | `data/profile.json` | JSON | hero, About, `/about`, Contact, 상단 nav 워드마크, 페이지 제목·메타·OG |
+| 학력·경력·수상·장학·활동 | `data/timeline.json` | JSON | About(홈), `/about` |
+| 프로젝트 | `data/projects.json` | admin 또는 JSON | Projects 선반, `/projects/[slug]` |
+| 글 | `data/posts.json` + `content/posts/<slug>.md` | JSON + md | Post 선반(`cover`가 카드 이미지), `/posts/[slug]` |
+| 시각 작업 | `data/pieces.json` (+ 업로드) | admin 또는 JSON | Piece 선반 + 라이트박스 |
+| 연구 · 논문 | `data/research.json`, `data/papers.json` | admin 또는 JSON | Research · Papers 카드 (비면 숨김) |
 
-필드 정의의 정본은 `types/index.ts`. JSON에 필드를 추가할 때는 타입부터 고친다. 위 번호는 모든 섹션이 찼을 때 기준이며, 비면 사라지고 밀린다(1-3).
+필드 정의의 정본은 `types/index.ts`. JSON에 필드를 추가할 때는 타입부터 고친다.
 
 ### 2-2. 프로필 · 타임라인 (`profile.json`, `timeline.json`)
 
 - `identity`: 직함이 아니라 하는 일. 10~15 단어(국문). `identityEn`은 보조 문장이면서 **검색·공유 미리보기 설명(meta/OG description)** 으로도 쓰인다. 비우면 화면에서 숨고 메타는 `identity`로 대체된다.
-- `tagline`: hero 상단 라벨, 모든 페이지 `<title>`(`이름 — tagline`), OG 이미지. `nameLines`: hero 줄바꿈 단위 `["Minyoung", "Kim"]`. `name`에서 상단 워드마크(M I N Y O U N G K I M)가 자동 파생된다.
+- `tagline`: hero 상단 라벨, 모든 페이지 `<title>`(`이름 — tagline`), OG 이미지. `name`이 hero 제목과 nav 워드마크에 그대로 쓰인다. `nameLines`는 OG 이미지 줄바꿈에만 쓰인다.
 - **OG 이미지(`app/opengraph-image.tsx`)는 내장 라틴 폰트만 쓴다.** `tagline`·`nameLines`·`email`에 한글을 넣지 않는다. 한글 이름은 `nameKo`(`/about`에만 표시).
 - `bio[]`: 국문 문단 배열. 3문단(지금 / 왜 / 어디로) 권장. 홈 About과 `/about`에 같은 전체가 나온다(요약본 없음). `bioEn[]`(선택)은 영문 bio로 `/about`의 "In English" 블록에만 표시.
 - `links[]`: `label`은 서로 다르게 한두 단어(칸이 좁아 `Scholar`처럼 짧게), `handle`이 화면 표기(raw URL 노출 금지), `mailto:` 외 링크는 새 탭.
-- `affiliation`·`location`: hero 우측과 `/about` 상단에 소문구로. `contactTitle`·`contactLine`: Contact 섹션.
+- `affiliation`·`location`: hero와 `/about` 상단에 `·`로 이어진 소문구로. `contactTitle`·`contactLine`: Contact 섹션.
 - 타임라인 `kind`: `career` · `education` · `award` · `scholarship` · `activity`. 같은 kind끼리 묶여 이 순서로 나오고(라벨 Career / Education / Awards / Scholarships / Activities, 정본은 `components/AboutSection.tsx`), **kind 안에서는 연도로 정렬하지 않으니 최신 항목을 배열 앞에** 둔다. `year`는 문자열(`"2022–2024"`, `"2025–"`, 이 길이를 넘기지 않는다). `org`·`description` 선택.
 
 ### 2-3. 프로젝트 추가 (`projects.json`)
@@ -72,15 +72,15 @@
 1. admin → Projects → `+ New`. 제목, 한 줄(subtitle), 연도(숫자, 비우면 0이 저장되니 항상 채운다), 카테고리(쉼표 구분), 스택(쉼표 구분), 설명, 썸네일, 링크(GitHub/Demo/Paper), featured.
 2. **slug는 최초 저장 때 제목에서 만들어지며 영문 소문자·숫자·하이픈만 남는다.** 한글 제목만 쓰면 slug가 비거나(`한글제목` → `""`) 하이픈만 남아(`한글 제목` → `-`) 링크가 깨지고 다른 항목과 겹친다. 영문 제목을 쓰거나 저장 후 JSON에서 `slug`를 직접 넣는다. 한 번 정해진 slug는 이후 admin 저장에서도 유지된다(제목을 바꿔도 URL이 안 끊긴다).
 3. 썸네일: admin의 `파일 선택`으로 올린다. 이미지는 `public/uploads/`(경로 `/uploads/...`), 영상(mp4/webm/mov)은 R2로 올라가 URL이 들어간다. 직접 URL을 넣을 때 외부 이미지는 `next.config.ts`의 `images.remotePatterns`에 있는 호스트(unsplash, picsum, `*.r2.dev`)만 된다. 그 밖의 호스트는 페이지가 죽는다.
-4. 같은 썸네일이 목록 카드 4:3, 상세 상단 16:9, hero 코버플로우 1:1로 각각 잘린다. **가로 이미지에 핵심을 중앙 정사각 안에** 두면 셋 다 안전하다.
-5. `description`은 마크다운이 아니라 **줄바꿈이 유지되는 일반 텍스트**. `category[0]`이 카드·hero의 대표 분류이고 상세에서는 전체가 쉼표로 이어진다. `subtitle`은 상세 페이지의 meta description으로도 쓰이니 한 문장으로. `images[]`는 아직 화면에 쓰이지 않는다(`[]`로 둔다).
+4. 같은 썸네일이 선반 카드에서는 1:1, 상세 상단에서는 4:3으로 잘린다. **핵심을 중앙 정사각 안에** 두면 둘 다 안전하다. 썸네일이 없으면 카테고리 + 제목이 적힌 카드가 대신 나온다.
+5. `description`은 마크다운이 아니라 **줄바꿈이 유지되는 일반 텍스트**. `category[0]`이 카드의 대표 분류이고 상세에서는 전체가 쉼표로 이어진다. `subtitle`은 선반 캡션과 상세 페이지 meta description에 쓰이니 한 문장으로. `images[]`와 `featured`는 아직 화면에 쓰이지 않는다.
 6. 테스트 항목 `ddaaa`는 실제 프로젝트를 넣을 때 삭제한다.
 
 ### 2-4. 글(Post) 추가 (`posts.json` + `content/posts/*.md`)
 
 1. `content/posts/<slug>.md`를 쓴다. slug는 자동 생성이 없다. 영문 소문자·숫자·하이픈으로 직접 정하고 **md 파일명과 대소문자까지 똑같이** 맞춘다(Vercel은 Linux라 구분한다). md만 있으면 목록에 안 뜨고, JSON만 있으면 상세가 404다.
 2. 이미지는 `public/images/articles/<폴더>/`에 넣고 `/images/articles/...`로 참조한다. 본문 이미지는 본문 폭(최대 760px)에 꽉 차고 높이 제한이 없으니 가로형(폭 1500px 안팎)을 쓴다.
-3. `data/posts.json`에 메타를 추가한다: `id`(고유 숫자), `slug`, `title`, `date`(`YYYY-MM-DD`), `summary`(상세 헤더와 meta description에 쓰임, 한 문장), `tags[]`(`tags[0]`이 목록·hero의 대표 태그), `cover`(선택, hero 노출 전용·이미지만). `content`는 빈 문자열로 둔다(본문은 md에서 읽는다).
+3. `data/posts.json`에 메타를 추가한다: `id`(고유 숫자), `slug`, `title`, `date`(`YYYY-MM-DD`), `summary`(상세 헤더와 meta description에 쓰임, 한 문장), `tags[]`(`tags[0]`이 선반 캡션의 대표 태그), `cover`(선택, 이미지만. 선반 카드와 상세 상단에 표시되고 없으면 제목 카드). `content`는 빈 문자열로 둔다(본문은 md에서 읽는다).
 4. 렌더러는 자체 파서(`components/MarkdownArticle.tsx`)라 **지원 문법이 제한적**이다.
    - 제목: `#` → 대제목(h2, 상단 괘선), `##` → 소제목(h3), `###` → 라벨(h4). `####` 이상은 글자 그대로 보인다. 글 제목은 `posts.json`의 `title`이 h1로 나오므로 md 첫 줄에 다시 쓰지 않는다.
    - 블록: 문단, `> 인용`, `- 목록`, `1. 번호 목록`(`1)`도 가능), `---` 구분선, 한 줄 단독 `![캡션](src)`(alt가 캡션).
@@ -92,7 +92,7 @@
 
 - admin → Piece → `+ New`: **이미지/영상 URL과 프롬프트가 둘 다 있어야 저장**된다(없으면 저장 버튼 비활성). `파일 선택`으로 이미지(→ `public/uploads/`)나 영상(→ R2)을 올리면 URL이 자동으로 채워진다. 제목 선택, 날짜는 `YYYY-MM`(검증 없음, 이번 달이 기본).
 - 영상은 주소가 `.mp4`/`.webm`/`.mov`로 끝날 때만 영상으로 재생된다. 확장자가 없는 주소는 이미지로 취급돼 깨진다.
-- hero에 올리려면 JSON에서 `featured: true`. admin Piece 폼에는 featured 칸이 없지만 저장 시 기존 값은 보존된다.
+- 모든 피스가 Piece 선반에 오르고, 가운데 카드를 누르면 라이트박스에서 원본과 프롬프트를 본다. `featured`는 현재 쓰이지 않는다(admin 저장 시 기존 값은 보존).
 
 ### 2-6. Papers · Research 추가 (`papers.json`, `research.json`)
 
@@ -143,12 +143,12 @@ app/
   opengraph-image.tsx    OG 이미지 (next/og, 내장 라틴 폰트)
   globals.css            토큰(@theme), .article-body 타이포, .page-enter
 components/
-  Hero, FeaturedRow, SectionHeading, AboutSection(groupTimeline·KIND_LABEL export), ProjectGrid, ProjectCard,
-  PostSection, ContactSection, PageTransition, MarkdownArticle, AdminAccess           ← 서버
-  Navigation, FeaturedCoverflow, PieceSection, PapersSection, ResearchSection,
-  ImageUploadButton, ui/coverflow-carousel, app/admin/*(page.tsx 제외)                 ← 'use client'
+  Hero, AboutSection(TimelineGroup·groupTimeline export), ContactSection, PageTransition,
+  MarkdownArticle, AdminAccess                                                          ← 서버
+  Navigation(알약 nav), Shelf(코버플로우 선반), PieceShelf(선반 + 라이트박스), PapersSection,
+  ResearchSection, ImageUploadButton, ui/coverflow-carousel, app/admin/*(page.tsx 제외)  ← 'use client'
 data/        *.json + 래퍼 .ts. export 이름: projects · posts · pieces · papers · researchItems(← research 아님) · profile · timeline
-lib/         sections.ts(섹션 정본) featured.ts(hero 슬라이드) utils.ts(cn) github.ts r2.ts
+lib/         sections.ts(섹션 정본) shelves.ts(데이터 → 선반 슬라이드) utils.ts(cn) adminAuth.ts adminFetch.ts github.ts r2.ts
 types/index.ts   모든 데이터 타입 (Project Post Piece Paper ResearchItem Profile TimelineEntry)
 content/posts/   글 본문 md          public/uploads/  admin 업로드 이미지          public/images/articles/  글 이미지
 ```
@@ -159,18 +159,18 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 
 - json → `data/*.ts`(`raw as Type`) → 서버 컴포넌트가 직접 import. 클라이언트 컴포넌트에는 직렬화 가능한 props만 넘긴다(`Navigation`은 `profile`을 직접 import하지만 정적 JSON이라 허용).
 - JSON은 빌드 시 번들에 구워지고 `/projects/[slug]`·`/posts/[slug]`는 `generateStaticParams`로 정적 생성된다. 동적 라우트는 `/api/*`와 `/admin`뿐. 로컬 dev에서는 JSON 저장이 HMR로 즉시 반영된다.
-- `lib/sections.ts`가 nav 목록·섹션 번호·표시 여부를, `lib/featured.ts`가 hero 슬라이드를 만든다. **홈 섹션을 추가·제거·재배열할 때는 세 곳을 함께 고친다**: ① `ORDER`(id·label·visible), ② `app/page.tsx`의 JSX 블록(순서 포함), ③ 섹션 컴포넌트의 `<section id="…">`(ORDER의 id와 같아야 nav 앵커·활성 표시·`scroll-margin`이 동작).
+- `lib/sections.ts`가 nav 목록·표시 여부를, `lib/shelves.ts`가 선반 슬라이드를 만든다. **홈 섹션을 추가·제거·재배열할 때는 세 곳을 함께 고친다**: ① `ORDER`(id·label·visible), ② `app/page.tsx`의 JSX 블록(순서 포함), ③ 섹션 컴포넌트의 `<section id="…">`(ORDER의 id와 같아야 nav 앵커·활성 표시·`scroll-margin`이 동작).
 - 동적 라우트의 `params`는 Next 16에서 `Promise`다: `const { slug } = await params`. 시그니처가 틀리면 빌드의 타입 검증에서 실패한다.
 
-### 3-3. 디자인 시스템 (요약. 근거는 `docs/design-audit.md` 5절)
+### 3-3. 디자인 시스템 (레퍼런스 = 코버플로우 데모의 언어. 기록은 `docs/design-audit.md` 6절)
 
-- 톤: 하이브리드. 에디토리얼 히어로(큰 serif) + 플랫 섹션(흰 배경, 1px 검정 상단 괘선). 배경 반전 블록 없음. **단일 반응형 레이아웃** — 데스크톱/모바일 분기 컴포넌트를 만들지 않는다.
-- 팔레트: `#000` · `#fff` · `#F5F5F5`(`bg-gray`). shadcn 별칭 `background / foreground / muted / ring`은 같은 값, `muted-foreground`는 `#666`. `bg-gray`(토큰)와 Tailwind 기본 `bg-gray-100`(oklch 스케일)은 다른 색이며 기본 스케일은 admin 화면에서만 쓴다.
-- 타이포: body 14px(모바일 13px). 항목 제목 italic 15px, 메타 11~12px uppercase `tracking-[0.18em]`, serif 대제목은 `clamp()`. `--font-mono` 토큰이 없으므로 `font-mono`를 쓰지 않고 숫자는 `tabular-nums`.
-- 대비: 텍스트는 `text-black/60`(#666, 5.7:1) 아래로 내리지 않는다. `/50` 이하는 괘선·장식에만.
-- 섹션 헤딩은 `SectionHeading` 컴포넌트만 사용. 번호는 props로 받는다.
-- 모션: 페이지 페이드(CSS `.page-enter`), hover scale 1.02, 아코디언 0.25s, 코버플로우(hero 한 곳만). 그 밖의 모션은 추가하지 않는다. `prefers-reduced-motion`은 현재 페이지 페이드와 smooth scroll에만 적용돼 있고 아코디언·코버플로우·hover는 미대응(모션을 만질 때 `useReducedMotion`/`matchMedia`/`motion-safe:`로 확장).
-- 이미지: `next/image`는 프로젝트 썸네일(`ProjectCard`, `/projects/[slug]`)에만. Piece·hero 슬라이드·글 본문은 소스가 로컬이든 원격이든 `<img>` + `eslint-disable-next-line @next/next/no-img-element`. 영상은 `<video autoPlay muted loop playsInline>`.
+- 톤: 둥근 카드 + 부드러운 그림자 + 중앙 정렬 + 알약형 UI. 앱 같은 감각이지 편집 디자인이 아니다. 다크 기본, 시스템이 라이트면 자동 라이트. **단일 반응형 레이아웃** — 데스크톱/모바일 분기 컴포넌트를 만들지 않는다.
+- 토큰: `app/globals.css`의 CSS 변수 `--background --foreground --card --muted --muted-foreground --border --ring --shadow-card`(다크 기본값 + `prefers-color-scheme: light` 세트)를 `@theme inline`으로 노출한다 → `bg-background` `text-foreground` `bg-card` `bg-muted` `text-muted-foreground` `border-border` `divide-border` `ring-border` `shadow-card`. **사이트 UI에서 색은 이 토큰만 쓴다.** `black/white/gray-*` 직접값과 opacity 위계(`text-black/60`)는 쓰지 않는다(admin 화면은 예외).
+- 타이포: Inter + Pretendard 하나. 섹션 제목 24~30px semibold `tracking-tight` 중앙 정렬, 카드·항목 제목 15px semibold, 보조 13px `text-muted-foreground`, 메타는 12px `dl`(라벨 좌 muted · 값 우 medium). uppercase 라벨은 11~12px `tracking-[0.18em]`~`[0.22em]`에만. serif·italic·`font-mono` 없음, 숫자는 `tabular-nums`.
+- 형태: 카드 `rounded-2xl` + `shadow-card`(코버플로우 카드는 `shadow-xl`) + `ring-1 ring-border`. 버튼·링크·nav는 `rounded-full`, 입력은 `rounded-xl`. 괘선은 `border-border`/`divide-border`만.
+- 레이아웃: 전부 중앙 정렬. 본문 카드 `max-w-3xl`(About·Contact·Papers·Research), 상세 `max-w-2xl`, 코버플로우 `max-w-5xl`. 섹션 `py-14 sm:py-20`. nav는 `fixed top-4` 알약이라 `section[id]`에 `scroll-margin-top` 5.5rem.
+- 모션: 코버플로우(드래그·rAF settle), 카드 hover `-translate-y-1`, 페이지 페이드(`.page-enter`), 아코디언 0.25s. 그 밖의 모션은 추가하지 않는다. `prefers-reduced-motion`은 페이드·smooth scroll만 대응(코버플로우·아코디언·hover 미대응).
+- 이미지: 선반 카드·글 본문·Piece 라이트박스는 `<img>`/`<video>` + `eslint-disable-next-line @next/next/no-img-element`(원격 소스 혼용). `next/image`는 프로젝트 상세 커버에만. 영상은 `<video autoPlay muted loop playsInline>`.
 
 ### 3-4. 컨벤션
 
@@ -179,8 +179,8 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 - 서버 컴포넌트가 기본. `'use client'`는 상태·이벤트·framer-motion이 필요할 때만(목록은 3-1). `AboutSection`은 헬퍼를 export하므로 서버로 둔다.
 - 데이터 필드 추가 순서: `types/index.ts` → JSON → 사용처 → admin 탭의 `EMPTY`·`fromX`·`toX`. `toX`는 `...existing`을 먼저 펼쳐 폼에 없는 필드를 보존한다(이 규칙을 깨면 admin 저장이 필드를 지운다).
 - `id`는 고유 식별자로만 쓴다(admin이 `Date.now()`로 생성). 화면 번호는 항상 index에서 파생.
-- 폰트 추가는 3단계: `app/layout.tsx`에서 `next/font`로 로드 → `variable`을 `<html className>`에 → `globals.css` `@theme`의 `--font-*` 체인에 참조. 한글 폰트는 `subsets` 없이 `preload: false`(Noto Serif KR 방식).
-- 코버플로우(`components/ui/coverflow-carousel.tsx`)는 외부 소스에 `media`/`onActivate`/`onChange`·플레이스홀더 카드만 더한 것이다. 스타일은 props(`cardClassName` 등)로 조정하고 파일은 최소한으로만 건드린다. `lucide-react` `clsx` `tailwind-merge` `tw-animate-css`는 이 컴포넌트 전용.
+- 폰트는 `app/layout.tsx`의 `next/font`(Inter) + `globals.css` `--font-sans` 체인(Pretendard 폴백)뿐이다. 세리프·모노를 추가하지 않는다(결정 사항). 새 토큰은 `globals.css`의 `:root`·라이트 블록·`@theme inline` 세 곳에 함께 넣는다.
+- 코버플로우(`components/ui/coverflow-carousel.tsx`)는 외부 소스에 `media`/`kicker`/`onActivate`/`onChange`·플레이스홀더 카드만 더한 것이다. 스타일은 props(`cardClassName` 등)로 조정하고 파일은 최소한으로만 건드린다. `lucide-react` `clsx` `tailwind-merge` `tw-animate-css`는 이 컴포넌트 전용. 새 선반은 `Shelf`에 `lib/shelves.ts`의 변환 함수를 물려 만든다.
 - 커밋 접두사: `[FEAT]` `[FIX]` `[STYLE]` `[DATA]` `[DOCS]`. admin의 자동 커밋은 `[admin]`.
 
 ### 3-5. 환경 변수
@@ -218,4 +218,5 @@ npx next typegen && npx tsc --noEmit && npm run lint && npm run build
 - admin에 Profile · Timeline · Post 탭이 없다 → JSON 직접 편집(2-8).
 - 마크다운 파서: 코드 블록·표 미지원. `prefers-reduced-motion` 부분 대응(3-3).
 - 커스텀 404 페이지 없음. Pretendard는 jsDelivr CDN 의존. `README.md` 보일러플레이트.
+- 선반 코버플로우는 슬라이드 3개 이상이어야 제 모습이 난다. 프로젝트 썸네일이 아직 없어 카테고리·제목 카드로 나간다.
 - `public/uploads/1772027226814-grok_2.jpg`는 어디에서도 참조되지 않는 고아 파일.

@@ -47,37 +47,40 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <PageTransition>
-      <main className="min-h-screen bg-white">
-        <article className="mx-auto max-w-[760px] px-5 sm:px-8 pt-20 pb-24">
-          <Link
-            href="/#post"
-            className="text-[11px] uppercase tracking-[0.22em] text-black/60 hover:text-black transition-colors"
-          >
-            ← Back to posts
+      <main className="min-h-screen">
+        <article className="mx-auto max-w-[720px] px-6 pt-28 pb-24 sm:pt-32">
+          <Link href="/#post" className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+            ← Post
           </Link>
 
-          <header className="mt-12 mb-12 border-b border-black/10 pb-10">
-            <div className="text-[11px] uppercase tracking-[0.22em] text-black/60">
-              Post / {post.date} / {post.tags.join(', ')}
-            </div>
-            <h1 className="font-serif text-[clamp(2.5rem,6vw,3.75rem)] leading-[0.95] tracking-[-0.03em] mt-5">
+          <header className="mt-8 mb-10">
+            <p className="text-[12px] text-muted-foreground">
+              {post.date}
+              {post.tags.length > 0 && <span> · {post.tags.join(', ')}</span>}
+            </p>
+            <h1 className="mt-4 text-[clamp(1.9rem,5vw,2.75rem)] font-semibold leading-[1.15] tracking-tight">
               {post.title}
             </h1>
-            <p className="text-[17px] sm:text-[19px] leading-8 text-black/60 mt-7 font-serif">
-              {post.summary}
-            </p>
+            <p className="mt-5 text-[16px] leading-7 text-muted-foreground">{post.summary}</p>
           </header>
+
+          {post.cover && (
+            <div className="mb-10 overflow-hidden rounded-2xl border border-border bg-muted shadow-card">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={post.cover} alt="" className="block w-full" />
+            </div>
+          )}
 
           <MarkdownArticle content={content} />
 
-          <nav className="mt-20 pt-8 border-t border-black/20 flex justify-between gap-6 text-[11px] uppercase tracking-[0.18em]">
+          <nav className="mt-16 flex justify-between gap-4 border-t border-border pt-8 text-[13px]">
             {prev ? (
-              <Link href={`/posts/${prev.slug}`} className="hover:opacity-60 transition-opacity">
+              <Link href={`/posts/${prev.slug}`} className="text-muted-foreground transition-colors hover:text-foreground">
                 ← {prev.title}
               </Link>
             ) : <span />}
             {next ? (
-              <Link href={`/posts/${next.slug}`} className="text-right hover:opacity-60 transition-opacity">
+              <Link href={`/posts/${next.slug}`} className="text-right text-muted-foreground transition-colors hover:text-foreground">
                 {next.title} →
               </Link>
             ) : <span />}

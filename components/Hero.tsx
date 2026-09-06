@@ -1,54 +1,36 @@
 import { profile } from '@/data/profile'
-import { getFeaturedSlides } from '@/lib/featured'
-import FeaturedCoverflow from '@/components/FeaturedCoverflow'
-import FeaturedRow from '@/components/FeaturedRow'
 
+/** 이름 · 한 줄 정체성 · 소속 · 링크. 중앙 정렬, 작게. 대표작은 아래 선반이 맡는다. */
 export default function Hero() {
-  const slides = getFeaturedSlides()
   const meta = [profile.affiliation, profile.location].filter((v): v is string => Boolean(v))
 
   return (
-    <section id="hero" className="px-4 pt-12 pb-6 sm:px-6 sm:pt-16">
-      <p className="text-[11px] uppercase tracking-[0.3em] text-black/60">{profile.tagline}</p>
-
-      <h1 className="mt-4 font-serif text-[clamp(3.5rem,11vw,9.5rem)] font-light leading-[0.92] tracking-[-0.03em]">
-        {profile.nameLines.map((line) => (
-          <span key={line} className="block">
-            {line}
-          </span>
-        ))}
+    <section id="hero" className="mx-auto max-w-3xl px-6 pt-32 pb-8 text-center sm:pt-40 sm:pb-12">
+      <p className="text-[12px] font-medium uppercase tracking-[0.22em] text-muted-foreground">{profile.tagline}</p>
+      <h1 className="mt-5 text-[clamp(2.5rem,7vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
+        {profile.name}
       </h1>
-
-      <div className="mt-8 grid gap-6 md:grid-cols-12 md:items-end">
-        <div className="md:col-span-8">
-          <p className="max-w-2xl text-[15px] leading-7 sm:text-[17px]">{profile.identity}</p>
-          {profile.identityEn && (
-            <p className="mt-2 max-w-2xl text-[13px] leading-6 text-black/60">{profile.identityEn}</p>
-          )}
-        </div>
-        <div className="space-y-1 text-[12px] text-black/60 md:col-span-4 md:text-right">
-          {meta.map((line) => (
-            <p key={line} className="uppercase tracking-[0.18em]">
-              {line}
-            </p>
-          ))}
-          <a href={`mailto:${profile.email}`} className="block transition-colors hover:text-black">
-            {profile.email}
-          </a>
-        </div>
-      </div>
-
-      {slides.length > 0 && (
-        <div className="mt-14 sm:mt-20">
-          <div className="flex items-baseline justify-between border-t border-black pt-3">
-            <p className="text-[11px] uppercase tracking-[0.22em]">Selected work</p>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-black/60">
-              Drag · Arrow keys
-            </p>
-          </div>
-          {slides.length >= 3 ? <FeaturedCoverflow slides={slides} /> : <FeaturedRow slides={slides} />}
-        </div>
+      <p className="mx-auto mt-6 max-w-xl text-[16px] leading-7 text-muted-foreground sm:text-[17px]">
+        {profile.identity}
+      </p>
+      {profile.identityEn && (
+        <p className="mx-auto mt-2 max-w-xl text-[13px] leading-6 text-muted-foreground/80">{profile.identityEn}</p>
       )}
+      {meta.length > 0 && <p className="mt-6 text-[12px] text-muted-foreground">{meta.join(' · ')}</p>}
+
+      <div className="mt-8 flex flex-wrap justify-center gap-2">
+        {profile.links.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target={link.href.startsWith('mailto') ? undefined : '_blank'}
+            rel="noopener noreferrer"
+            className="rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium shadow-card transition-colors hover:bg-muted"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
     </section>
   )
 }

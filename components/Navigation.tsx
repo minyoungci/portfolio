@@ -5,19 +5,17 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { HomeSection } from '@/lib/sections'
 import { profile } from '@/data/profile'
-
-// 워드마크는 profile.name에서 파생 ("Minyoung KIM" → M I N Y O U N G K I M)
-const NAME_LETTERS = profile.name.replace(/\s+/g, '').toUpperCase().split('')
+import { cn } from '@/lib/utils'
 
 interface NavigationProps {
   sections: HomeSection[]
 }
 
+/** 화면 상단에 떠 있는 알약형 내비게이션. 홈에서는 보고 있는 섹션이 강조된다. */
 export default function Navigation({ sections }: NavigationProps) {
   const pathname = usePathname()
   const isHome = pathname === '/'
   const [activeId, setActiveId] = useState<string | null>(null)
-  // 홈 밖에서는 활성 표시를 하지 않는다 (상태를 지우는 대신 파생값으로 처리).
   const shownActive = isHome ? activeId : null
 
   useEffect(() => {
@@ -49,32 +47,25 @@ export default function Navigation({ sections }: NavigationProps) {
   }, [isHome, sections])
 
   return (
-    <header className="sticky top-0 z-50 bg-white">
-      {/* Row 1: name letters spread across the width */}
-      <Link
-        href="/"
-        aria-label="Home"
-        className="flex justify-center gap-1.5 border-b border-black px-4 py-2.5 transition-opacity hover:opacity-60 sm:gap-2.5"
-      >
-        {NAME_LETTERS.map((letter, i) => (
-          <span key={i} className="text-[12px] font-bold leading-none sm:text-[14px]">
-            {letter}
-          </span>
-        ))}
-      </Link>
-
-      {/* Row 2: section anchors. Wraps instead of clipping on narrow screens. */}
+    <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-3">
       <nav
-        aria-label="Sections"
-        className="flex flex-wrap gap-x-5 gap-y-1 border-b border-black px-4 py-2 sm:justify-between sm:px-6"
+        aria-label="Primary"
+        className="scrollbar-none pointer-events-auto flex max-w-full items-center gap-0.5 overflow-x-auto rounded-full border border-border bg-background/70 p-1.5 shadow-card backdrop-blur-md"
       >
+        <Link
+          href="/"
+          className="hidden shrink-0 rounded-full px-3 py-1.5 text-[13px] font-semibold tracking-tight transition-colors hover:bg-muted sm:block"
+        >
+          {profile.name}
+        </Link>
         {sections.map(({ id, label }) => (
           <Link
             key={id}
             href={`/#${id}`}
-            className={`text-[11px] uppercase tracking-[0.18em] transition-colors sm:text-[12px] ${
-              shownActive === id ? 'italic text-black' : 'text-black/60 hover:text-black'
-            }`}
+            className={cn(
+              'shrink-0 rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors',
+              shownActive === id ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
           >
             {label}
           </Link>

@@ -9,7 +9,6 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-const pad = (index: number) => String(index + 1).padStart(2, '0')
 const isVideo = (src: string) => /\.(mp4|webm|mov)(\?|$)/i.test(src)
 
 export function generateStaticParams() {
@@ -38,107 +37,92 @@ export default async function ProjectPage({ params }: Props) {
     { label: 'Paper', href: project.links.paper },
   ].filter((l): l is { label: string; href: string } => Boolean(l.href))
 
+  const rows = [
+    { label: 'Year', value: String(project.year) },
+    ...(project.category.length ? [{ label: 'Category', value: project.category.join(', ') }] : []),
+    ...(project.stack.length ? [{ label: 'Stack', value: project.stack.join(', ') }] : []),
+  ]
+
   return (
     <PageTransition>
-      <main className="min-h-screen px-4 pt-16 pb-24 sm:px-6">
-        <div className="max-w-3xl">
-          <Link
-            href="/#projects"
-            className="text-[11px] uppercase tracking-[0.22em] text-black/60 transition-colors hover:text-black"
-          >
-            ← Back to projects
-          </Link>
+      <main className="mx-auto min-h-screen max-w-2xl px-6 pt-28 pb-24 sm:pt-32">
+        <Link href="/#projects" className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+          ← Projects
+        </Link>
 
-          {/* Header */}
-          <header className="mt-12 mb-12">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-black/60">
-              <span className="tabular-nums">{pad(currentIndex)}</span>
-              {' · '}
-              {project.category.length > 0 ? project.category.join(', ') : 'Project'}
-              {' · '}
-              <span className="tabular-nums">{project.year}</span>
-            </p>
-            <h1 className="mt-4 font-serif text-[clamp(2.5rem,6vw,4.5rem)] font-light leading-[0.95] tracking-[-0.02em]">
-              {project.title}
-            </h1>
-            {project.subtitle && (
-              <p className="mt-4 max-w-2xl text-[15px] leading-7 text-black/60 sm:text-[17px]">
-                {project.subtitle}
-              </p>
-            )}
-          </header>
-
-          {/* Thumbnail */}
-          {project.thumbnail && (
-            <div className="relative mb-12 aspect-video w-full overflow-hidden bg-gray">
-              {isVideo(project.thumbnail) ? (
-                <video
-                  src={project.thumbnail}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <Image src={project.thumbnail} alt={project.title} fill className="object-cover" />
-              )}
-            </div>
-          )}
-
-          {/* Stack */}
-          {project.stack.length > 0 && (
-            <div className="mb-10 flex flex-wrap gap-2">
-              {project.stack.map((s) => (
-                <span key={s} className="border border-black px-2 py-1 text-[11px] tracking-[0.06em]">
-                  {s}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Description */}
-          {project.description && (
-            <div className="mb-16 max-w-2xl whitespace-pre-wrap text-[15px] leading-7">
-              {project.description}
-            </div>
-          )}
-
-          {/* Links */}
-          {links.length > 0 && (
-            <div className="mb-20 flex gap-8 text-[11px] uppercase tracking-[0.18em]">
-              {links.map((l) => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-opacity hover:opacity-60"
-                >
-                  {l.label} ↗
-                </a>
-              ))}
-            </div>
-          )}
-
-          {/* Prev / Next */}
-          <nav className="flex justify-between gap-6 border-t border-black pt-8 text-[11px] uppercase tracking-[0.18em]">
-            {prev ? (
-              <Link href={`/projects/${prev.slug}`} className="transition-opacity hover:opacity-60">
-                ← {pad(currentIndex - 1)} {prev.title}
-              </Link>
+        {/* Cover */}
+        <div className="relative mt-8 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted shadow-card">
+          {project.thumbnail ? (
+            isVideo(project.thumbnail) ? (
+              <video src={project.thumbnail} autoPlay muted loop playsInline className="h-full w-full object-cover" />
             ) : (
-              <span />
-            )}
-            {next ? (
-              <Link href={`/projects/${next.slug}`} className="text-right transition-opacity hover:opacity-60">
-                {pad(currentIndex + 1)} {next.title} →
-              </Link>
-            ) : (
-              <span />
-            )}
-          </nav>
+              <Image src={project.thumbnail} alt={project.title} fill className="object-cover" priority />
+            )
+          ) : (
+            <div className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted to-card p-8">
+              <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                {project.category[0] ?? 'Project'}
+              </span>
+              <span className="mt-2 text-2xl font-semibold tracking-tight">{project.title}</span>
+            </div>
+          )}
         </div>
+
+        <header className="mt-8">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{project.title}</h1>
+          {project.subtitle && <p className="mt-3 text-[15px] leading-7 text-muted-foreground">{project.subtitle}</p>}
+        </header>
+
+        <dl className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card px-5 text-[13px] shadow-card">
+          {rows.map((row) => (
+            <div key={row.label} className="flex justify-between gap-6 py-3">
+              <dt className="shrink-0 text-muted-foreground">{row.label}</dt>
+              <dd className="text-right font-medium">{row.value}</dd>
+            </div>
+          ))}
+          {links.length > 0 && (
+            <div className="flex justify-between gap-6 py-3">
+              <dt className="shrink-0 text-muted-foreground">Links</dt>
+              <dd className="flex flex-wrap justify-end gap-2">
+                {links.map((l) => (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full border border-border px-3 py-0.5 text-[12px] font-medium transition-colors hover:bg-muted"
+                  >
+                    {l.label}
+                  </a>
+                ))}
+              </dd>
+            </div>
+          )}
+        </dl>
+
+        {project.description && (
+          <div className="mt-10 whitespace-pre-wrap text-[15px] leading-7">{project.description}</div>
+        )}
+
+        <nav className="mt-16 flex justify-between gap-4 border-t border-border pt-8 text-[13px]">
+          {prev ? (
+            <Link href={`/projects/${prev.slug}`} className="text-muted-foreground transition-colors hover:text-foreground">
+              ← {prev.title}
+            </Link>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <Link
+              href={`/projects/${next.slug}`}
+              className="text-right text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {next.title} →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
       </main>
     </PageTransition>
   )

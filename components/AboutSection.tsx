@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { profile } from '@/data/profile'
 import { timeline } from '@/data/timeline'
 import type { TimelineKind } from '@/types'
-import SectionHeading from '@/components/SectionHeading'
 
 export const KIND_ORDER: TimelineKind[] = ['career', 'education', 'award', 'scholarship', 'activity']
 export const KIND_LABEL: Record<TimelineKind, string> = {
@@ -20,57 +19,59 @@ export function groupTimeline() {
   })).filter((group) => group.items.length > 0)
 }
 
-interface AboutSectionProps {
-  number: string
+/** 타임라인 한 그룹. 레퍼런스 캡션의 dl(라벨 좌·값 우) 리듬을 따른다. */
+export function TimelineGroup({ kind, items }: ReturnType<typeof groupTimeline>[number]) {
+  return (
+    <div>
+      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">{KIND_LABEL[kind]}</p>
+      <dl className="mt-3 divide-y divide-border">
+        {items.map((entry, i) => (
+          <div key={i} className="flex gap-4 py-3 text-[13px]">
+            <dt className="w-24 shrink-0 tabular-nums text-muted-foreground">{entry.year}</dt>
+            <dd className="min-w-0 flex-1">
+              <p className="font-medium">{entry.title}</p>
+              {entry.org && <p className="text-muted-foreground">{entry.org}</p>}
+              {entry.description && (
+                <p className="mt-1 text-[12px] leading-5 text-muted-foreground">{entry.description}</p>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  )
 }
 
-export default function AboutSection({ number }: AboutSectionProps) {
+export default function AboutSection() {
   const groups = groupTimeline()
 
   return (
-    <section id="about" className="px-4 py-8 sm:px-6">
-      <SectionHeading
-        number={number}
-        title="About"
-        aside={
-          <Link href="/about" className="transition-colors hover:text-black">
-            Full profile →
-          </Link>
-        }
-      />
+    <section id="about" className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
+      <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">About</h2>
 
-      <div className="grid gap-10 md:grid-cols-12">
-        <div className="max-w-2xl space-y-5 text-[15px] leading-7 md:col-span-7">
+      <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-card sm:p-10">
+        <div className="space-y-4 text-[15px] leading-7">
           {profile.bio.map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
         </div>
 
         {groups.length > 0 && (
-          <div className="space-y-8 md:col-span-5">
+          <div className="mt-10 grid gap-8 sm:grid-cols-2">
             {groups.map((group) => (
-              <div key={group.kind}>
-                <p className="mb-3 text-[11px] uppercase tracking-[0.22em] text-black/60">
-                  {KIND_LABEL[group.kind]}
-                </p>
-                <ul className="divide-y divide-black/10 border-y border-black/10">
-                  {group.items.map((entry, i) => (
-                    <li key={i} className="grid grid-cols-[6rem_1fr] gap-4 py-3 text-[13px]">
-                      <span className="tabular-nums text-black/60">{entry.year}</span>
-                      <div>
-                        <p className="italic">{entry.title}</p>
-                        {entry.org && <p className="text-black/60">{entry.org}</p>}
-                        {entry.description && (
-                          <p className="mt-1 text-[12px] leading-5 text-black/60">{entry.description}</p>
-                        )}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <TimelineGroup key={group.kind} {...group} />
             ))}
           </div>
         )}
+
+        <div className="mt-10 text-center">
+          <Link
+            href="/about"
+            className="inline-block rounded-full border border-border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-muted"
+          >
+            Full profile
+          </Link>
+        </div>
       </div>
     </section>
   )
