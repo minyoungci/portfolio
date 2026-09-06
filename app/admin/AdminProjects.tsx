@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import type { Project } from '@/types'
 import ImageUploadButton from '@/components/ImageUploadButton'
+import { adminList, adminSave } from '@/lib/adminFetch'
 
 const EMPTY = {
   title: '', subtitle: '', year: new Date().getFullYear(),
@@ -54,7 +55,7 @@ export default function AdminProjects() {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   useEffect(() => {
-    fetch('/api/save-content?type=projects').then(r => r.json()).then(setItems).catch(() => {})
+    adminList<Project>('projects').then(setItems).catch(() => {})
   }, [])
 
   const set = (k: keyof Form, v: string | boolean | number) =>
@@ -70,12 +71,10 @@ export default function AdminProjects() {
   const deleteItem = async () => {
     if (selectedId === null) return
     const next = items.filter(p => p.id !== selectedId)
-    await fetch('/api/save-content', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'projects', data: next }),
-    })
-    setItems(next); setSelectedId(null); setForm(EMPTY)
+    try {
+      await adminSave('projects', next)
+      setItems(next); setSelectedId(null); setForm(EMPTY)
+    } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }
   }
 
   const save = async () => {
@@ -86,11 +85,7 @@ export default function AdminProjects() {
       ? items.map(p => p.id === id ? updated : p)
       : [...items, updated]
     try {
-      const res = await fetch('/api/save-content', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'projects', data: next }),
-      })
-      if (!res.ok) throw new Error()
+      await adminSave('projects', next)
       setItems(next); setSelectedId(id); setStatus('saved')
       setTimeout(() => setStatus('idle'), 2000)
     } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }
@@ -158,10 +153,10 @@ export default function AdminProjects() {
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-6">
               <div className="max-w-xl">
-                <F label="Title" k="title" />
-                <F label="Subtitle (한 줄 설명)" k="subtitle" />
+                {F({ label: "Title", k: "title" })}
+                {F({ label: "Subtitle (한 줄 설명)", k: "subtitle" })}
                 <div className="grid grid-cols-2 gap-4">
-                  <F label="Year" k="year" type="number" />
+                  {F({ label: "Year", k: "year", type: "number" })}
                   <div className="mb-4">
                     <label className="text-xs opacity-50 block mb-1">Featured</label>
                     <input type="checkbox" checked={form.featured}
@@ -169,8 +164,8 @@ export default function AdminProjects() {
                       className="mt-1" />
                   </div>
                 </div>
-                <F label="Category (쉼표 구분, 예: Medical AI, Vision)" k="categoryStr" />
-                <F label="Stack (쉼표 구분, 예: Python, PyTorch)" k="stackStr" />
+                {F({ label: "Category (쉼표 구분, 예: Medical AI, Vision)", k: "categoryStr" })}
+                {F({ label: "Stack (쉼표 구분, 예: Python, PyTorch)", k: "stackStr" })}
                 <div className="mb-4">
                   <label className="text-xs opacity-50 block mb-1">Description</label>
                   <textarea value={form.description}
@@ -193,9 +188,9 @@ export default function AdminProjects() {
                 </div>
                 <div className="mt-2 pt-4 border-t border-black">
                   <p className="text-xs opacity-50 mb-3">Links</p>
-                  <F label="GitHub" k="github" placeholder="https://github.com/..." />
-                  <F label="Demo" k="demo" placeholder="https://..." />
-                  <F label="Paper" k="paper" placeholder="https://arxiv.org/..." />
+                  {F({ label: "GitHub", k: "github", placeholder: "https://github.com/..." })}
+                  {F({ label: "Demo", k: "demo", placeholder: "https://..." })}
+                  {F({ label: "Paper", k: "paper", placeholder: "https://arxiv.org/..." })}
                 </div>
               </div>
             </div>

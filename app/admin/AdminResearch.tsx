@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import type { ResearchItem } from '@/types'
+import { adminList, adminSave } from '@/lib/adminFetch'
 
 const EMPTY = {
   title: '', description: '', status: 'ongoing' as 'ongoing' | 'completed', tagsStr: '',
@@ -26,7 +27,7 @@ export default function AdminResearch() {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   useEffect(() => {
-    fetch('/api/save-content?type=research').then(r => r.json()).then(setItems).catch(() => {})
+    adminList<ResearchItem>('research').then(setItems).catch(() => {})
   }, [])
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => setForm(f => ({ ...f, [k]: v }))
@@ -36,11 +37,10 @@ export default function AdminResearch() {
   const deleteItem = async () => {
     if (selectedId === null) return
     const next = items.filter(r => r.id !== selectedId)
-    await fetch('/api/save-content', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'research', data: next }),
-    })
-    setItems(next); setSelectedId(null); setForm(EMPTY)
+    try {
+      await adminSave('research', next)
+      setItems(next); setSelectedId(null); setForm(EMPTY)
+    } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }
   }
 
   const save = async () => {
@@ -51,11 +51,7 @@ export default function AdminResearch() {
       ? items.map(r => r.id === id ? updated : r)
       : [...items, updated]
     try {
-      const res = await fetch('/api/save-content', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'research', data: next }),
-      })
-      if (!res.ok) throw new Error()
+      await adminSave('research', next)
       setItems(next); setSelectedId(id); setStatus('saved')
       setTimeout(() => setStatus('idle'), 2000)
     } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }

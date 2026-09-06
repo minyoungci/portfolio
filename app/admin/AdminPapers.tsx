@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import type { Paper } from '@/types'
+import { adminList, adminSave } from '@/lib/adminFetch'
 
 const EMPTY = {
   title: '', authors: '', journal: '', year: new Date().getFullYear(),
@@ -37,7 +38,7 @@ export default function AdminPapers() {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   useEffect(() => {
-    fetch('/api/save-content?type=papers').then(r => r.json()).then(setItems).catch(() => {})
+    adminList<Paper>('papers').then(setItems).catch(() => {})
   }, [])
 
   const set = (k: keyof Form, v: string | number) =>
@@ -49,11 +50,10 @@ export default function AdminPapers() {
   const deleteItem = async () => {
     if (selectedId === null) return
     const next = items.filter(p => p.id !== selectedId)
-    await fetch('/api/save-content', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'papers', data: next }),
-    })
-    setItems(next); setSelectedId(null); setForm(EMPTY)
+    try {
+      await adminSave('papers', next)
+      setItems(next); setSelectedId(null); setForm(EMPTY)
+    } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }
   }
 
   const save = async () => {
@@ -64,11 +64,7 @@ export default function AdminPapers() {
       ? items.map(p => p.id === id ? updated : p)
       : [...items, updated]
     try {
-      const res = await fetch('/api/save-content', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'papers', data: next }),
-      })
-      if (!res.ok) throw new Error()
+      await adminSave('papers', next)
       setItems(next); setSelectedId(id); setStatus('saved')
       setTimeout(() => setStatus('idle'), 2000)
     } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }
@@ -129,11 +125,11 @@ export default function AdminPapers() {
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-6">
               <div className="max-w-xl">
-                <F label="Title" k="title" />
-                <F label="Authors" k="authors" placeholder="Kim M., Lee S., ..." />
+                {F({ label: "Title", k: "title" })}
+                {F({ label: "Authors", k: "authors", placeholder: "Kim M., Lee S., ..." })}
                 <div className="grid grid-cols-2 gap-4">
-                  <F label="Journal / Venue" k="journal" placeholder="Nature Medicine" />
-                  <F label="Year" k="year" type="number" />
+                  {F({ label: "Journal / Venue", k: "journal", placeholder: "Nature Medicine" })}
+                  {F({ label: "Year", k: "year", type: "number" })}
                 </div>
                 <div className="mb-4">
                   <label className="text-xs opacity-50 block mb-1">Abstract</label>
@@ -144,9 +140,9 @@ export default function AdminPapers() {
                 </div>
                 <div className="mt-2 pt-4 border-t border-black">
                   <p className="text-xs opacity-50 mb-3">Links</p>
-                  <F label="arXiv" k="arxiv" placeholder="https://arxiv.org/abs/..." />
-                  <F label="PDF" k="pdf" placeholder="https://..." />
-                  <F label="DOI" k="doi" placeholder="https://doi.org/..." />
+                  {F({ label: "arXiv", k: "arxiv", placeholder: "https://arxiv.org/abs/..." })}
+                  {F({ label: "PDF", k: "pdf", placeholder: "https://..." })}
+                  {F({ label: "DOI", k: "doi", placeholder: "https://doi.org/..." })}
                 </div>
               </div>
             </div>

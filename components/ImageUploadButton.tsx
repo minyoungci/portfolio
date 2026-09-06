@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { adminFetch, UnauthorizedError } from '@/lib/adminFetch'
 
 interface Props {
   onUpload: (url: string) => void
@@ -19,11 +20,14 @@ export default function ImageUploadButton({ onUpload, accept = 'image/*' }: Prop
     try {
       const fd = new FormData()
       fd.append('file', file)
-      const res = await fetch('/api/upload', { method: 'POST', body: fd })
-      const data = await res.json()
-      if (data.url) onUpload(data.url)
-    } catch {
-      alert('업로드 실패')
+      const res = await adminFetch('/api/upload', { method: 'POST', body: fd })
+      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string }
+      if (!res.ok || !data.url) throw new Error(data.error ?? `Upload failed (${res.status})`)
+      onUpload(data.url)
+    } catch (err) {
+      if (!(err instanceof UnauthorizedError)) {
+        alert(`업로드 실패: ${err instanceof Error ? err.message : 'unknown error'}`)
+      }
     } finally {
       setUploading(false)
       if (inputRef.current) inputRef.current.value = ''

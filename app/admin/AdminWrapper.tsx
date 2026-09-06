@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
 const AdminProjects = dynamic(() => import('./AdminProjects'), { ssr: false })
@@ -14,8 +15,15 @@ type Tab = typeof TABS[number]
 
 export default function AdminWrapper() {
   const [tab, setTab] = useState<Tab>('Projects')
+  const router = useRouter()
 
   const isLive = typeof window !== 'undefined' && !window.location.hostname.includes('localhost')
+
+  const logout = async () => {
+    await fetch('/api/admin/logout', { method: 'POST' }).catch(() => {})
+    router.replace('/')
+    router.refresh()
+  }
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-black bg-white">
@@ -43,6 +51,13 @@ export default function AdminWrapper() {
             {t}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={logout}
+          className="ml-auto text-xs border border-black px-3 py-1 hover:bg-black hover:text-white transition-colors"
+        >
+          로그아웃
+        </button>
       </div>
 
       {/* Content area — sidebar + form/editor side by side */}

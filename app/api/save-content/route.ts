@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { putFile } from '@/lib/github'
+import { isAuthorized } from '@/lib/adminAuth'
 
 const DATA_DIR = path.join(process.cwd(), 'data')
+const unauthorized = () => NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 const ALLOWED = ['projects', 'papers', 'research', 'pieces'] as const
 type DataType = typeof ALLOWED[number]
 
@@ -11,6 +13,7 @@ const IS_PROD = !!process.env.VERCEL
 
 // GET ?type=...
 export async function GET(req: NextRequest) {
+  if (!isAuthorized(req)) return unauthorized()
   const type = (req.nextUrl.searchParams.get('type') ?? 'pieces') as DataType
   if (!ALLOWED.includes(type)) return NextResponse.json([], { status: 400 })
   try {
@@ -23,6 +26,7 @@ export async function GET(req: NextRequest) {
 
 // POST { type, data }
 export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) return unauthorized()
   try {
     const { type, data } = (await req.json()) as { type: DataType; data: unknown }
     if (!ALLOWED.includes(type)) {

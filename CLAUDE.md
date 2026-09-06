@@ -25,7 +25,7 @@
 |------|------|
 | `PROFILE-INTAKE.md` | 콘텐츠 입력 시트. 여기 답을 `data/*.json`으로 옮긴다. 12절이 확정된 정보 구조 |
 | `docs/design-audit.md` | 1~4절은 **리빌드 전(2026-09-06 오전) 상태 기록**, 5절이 현재 반영 상태. 현재 수치는 5절과 코드만 믿는다 |
-| `SPEC.md` | 최초 명세(2026-02). 비목표에 admin·static export가 있으나 둘 다 뒤집힘. 참고용 |
+| `SPEC.md` | 최초 명세(2026-02). 비목표에 admin·static export·로그인/인증이 있으나 셋 다 뒤집힘. 참고용 |
 | `DEPLOY.md` | Vercel 최초 연결·도메인 절차. 2026-09에 브랜치(`master`)·env·`next.config.ts`로 갱신 |
 | `SCRATCHPAD.md` | 작업 로그. 세션 끝에 손으로 갱신. 2026-02 기록의 `.claude/commands/*`, `docs/design-system.md` 등은 현재 없다 |
 | `README.md` | create-next-app 보일러플레이트 그대로 (정리 대상) |
@@ -102,7 +102,9 @@
 
 ### 2-7. admin 사용
 
-- 홈 우하단의 옅은 `⌗` 버튼 → 비밀번호 → `/admin`. 탭: Projects · Papers · Research · Piece. **비밀번호는 이 버튼만 막는다.** `/admin` 주소를 직접 열면 그대로 들어가고 write API에도 서버 인증이 없다(수정 예정). 사실상 유일한 보호는 주소를 외부에 알리지 않는 것이다. 비밀번호 자체는 `components/AdminAccess.tsx` 상수(바꾸면 배포 필요).
+- 홈 우하단의 옅은 `⌗` 버튼 → `/admin` → 세션이 없으면 `/admin/login`으로 이동 → 비밀번호 입력. 탭: Projects · Papers · Research · Piece. 우측 `로그아웃`으로 세션 종료.
+- 인증은 서버에서 한다(`lib/adminAuth.ts`). 비밀번호는 환경 변수 `ADMIN_PASSWORD`(12자 이상), 세션은 `ADMIN_SESSION_SECRET`(16자 이상, 32자 권장)과 비밀번호에서 파생한 키로 서명한 httpOnly 쿠키(8시간). `/admin` 페이지와 저장·업로드 API 모두 쿠키를 검증하고, **두 변수 중 하나라도 없거나 짧으면 로그인이 503으로 막힌다**(Vercel과 `.env.local` 양쪽에 넣어야 한다).
+- **Vercel에서 환경 변수를 바꾸면 재배포해야 반영된다**(코드 수정은 불필요). 비밀번호를 바꾸고 재배포하면 이미 발급된 세션도 모두 무효가 된다. 로그아웃은 브라우저 쿠키만 지우므로, 세션이 새어 나갔다고 의심되면 비밀번호나 시크릿을 바꾸고 재배포한다. 외부 링크(메일·슬랙)로 `/admin`을 열면 로그인 화면이 잠깐 보였다가 유효한 세션이면 자동으로 들어간다.
 - Vercel에 배포된 사이트에서 저장 = 목록 전체를 GitHub `master`에 커밋(`[admin] update <type>`) → 프로덕션 자동 재배포(1~2분). **프리뷰 URL에서 저장해도 `master`(프로덕션)가 바뀐다.** 실험은 로컬(`npm run dev`, `data/*.json`에 직접 씀)에서만 한다.
 - 저장은 페이지를 연 시점의 목록 전체를 통째로 다시 쓴다. 재배포가 끝나기 전에 admin을 새로고침하면 이전 목록이 보이고, 그 상태에서 다시 저장하면 직전 변경이 덮어써진다. 연속 편집은 새로고침 없이 한 화면에서 끝내거나 저장마다 재배포를 기다린다. JSON을 직접 고쳐 push한 직후도 마찬가지.
 - 삭제는 확인 창 없이 즉시 저장되고, 업로드 파일(`public/uploads/`, R2)은 남는다. 안 쓰는 파일은 직접 지운다.
@@ -134,16 +136,17 @@ app/
   about/page.tsx         프로필 상세 (profile + timeline, AboutSection의 groupTimeline 재사용)
   projects/[slug]/       프로젝트 상세. 번호는 배열 index. 썸네일은 이미지/영상 분기
   posts/[slug]/          Medium형 아티클. 본문은 fs로 content/posts/*.md 읽음
-  admin/                 자체 CMS (전부 client, ssr:false)
-  api/save-content/      GET/POST data/{projects,papers,research,pieces}.json (VERCEL: GitHub 커밋 / 로컬: 파일 쓰기)
-  api/upload/            이미지 → public/uploads (VERCEL: GitHub 커밋 / 로컬: 파일 쓰기), 영상 → R2 (환경 무관)
+  admin/                 자체 CMS. page.tsx(서버, 쿠키 검증·리다이렉트) → AdminClient(client, ssr:false) → AdminWrapper. login/은 로그인 폼
+  api/admin/login|logout 세션 쿠키 발급·삭제 (lib/adminAuth.ts)
+  api/save-content/      GET/POST data/{projects,papers,research,pieces}.json (세션 필수. VERCEL: GitHub 커밋 / 로컬: 파일 쓰기)
+  api/upload/            이미지 → public/uploads (VERCEL: GitHub 커밋 / 로컬: 파일 쓰기), 영상 → R2 (환경 무관). 세션 필수
   opengraph-image.tsx    OG 이미지 (next/og, 내장 라틴 폰트)
   globals.css            토큰(@theme), .article-body 타이포, .page-enter
 components/
   Hero, FeaturedRow, SectionHeading, AboutSection(groupTimeline·KIND_LABEL export), ProjectGrid, ProjectCard,
-  PostSection, ContactSection, PageTransition, MarkdownArticle                       ← 서버
+  PostSection, ContactSection, PageTransition, MarkdownArticle, AdminAccess           ← 서버
   Navigation, FeaturedCoverflow, PieceSection, PapersSection, ResearchSection,
-  AdminAccess, ImageUploadButton, ui/coverflow-carousel                                ← 'use client'
+  ImageUploadButton, ui/coverflow-carousel, app/admin/*(page.tsx 제외)                 ← 'use client'
 data/        *.json + 래퍼 .ts. export 이름: projects · posts · pieces · papers · researchItems(← research 아님) · profile · timeline
 lib/         sections.ts(섹션 정본) featured.ts(hero 슬라이드) utils.ts(cn) github.ts r2.ts
 types/index.ts   모든 데이터 타입 (Project Post Piece Paper ResearchItem Profile TimelineEntry)
@@ -184,11 +187,12 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 
 | 이름 | 용도 |
 |------|------|
+| `ADMIN_PASSWORD`(12자 이상), `ADMIN_SESSION_SECRET`(16자 이상, 32자 임의 문자열 권장) | admin 로그인과 세션 쿠키 서명. 없거나 짧으면 admin 전체가 잠긴다. 바꾸면 재배포 필요 |
 | `GITHUB_TOKEN`, `GITHUB_OWNER`(기본 `minyoungci`), `GITHUB_REPO`(기본 `portfolio`) | admin 저장·이미지 업로드를 GitHub Contents API로 커밋 |
 | `R2_ACCOUNT_ID` `R2_BUCKET_NAME` `R2_PUBLIC_URL` `R2_ACCESS_KEY_ID` `R2_SECRET_ACCESS_KEY` | 영상 업로드 (Cloudflare R2). 로컬에서도 영상은 R2로 가므로 시험하려면 `.env.local`에 필요 |
 | `NEXT_PUBLIC_SITE_URL` | 커스텀 도메인 연결 후 OG 절대 URL. 없으면 `VERCEL_PROJECT_PRODUCTION_URL`, 그것도 없으면 localhost |
 
-GitHub 커밋 경로 판정은 `process.env.VERCEL` 유무(코드 이름은 `IS_PROD`지만 **프리뷰 배포에도 설정**된다). `putFile`은 브랜치를 지정하지 않으므로 커밋은 항상 기본 브랜치 `master`로 간다. `.env*`는 gitignore 대상.
+GitHub 커밋 경로 판정은 `process.env.VERCEL` 유무(코드 이름은 `IS_PROD`지만 **프리뷰 배포에도 설정**된다). `putFile`은 브랜치를 지정하지 않으므로 커밋은 항상 기본 브랜치 `master`로 간다. `.env*`는 gitignore 대상. 로컬 admin을 쓰려면 `.env.local`에 최소 `ADMIN_PASSWORD`와 `ADMIN_SESSION_SECRET`이 있어야 한다.
 
 ### 3-6. 검증
 
@@ -210,7 +214,7 @@ npx next typegen && npx tsc --noEmit && npm run lint && npm run build
 
 ### 3-8. 알려진 이슈 · 남은 작업
 
-- admin write API(`api/save-content`, `api/upload`)에 서버 인증이 없고 비밀번호가 클라이언트 상수다 (P1). env + 서명 쿠키로 옮길 것.
+- admin 로그인 시도 제한은 인스턴스 메모리 카운터라 서버리스에서는 느슨하다. 비밀번호를 충분히 길게 둔다.
 - admin에 Profile · Timeline · Post 탭이 없다 → JSON 직접 편집(2-8).
 - 마크다운 파서: 코드 블록·표 미지원. `prefers-reduced-motion` 부분 대응(3-3).
 - 커스텀 404 페이지 없음. Pretendard는 jsDelivr CDN 의존. `README.md` 보일러플레이트.

@@ -3,6 +3,7 @@ import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import { putFile } from '@/lib/github'
 import { uploadToR2 } from '@/lib/r2'
+import { isAuthorized } from '@/lib/adminAuth'
 
 const UPLOAD_DIR = path.join(process.cwd(), 'public/uploads')
 const IS_PROD = !!process.env.VERCEL
@@ -15,6 +16,9 @@ const MIME: Record<string, string> = {
 }
 
 export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
   try {
     const formData = await req.formData()
     const file = formData.get('file') as File | null

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import type { Piece } from '@/types'
 import ImageUploadButton from '@/components/ImageUploadButton'
+import { adminList, adminSave } from '@/lib/adminFetch'
 
 const EMPTY = {
   title: '',
@@ -39,10 +40,7 @@ export default function AdminEditor() {
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
 
   useEffect(() => {
-    fetch('/api/save-content?type=pieces')
-      .then(r => r.json())
-      .then(setPieces)
-      .catch(() => {})
+    adminList<Piece>('pieces').then(setPieces).catch(() => {})
   }, [])
 
   const set = (k: keyof Form, v: string) => setForm(f => ({ ...f, [k]: v }))
@@ -53,11 +51,10 @@ export default function AdminEditor() {
   const deletePiece = async () => {
     if (selectedId === null) return
     const next = pieces.filter(p => p.id !== selectedId)
-    await fetch('/api/save-content', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'pieces', data: next }),
-    })
-    setPieces(next); setSelectedId(null); setForm(EMPTY)
+    try {
+      await adminSave('pieces', next)
+      setPieces(next); setSelectedId(null); setForm(EMPTY)
+    } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }
   }
 
   const save = async () => {
@@ -69,11 +66,7 @@ export default function AdminEditor() {
       ? pieces.map(p => p.id === id ? updated : p)
       : [...pieces, updated]
     try {
-      const res = await fetch('/api/save-content', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'pieces', data: next }),
-      })
-      if (!res.ok) throw new Error()
+      await adminSave('pieces', next)
       setPieces(next); setSelectedId(id); setStatus('saved')
       setTimeout(() => setStatus('idle'), 2000)
     } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 3000) }

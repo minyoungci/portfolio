@@ -239,7 +239,7 @@ Post·Contact 행이 1440px 폭에서 좌우 24px 여백만 두고 펼쳐진다.
 | C9 메타 title | 해결 — 제목 템플릿 + OG 이미지 (`app/opengraph-image.tsx`) | `layout.tsx` |
 | C10 보일러플레이트 svg | 해결 — 삭제 | `public/` |
 | C8 `<img>` 직접 사용 | 유지 — 원격(R2) 소스 때문에 의도적 | `PieceSection`, `FeaturedRow` |
-| C11 admin 인증 | 미해결 — 별도 작업 (작업 칩) | `api/*` |
+| C11 admin 인증 | 해결 — env 비밀번호 + HMAC 서명 세션 쿠키, `/admin`·write API 서버 검증 | `lib/adminAuth.ts`, `app/api/admin/*` |
 
 ### 콘텐츠 슬롯 (채우면 바로 반영)
 

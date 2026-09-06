@@ -88,6 +88,7 @@ Vercel 배포 전에 npm run build가 로컬에서 통과하는지 확인하는 
 
 Vercel 프로젝트 → Settings → Environment Variables 에 등록한다. 목록과 용도는 `CLAUDE.md` 3-5절.
 
+- `ADMIN_PASSWORD`(12자 이상), `ADMIN_SESSION_SECRET`(32자 권장) — admin 로그인·세션 서명. 없거나 짧으면 admin이 잠긴다. 시크릿은 `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`로 생성. **변경 후에는 재배포해야 반영되고, 비밀번호를 바꾸면 기존 세션이 모두 끊긴다.**
 - `GITHUB_TOKEN` (+ 선택 `GITHUB_OWNER`, `GITHUB_REPO`) — admin 저장·이미지 업로드를 GitHub 커밋으로
 - `R2_ACCOUNT_ID` `R2_BUCKET_NAME` `R2_PUBLIC_URL` `R2_ACCESS_KEY_ID` `R2_SECRET_ACCESS_KEY` — 영상 업로드
 - `NEXT_PUBLIC_SITE_URL` — 커스텀 도메인 연결 후 OG 절대 URL
