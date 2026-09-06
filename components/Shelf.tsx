@@ -30,17 +30,17 @@ export default function Shelf({ id, title, description, slides, onActivate }: Sh
   }
 
   return (
-    <section id={id} className="py-14 sm:py-20">
+    <section id={id} className="py-10 sm:py-14">
       <header className="mx-auto max-w-2xl px-6 text-center">
         <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
         {description && <p className="mt-2 text-[13px] text-muted-foreground">{description}</p>}
       </header>
 
-      <div className="mx-auto mt-4 max-w-5xl overflow-hidden">
+      <div className="mx-auto mt-2 max-w-7xl overflow-hidden">
         {slides.length >= 3 ? (
           <CoverflowCarousel
             slides={slides}
-            cardWidth="clamp(170px, 26vw, 300px)"
+            cardWidth="clamp(220px, 40vw, 480px)"
             cardClassName="ring-1 ring-border ring-inset"
             showCaption
             showPagination
@@ -64,7 +64,7 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
           key={`${slide.title}-${index}`}
           type="button"
           onClick={() => onActivate(index)}
-          className="group w-[clamp(170px,26vw,300px)] cursor-pointer text-center"
+          className="group w-[clamp(220px,40vw,480px)] cursor-pointer text-center"
         >
           <div className="aspect-square overflow-hidden rounded-2xl bg-muted shadow-xl ring-1 ring-inset ring-border transition-transform duration-300 group-hover:-translate-y-1">
             {slide.src ? (

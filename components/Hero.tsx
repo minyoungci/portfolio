@@ -5,7 +5,7 @@ export default function Hero() {
   const meta = [profile.affiliation, profile.location].filter((v): v is string => Boolean(v))
 
   return (
-    <section id="hero" className="mx-auto max-w-3xl px-6 pt-32 pb-8 text-center sm:pt-40 sm:pb-12">
+    <section id="hero" className="mx-auto max-w-3xl px-6 pt-28 pb-2 text-center sm:pt-36 sm:pb-4">
       <p className="text-[12px] font-medium uppercase tracking-[0.22em] text-muted-foreground">{profile.tagline}</p>
       <h1 className="mt-5 text-[clamp(2.5rem,7vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
         {profile.name}
