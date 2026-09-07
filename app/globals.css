@@ -114,8 +114,13 @@ section[id] {
   }
 }
 
+/* `backwards`, not `both`. With `both` the transform keyframe keeps applying after the animation
+   ends, and an element with a filling transform animation is a containing block for its
+   position: fixed descendants — which silently broke the Piece lightbox (it laid out against the
+   whole document instead of the viewport). The `to` keyframe equals the element's natural state,
+   so dropping the forwards fill changes nothing visually. */
 .page-enter {
-  animation: page-enter 0.45s ease-out both;
+  animation: page-enter 0.45s ease-out backwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -649,6 +654,26 @@ html.js [data-reveal].is-visible {
 
   /* Solid variant. Declared after the fallbacks above so its opaque fill wins on source
      order, which is why none of them need a :not() selector list. */
+  /* A surface that is dark regardless of the page theme (the Piece lightbox). The --glass-*
+     tokens key off prefers-color-scheme, so in light mode a pill inside that dialog filled with
+     the light tint (rgba(255,255,255,0.66)) and its white label fell to ~2.5:1. Re-pin the dark
+     set here, plus --ring, so the base-layer focus outline is visible on the dark panel too. */
+  .on-dark {
+    --glass-tint-top: rgba(255, 255, 255, 0.1);
+    --glass-tint-bottom: rgba(255, 255, 255, 0.035);
+    --glass-edge: rgba(255, 255, 255, 0.14);
+    --glass-sheen: rgba(255, 255, 255, 0.3);
+    --glass-shade: rgba(0, 0, 0, 0.34);
+    --glass-rim: rgba(255, 255, 255, 0.72);
+    --glass-rim-back: rgba(255, 255, 255, 0.26);
+    --glass-caustic: rgba(255, 255, 255, 0.14);
+    --glass-mote: rgba(255, 255, 255, 0.5);
+    --glass-solid-spec: rgba(0, 0, 0, 0.3);
+    --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.35), 0 10px 26px -14px rgba(0, 0, 0, 0.8);
+    --glass-shadow-hover: 0 1px 1px rgba(0, 0, 0, 0.4), 0 18px 34px -16px rgba(0, 0, 0, 0.85);
+    --ring: #f4f4f5;
+  }
+
   .glass--solid {
     background-image: none;
     background-color: var(--foreground);

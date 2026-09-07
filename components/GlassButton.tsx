@@ -19,8 +19,15 @@ type ButtonRest = Omit<ComponentProps<'button'>, 'className' | 'children'>
 type AnchorRest = Omit<ComponentProps<'a'>, 'className' | 'children'>
 type LinkRest = Omit<ComponentProps<typeof Link>, 'className' | 'children'>
 
+/**
+ * 유니온의 초과 속성 검사는 어느 한 멤버에만 있으면 통과한다. 그래서 `as` 없이(=button)
+ * href를 넘겨도 컴파일되고, 런타임에는 <button href>가 되어 링크가 죽는다. 앵커 전용
+ * 속성을 button 멤버에서 명시적으로 막아 그 구멍을 닫는다.
+ */
+type NoAnchorProps = { href?: never; target?: never; rel?: never; download?: never }
+
 export type GlassButtonProps =
-  | (GlassOwn & { as?: 'button' } & ButtonRest)
+  | (GlassOwn & { as?: 'button' } & NoAnchorProps & ButtonRest)
   | (GlassOwn & { as: 'a' } & AnchorRest)
   | (GlassOwn & { as: 'link' } & LinkRest)
 

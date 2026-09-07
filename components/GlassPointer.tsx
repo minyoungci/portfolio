@@ -127,8 +127,14 @@ export default function GlassPointer() {
         leaving = false
         return
       }
+      // 알약 밖으로 나간 경우, pointerleave가 이미 되돌아가는 이징을 걸어 뒀다. 여기서
+      // detach()를 부르면 그 rAF를 한 프레임도 돌기 전에 취소해서 빛이 순간이동한다.
+      // 값이 정착하면 step()이 스스로 detach하므로 넘겨주기만 하면 된다.
+      if (!next) {
+        if (pill) onLeave()
+        return
+      }
       detach()
-      if (!next) return
       pill = next
       next.addEventListener('pointermove', onMove)
       next.addEventListener('pointerleave', onLeave)

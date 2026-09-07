@@ -85,7 +85,7 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
           aria-modal="true"
           aria-label={open.title ?? 'Piece'}
           tabIndex={-1}
-          className="fade-in fixed inset-0 z-[300] flex items-center justify-center bg-black/85 p-4 outline-none backdrop-blur-sm motion-reduce:animate-none md:p-10"
+          className="on-dark fade-in fixed inset-0 z-[300] flex items-center justify-center bg-black/85 p-4 outline-none backdrop-blur-sm motion-reduce:animate-none md:p-10"
           onClick={() => setOpenIndex(null)}
         >
           <div
@@ -129,7 +129,7 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
                 <CopyButton
                   text={open.prompt}
                   label="Copy prompt"
-                  className="border-white/15 bg-white/10 text-white shadow-none hover:bg-white/20"
+                  className="bg-white/10 text-white hover:bg-white/20"
                 />
                 {count > 1 && (
                   <>

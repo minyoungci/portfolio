@@ -473,7 +473,7 @@ export function CoverflowCarousel({
                 ) : (
                   <div
                     aria-label={slide.alt}
-                    className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted-foreground/25 via-muted to-card p-5"
+                    className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted-foreground/30 via-muted to-muted p-5"
                   >
                     <span className="line-clamp-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
                       {slide.kicker ?? slide.subtitle}

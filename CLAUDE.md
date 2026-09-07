@@ -173,6 +173,10 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 - 형태: 카드 `rounded-2xl` + `shadow-card`(코버플로우 카드는 `shadow-xl`) + `ring-1 ring-border`. 버튼·링크·nav는 `rounded-full`, 입력은 `rounded-xl`. 괘선은 `border-border`/`divide-border`만.
 - 레이아웃: 전부 중앙 정렬. 본문 카드 `max-w-3xl`(About·Contact·Papers·Research), 상세 `max-w-2xl`, 코버플로우 `max-w-5xl`. 섹션 `py-14 sm:py-20`. nav는 `fixed top-4` 알약이라 `section[id]`에 `scroll-margin-top` 5.5rem.
 - 모션: 코버플로우(드래그·rAF settle, 보이는 동안 6초마다 자동 회전하다가 사용자가 만지면 멈춤), 섹션 스크롤 등장(`[data-reveal]` + `RevealObserver`, JS 전에는 숨기지 않음), 히어로 포인터 글로우(`HeroGlow`, 마우스 있을 때만), 카드 hover `-translate-y-1`, 페이지 페이드(`.page-enter`), 아코디언 CSS grid 0.3s. **전부 `prefers-reduced-motion`을 존중한다**(코버플로우는 즉시 이동, 자동 회전·등장·글로우는 꺼짐). 새 모션을 추가하면 같은 규칙을 지킨다.
+- 알약 버튼은 전부 `components/GlassButton.tsx`(Liquid Glass). `as`로 `button`·`a`·`next/link`, `variant`로 `glass`(기본)·`solid`. 광학은 `globals.css`의 `.glass`가 맡고, 포인터 추적은 `components/GlassPointer.tsx`가 `layout.tsx`에서 한 번만 마운트해 `document`의 위임 리스너 하나로 처리한다(알약마다 리스너를 달지 않는다). `--glass-*` 토큰 12개도 `:root`·라이트 블록·`@theme inline` 세 곳 규칙을 따른다.
+- **`.glass` 위에 `transform`·`opacity < 1`·`filter`를 주지 않는다.** backdrop-filter가 걸린 요소라 배경 샘플링이 깨진다(그래서 hover 리프트와 `hover:opacity-90`이 없다). 그림자 깊이와 빛으로 hover를 표현한다.
+- 페이지 테마와 무관하게 **항상 어두운 표면**(Piece 라이트박스) 안에 유리를 넣을 때는 그 컨테이너에 `.on-dark`를 준다. `--glass-*`는 `prefers-color-scheme`을 따르므로, 안 주면 라이트 모드에서 알약이 흰 슬래브가 되고 흰 글자가 묻힌다. `.on-dark`는 `--ring`도 함께 뒤집어 포커스 링이 보이게 한다.
+- **진입 애니메이션에 `animation-fill-mode: both`를 쓰지 않는다.** transform 키프레임이 계속 적용되면 그 요소가 `position: fixed` 자손의 containing block이 되어 모달이 뷰포트가 아니라 문서 전체를 기준으로 잡힌다(`.page-enter`가 실제로 그랬다). `backwards`를 쓴다.
 - 이미지: 선반 카드는 `next/image`(`fill` + `sizes`)로 최적화하되, `lib/site.ts`의 `isOptimizableImage`가 허용하는 소스(로컬 경로, `next.config.ts`의 remotePatterns 호스트)만. 그 밖의 원격 URL과 글 본문·라이트박스는 `<img loading="lazy">` + `eslint-disable-next-line @next/next/no-img-element`. 영상은 `<video autoPlay muted loop playsInline preload="metadata">`.
 
 ### 3-4. 컨벤션

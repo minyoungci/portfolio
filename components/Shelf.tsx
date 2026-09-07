@@ -96,7 +96,7 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
                 <img src={slide.src} alt={slide.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
               )
             ) : (
-              <div className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted-foreground/25 via-muted to-card p-5 text-left">
+              <div className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted-foreground/30 via-muted to-muted p-5 text-left">
                 <span className="line-clamp-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
                   {slide.kicker ?? slide.subtitle}
                 </span>
