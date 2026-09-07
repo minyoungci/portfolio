@@ -26,6 +26,7 @@ export type AuthorRole = 'first' | 'co-first' | 'contributing';
 
 export interface Paper {
   id: number;
+  slug: string;        // URL slug (/papers/[slug])
   title: string;
   titleKo?: string;    // 국문 병기 (선택)
   authors: string;     // 한 줄 문자열. 심사 중 원고는 비워 둘 수 있다

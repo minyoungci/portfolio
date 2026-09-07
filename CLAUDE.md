@@ -35,9 +35,9 @@
 ### 1-3. 홈 구조 (한 번만 이해하면 되는 규칙)
 
 - 레퍼런스(코버플로우 데모)의 언어로 만든 "앨범 선반" 홈. HERO는 이름 + 한 줄 정체성 + 소속 + 링크 알약(중앙 정렬, 작게).
-- 섹션 순서: Projects → Post → Piece → Research → Publications & Awards → About → Contact. Projects·Post·Piece는 **코버플로우 선반**(`components/Shelf.tsx`), Research·Publications·About는 중앙 카드, Contact는 중앙 정렬. 번호는 쓰지 않는다.
+- 섹션 순서: Projects → Post → Piece → Research → Publications & Awards → About → Contact. Projects·Post·Piece·Publications는 **코버플로우 선반**(앞 셋은 `components/Shelf.tsx`, Publications는 `PublicationsSection`이 `CoverflowCarousel`을 직접 쓴다 — 위에 Awards 카드가 얹히므로 `<section>` 중첩을 피했다), Research·About는 중앙 카드, Contact는 중앙 정렬. 번호는 쓰지 않는다.
 - **표시 여부·nav 목록의 정본은 `lib/sections.ts`의 `ORDER`.** 데이터가 빈 섹션(Projects·Post·Piece·Research·Publications)은 페이지와 nav에서 함께 사라진다. About·Contact는 항상 보인다.
-- 선반 규칙: 슬라이드가 3개 이상이면 코버플로우, 미만이면 같은 카드의 정적 나열(`ShelfRow`). 가운데 카드를 누르면 프로젝트·글은 상세로, 피스는 라이트박스. 데이터 → 슬라이드 변환은 `lib/shelves.ts`. **항목 순서는 각 JSON 배열의 순서.** `id`는 화면에 쓰지 않는다.
+- 선반 규칙: 슬라이드가 3개 이상이면 코버플로우, 미만이면 같은 카드의 정적 나열(`ShelfRow`). 가운데 카드를 누르면 프로젝트·글·논문은 상세로, 피스는 라이트박스. 데이터 → 슬라이드 변환은 `lib/shelves.ts`. **항목 순서는 각 JSON 배열의 순서.** `id`는 화면에 쓰지 않는다.
 - 썸네일 없는 프로젝트는 카테고리 + 제목이 적힌 그라데이션 카드로 나온다. `featured` 플래그는 현재 화면에 쓰이지 않는다.
 
 ---
@@ -99,6 +99,7 @@
 
 - Papers: admin → Papers → `+ New`. `authors`는 한 줄 문자열(예: `Kim M., Lee S.`), `journal`, `year`(숫자), `abstract`(선택), 링크 arXiv/PDF/DOI(선택). 목록에는 제목과 `authors · journal, note`가 보이고 abstract·링크는 클릭해 펼친다(한 번에 하나).
 - 논문의 선택 필드는 JSON으로만 넣는다(admin 폼에 없다): `titleKo`(국문 병기), `status`(`published` 기본 · `preprint` · `under-review`), `role`(`first` · `co-first` · `contributing` — 앞 둘만 진한 배지), `note`(권·호·쪽 또는 투고일). `under-review`는 **Under review** 묶음으로 따로 내려가고, 머리말 카운트의 "제1·공동제1저자"는 **게재분만** 센다.
+- 논문마다 `slug`가 필요하다(`/papers/[slug]`). admin으로 추가하면 제목에서 영문 소문자·숫자·하이픈만 남겨 만들고, 한글만 있는 제목이면 `paper-<id>`로 대체된다. 한 번 정해진 slug는 이후 저장에서도 유지된다.
 - Awards: `data/awards.json`을 직접 편집한다(admin 탭 없음). `title`(과제명) `titleEn` `event`(대회) `organizer` `year` `prize`(상격) `team` `role` `description` `metrics[]`(`label`·`value`·`note` — 2열 격자 숫자 카드). Awards가 섹션 맨 위에 온다.
 - 이 섹션은 About 타임라인의 `award` 항목과 별개다. 타임라인은 한 줄 CV 요약, 이 섹션이 상세 기록이다.
 - Research: admin → Research → `+ New`. `status`는 `ongoing` / `completed` 둘 중 하나(그 외 값은 completed로 표시). `tags[]`는 제목 아래 칩, `description`은 펼쳐야 보인다.
@@ -140,6 +141,7 @@ app/
   about/page.tsx         프로필 상세 (profile + timeline, AboutSection의 groupTimeline 재사용)
   projects/[slug]/       프로젝트 상세. 번호는 배열 index. 썸네일은 이미지/영상 분기
   posts/[slug]/          Medium형 아티클. 본문은 fs로 content/posts/*.md 읽음
+  papers/[slug]/         논문 상세. 기여·상태 배지, 서지 dl, 핵심 결과, DOI, 이전/다음
   admin/                 자체 CMS. page.tsx(서버, 쿠키 검증·리다이렉트) → AdminClient(client, ssr:false) → AdminWrapper. login/은 로그인 폼
   api/admin/login|logout 세션 쿠키 발급·삭제 (lib/adminAuth.ts)
   api/save-content/      GET/POST data/{projects,papers,research,pieces}.json (세션 필수. VERCEL: GitHub 커밋 / 로컬: 파일 쓰기)
@@ -166,7 +168,7 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 
 - json → `data/*.ts`(`raw as Type`) → 서버 컴포넌트가 직접 import. 클라이언트 컴포넌트에는 직렬화 가능한 props만 넘긴다(`Navigation`은 `profile`을 직접 import하지만 정적 JSON이라 허용).
 - JSON은 빌드 시 번들에 구워지고 `/projects/[slug]`·`/posts/[slug]`는 `generateStaticParams`로 정적 생성된다. 동적 라우트는 `/api/*`와 `/admin`뿐. 로컬 dev에서는 JSON 저장이 HMR로 즉시 반영된다.
-- `lib/sections.ts`가 nav 목록·표시 여부를, `lib/shelves.ts`가 선반 슬라이드를 만든다. **홈 섹션을 추가·제거·재배열할 때는 세 곳을 함께 고친다**: ① `ORDER`(id·label·visible), ② `app/page.tsx`의 JSX 블록(순서 포함), ③ 섹션 컴포넌트의 `<section id="…">`(ORDER의 id와 같아야 nav 앵커·활성 표시·`scroll-margin`이 동작).
+- `lib/sections.ts`가 nav 목록·표시 여부를, `lib/shelves.ts`가 선반 슬라이드를 만든다(`projectSlides` `postSlides` `pieceSlides` `paperSlides`). **홈 섹션을 추가·제거·재배열할 때는 세 곳을 함께 고친다**: ① `ORDER`(id·label·visible), ② `app/page.tsx`의 JSX 블록(순서 포함), ③ 섹션 컴포넌트의 `<section id="…">`(ORDER의 id와 같아야 nav 앵커·활성 표시·`scroll-margin`이 동작).
 - 동적 라우트의 `params`는 Next 16에서 `Promise`다: `const { slug } = await params`. 시그니처가 틀리면 빌드의 타입 검증에서 실패한다.
 
 ### 3-3. 디자인 시스템 (레퍼런스 = 코버플로우 데모의 언어. 기록은 `docs/design-audit.md` 6절)

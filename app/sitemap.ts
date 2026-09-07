@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { projects } from '@/data/projects'
 import { posts } from '@/data/posts'
+import { papers } from '@/data/papers'
 import { siteUrl } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -19,6 +20,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(p.date),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
+    })),
+    ...papers.map((p) => ({
+      url: `${siteUrl}/papers/${p.slug}`,
+      lastModified: now,
+      changeFrequency: 'yearly' as const,
+      priority: 0.6,
     })),
   ]
 }

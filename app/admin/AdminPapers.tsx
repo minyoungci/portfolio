@@ -10,8 +10,14 @@ const EMPTY = {
 }
 type Form = typeof EMPTY
 
-function toPaper(form: Form, id: number): Paper {
+// existing을 먼저 펼쳐 폼에 없는 필드(slug·status·role·note·titleKo)를 보존한다.
+// slug는 최초 저장 때만 제목에서 만들고, 이후에는 URL이 끊기지 않게 유지한다.
+// 한글만 있는 제목은 slug가 비므로 id로 대체한다(프로젝트 탭과 달리 링크가 반드시 필요하다).
+function toPaper(form: Form, id: number, existing?: Paper): Paper {
+  const derivedSlug = form.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/^-+|-+$/g, '')
   return {
+    ...existing,
+    slug: existing?.slug || derivedSlug || `paper-${id}`,
     id, title: form.title, authors: form.authors,
     journal: form.journal, year: Number(form.year),
     abstract: form.abstract || undefined,
@@ -59,7 +65,7 @@ export default function AdminPapers() {
   const save = async () => {
     setStatus('saving')
     const id = selectedId === -1 ? Date.now() : selectedId!
-    const updated = toPaper(form, id)
+    const updated = toPaper(form, id, items.find(p => p.id === id))
     const next = items.some(p => p.id === id)
       ? items.map(p => p.id === id ? updated : p)
       : [...items, updated]

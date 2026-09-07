@@ -1,4 +1,4 @@
-import type { Piece, Post, Project } from '@/types'
+import type { Paper, Piece, Post, Project } from '@/types'
 
 /** 코버플로우 선반의 슬라이드. CoverflowSlide와 호환되고 링크를 더한 형태. */
 export interface ShelfSlide {
@@ -56,4 +56,29 @@ export function pieceSlides(pieces: Piece[]): ShelfSlide[] {
     subtitle: isVideo(p.image) ? 'Video' : 'Image',
     meta: [{ label: 'Date', value: p.date }],
   }))
+}
+
+const PAPER_ROLE: Record<string, string> = {
+  first: '제1저자',
+  'co-first': '공동제1저자',
+  contributing: '공저자',
+}
+
+/** 논문 선반. 썸네일이 없으므로 카드는 기여 배지 + 제목의 타이포 카드로 나온다. */
+export function paperSlides(papers: Paper[]): ShelfSlide[] {
+  return papers.map((p) => {
+    const underReview = p.status === 'under-review'
+    return {
+      alt: p.title,
+      title: p.title,
+      kicker: p.role ? PAPER_ROLE[p.role] ?? p.journal : p.journal,
+      subtitle: p.titleKo ?? p.journal,
+      meta: [
+        { label: underReview ? 'Submitted' : 'Journal', value: p.journal },
+        { label: 'Year', value: String(p.year) },
+        ...(p.role ? [{ label: 'Role', value: PAPER_ROLE[p.role] ?? p.role }] : []),
+      ],
+      href: `/papers/${p.slug}`,
+    }
+  })
 }
