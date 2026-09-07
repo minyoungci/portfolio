@@ -242,11 +242,13 @@ section[id] {
   word-break: break-all;
 }
 
-/* Focus ring for keyboard users, everywhere */
-:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 3px;
-  border-radius: 0.5rem;
+/* Focus ring for keyboard users, everywhere. Lives in the base layer so Tailwind utilities
+   (outline-none, focus-visible:ring-*) can override it per element without double rings. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
 }
 
 /* Hero glow: follows the pointer (HeroGlow.tsx sets --gx/--gy) */

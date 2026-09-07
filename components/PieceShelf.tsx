@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Piece } from '@/types'
 import { pieceSlides } from '@/lib/shelves'
 import { isVideoSrc } from '@/lib/site'
@@ -11,28 +11,62 @@ interface PieceShelfProps {
   pieces: Piece[]
 }
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), video[controls], [tabindex]:not([tabindex="-1"])'
+
 /** Piece 선반. 가운데 카드를 누르면 라이트박스로 원본과 프롬프트를 보여준다. ←/→로 이동, Esc로 닫기. */
 export default function PieceShelf({ pieces }: PieceShelfProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
   const open = openIndex === null ? null : pieces[openIndex] ?? null
   const count = pieces.length
+  const isOpen = open !== null
 
+  // 열려 있는 동안: 포커스를 다이얼로그 안으로 옮기고 Tab을 가두며, 닫히면 열기 전 요소로 되돌린다.
+  // 뒤 페이지 스크롤도 막는다. openIndex가 아니라 isOpen에 묶어 ←/→ 이동 때는 다시 실행되지 않게 한다.
   useEffect(() => {
-    if (openIndex === null) return
+    if (!isOpen) return
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    dialogRef.current?.focus()
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpenIndex(null)
-      else if (e.key === 'ArrowRight') setOpenIndex((i) => (i === null ? null : (i + 1) % count))
-      else if (e.key === 'ArrowLeft') setOpenIndex((i) => (i === null ? null : (i - 1 + count) % count))
+      if (e.key === 'Escape') {
+        setOpenIndex(null)
+      } else if (e.key === 'ArrowRight') {
+        setOpenIndex((i) => (i === null ? null : (i + 1) % count))
+      } else if (e.key === 'ArrowLeft') {
+        setOpenIndex((i) => (i === null ? null : (i - 1 + count) % count))
+      } else if (e.key === 'Tab') {
+        const dialog = dialogRef.current
+        if (!dialog) return
+        const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE))
+        if (focusable.length === 0) {
+          e.preventDefault()
+          dialog.focus()
+          return
+        }
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        const active = document.activeElement
+        const inside = active instanceof Node && dialog.contains(active)
+        if (e.shiftKey && (active === first || active === dialog || !inside)) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && (active === last || !inside)) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
     }
     window.addEventListener('keydown', onKey)
-    // 라이트박스가 열린 동안 뒤 페이지 스크롤을 막는다
-    const previous = document.body.style.overflow
+    const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = previous
+      document.body.style.overflow = previousOverflow
+      if (opener && opener.isConnected) opener.focus()
     }
-  }, [openIndex, count])
+  }, [isOpen, count])
 
   return (
     <>
@@ -46,10 +80,12 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
 
       {open && openIndex !== null && (
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={open.title ?? 'Piece'}
-          className="fade-in fixed inset-0 z-[300] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm motion-reduce:animate-none md:p-10"
+          tabIndex={-1}
+          className="fade-in fixed inset-0 z-[300] flex items-center justify-center bg-black/85 p-4 outline-none backdrop-blur-sm motion-reduce:animate-none md:p-10"
           onClick={() => setOpenIndex(null)}
         >
           <div
@@ -82,7 +118,7 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
             <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 p-5 text-white md:w-72">
               <div className="flex items-baseline justify-between gap-3">
                 <h3 className="text-[15px] font-semibold tracking-tight">{open.title ?? 'Untitled'}</h3>
-                <span className="text-[11px] tabular-nums text-white/50">
+                <span className="text-[11px] tabular-nums text-white/50" aria-live="polite">
                   {openIndex + 1} / {count}
                 </span>
               </div>
