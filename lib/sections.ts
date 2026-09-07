@@ -2,6 +2,7 @@ import { projects } from '@/data/projects'
 import { posts } from '@/data/posts'
 import { pieces } from '@/data/pieces'
 import { papers } from '@/data/papers'
+import { awards } from '@/data/awards'
 import { researchItems } from '@/data/research'
 
 export interface HomeSection {
@@ -15,7 +16,7 @@ const ORDER: { id: string; label: string; visible: () => boolean }[] = [
   { id: 'post', label: 'Post', visible: () => posts.length > 0 },
   { id: 'piece', label: 'Piece', visible: () => pieces.length > 0 },
   { id: 'research', label: 'Research', visible: () => researchItems.length > 0 },
-  { id: 'papers', label: 'Papers', visible: () => papers.length > 0 },
+  { id: 'publications', label: 'Publications', visible: () => papers.length > 0 || awards.length > 0 },
   { id: 'about', label: 'About', visible: () => true },
   { id: 'contact', label: 'Contact', visible: () => true },
 ]

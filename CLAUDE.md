@@ -35,8 +35,8 @@
 ### 1-3. 홈 구조 (한 번만 이해하면 되는 규칙)
 
 - 레퍼런스(코버플로우 데모)의 언어로 만든 "앨범 선반" 홈. HERO는 이름 + 한 줄 정체성 + 소속 + 링크 알약(중앙 정렬, 작게).
-- 섹션 순서: Projects → Post → Piece → Research → Papers → About → Contact. Projects·Post·Piece는 **코버플로우 선반**(`components/Shelf.tsx`), Research·Papers·About는 중앙 카드, Contact는 중앙 정렬. 번호는 쓰지 않는다.
-- **표시 여부·nav 목록의 정본은 `lib/sections.ts`의 `ORDER`.** 데이터가 빈 섹션(Projects·Post·Piece·Research·Papers)은 페이지와 nav에서 함께 사라진다. About·Contact는 항상 보인다.
+- 섹션 순서: Projects → Post → Piece → Research → Publications & Awards → About → Contact. Projects·Post·Piece는 **코버플로우 선반**(`components/Shelf.tsx`), Research·Publications·About는 중앙 카드, Contact는 중앙 정렬. 번호는 쓰지 않는다.
+- **표시 여부·nav 목록의 정본은 `lib/sections.ts`의 `ORDER`.** 데이터가 빈 섹션(Projects·Post·Piece·Research·Publications)은 페이지와 nav에서 함께 사라진다. About·Contact는 항상 보인다.
 - 선반 규칙: 슬라이드가 3개 이상이면 코버플로우, 미만이면 같은 카드의 정적 나열(`ShelfRow`). 가운데 카드를 누르면 프로젝트·글은 상세로, 피스는 라이트박스. 데이터 → 슬라이드 변환은 `lib/shelves.ts`. **항목 순서는 각 JSON 배열의 순서.** `id`는 화면에 쓰지 않는다.
 - 썸네일 없는 프로젝트는 카테고리 + 제목이 적힌 그라데이션 카드로 나온다. `featured` 플래그는 현재 화면에 쓰이지 않는다.
 
@@ -53,7 +53,8 @@
 | 프로젝트 | `data/projects.json` | admin 또는 JSON | Projects 선반, `/projects/[slug]` |
 | 글 | `data/posts.json` + `content/posts/<slug>.md` | JSON + md | Post 선반(`cover`가 카드 이미지), `/posts/[slug]` |
 | 시각 작업 | `data/pieces.json` (+ 업로드) | admin 또는 JSON | Piece 선반 + 라이트박스 |
-| 연구 · 논문 | `data/research.json`, `data/papers.json` | admin 또는 JSON | Research · Papers 카드 (비면 숨김) |
+| 연구 | `data/research.json` | admin 또는 JSON | Research 카드 (비면 숨김) |
+| 논문 · 수상 | `data/papers.json`, `data/awards.json` | papers는 admin 또는 JSON, awards는 JSON만 | Publications & Awards 섹션 (둘 다 비면 숨김) |
 
 필드 정의의 정본은 `types/index.ts`. JSON에 필드를 추가할 때는 타입부터 고친다.
 
@@ -94,9 +95,12 @@
 - 영상은 주소가 `.mp4`/`.webm`/`.mov`로 끝날 때만 영상으로 재생된다. 확장자가 없는 주소는 이미지로 취급돼 깨진다.
 - 모든 피스가 Piece 선반에 오르고, 가운데 카드를 누르면 라이트박스에서 원본과 프롬프트를 본다. `featured`는 현재 쓰이지 않는다(admin 저장 시 기존 값은 보존).
 
-### 2-6. Papers · Research 추가 (`papers.json`, `research.json`)
+### 2-6. Publications & Awards · Research 추가 (`papers.json`, `awards.json`, `research.json`)
 
-- Papers: admin → Papers → `+ New`. `authors`는 한 줄 문자열(예: `Kim M., Lee S.`), `journal`, `year`(숫자), `abstract`(선택), 링크 arXiv/PDF/DOI(선택). 목록에는 제목과 `authors · journal, year`만 보이고 abstract·링크는 클릭해 펼친다(한 번에 하나).
+- Papers: admin → Papers → `+ New`. `authors`는 한 줄 문자열(예: `Kim M., Lee S.`), `journal`, `year`(숫자), `abstract`(선택), 링크 arXiv/PDF/DOI(선택). 목록에는 제목과 `authors · journal, note`가 보이고 abstract·링크는 클릭해 펼친다(한 번에 하나).
+- 논문의 선택 필드는 JSON으로만 넣는다(admin 폼에 없다): `titleKo`(국문 병기), `status`(`published` 기본 · `preprint` · `under-review`), `role`(`first` · `co-first` · `contributing` — 앞 둘만 진한 배지), `note`(권·호·쪽 또는 투고일). `under-review`는 **Under review** 묶음으로 따로 내려가고, 머리말 카운트의 "제1·공동제1저자"는 **게재분만** 센다.
+- Awards: `data/awards.json`을 직접 편집한다(admin 탭 없음). `title`(과제명) `titleEn` `event`(대회) `organizer` `year` `prize`(상격) `team` `role` `description` `metrics[]`(`label`·`value`·`note` — 2열 격자 숫자 카드). Awards가 섹션 맨 위에 온다.
+- 이 섹션은 About 타임라인의 `award` 항목과 별개다. 타임라인은 한 줄 CV 요약, 이 섹션이 상세 기록이다.
 - Research: admin → Research → `+ New`. `status`는 `ongoing` / `completed` 둘 중 하나(그 외 값은 completed로 표시). `tags[]`는 제목 아래 칩, `description`은 펼쳐야 보인다.
 - 항목이 하나라도 생기면 섹션과 nav 항목이 자동으로 나타난다.
 
@@ -147,16 +151,16 @@ app/
 components/
   Hero(+HeroGlow), AboutSection(TimelineGroup·groupTimeline export), ContactSection, PageTransition,
   MarkdownArticle, AdminAccess, Collapse(CSS 아코디언)                                     ← 서버
-  Navigation(알약 nav), Shelf(코버플로우 선반), PieceShelf(선반 + 라이트박스), PapersSection,
+  Navigation(알약 nav), Shelf(코버플로우 선반), PieceShelf(선반 + 라이트박스), PublicationsSection,
   ResearchSection, RevealObserver(스크롤 등장), HeroGlow(포인터 글로우), CopyButton,
   ImageUploadButton, ui/coverflow-carousel, app/admin/*(page.tsx 제외)                     ← 'use client'
-data/        *.json + 래퍼 .ts. export 이름: projects · posts · pieces · papers · researchItems(← research 아님) · profile · timeline
+data/        *.json + 래퍼 .ts. export 이름: projects · posts · pieces · papers · awards · researchItems(← research 아님) · profile · timeline
 lib/         sections.ts(섹션 정본) shelves.ts(데이터 → 선반 슬라이드) site.ts(siteUrl·이미지 최적화 판정) utils.ts(cn) adminAuth.ts adminFetch.ts github.ts r2.ts
 types/index.ts   모든 데이터 타입 (Project Post Piece Paper ResearchItem Profile TimelineEntry)
 content/posts/   글 본문 md          public/uploads/  admin 업로드 이미지          public/images/articles/  글 이미지
 ```
 
-이름이 층마다 다르니 그대로 따른다: 섹션 id·앵커는 `about` `projects` `post` `piece` `research` `papers` `contact`(Post·Piece 단수), admin API `type`은 `projects` `papers` `research` `pieces`.
+이름이 층마다 다르니 그대로 따른다: 섹션 id·앵커는 `about` `projects` `post` `piece` `research` `publications` `contact`(Post·Piece 단수), nav 라벨은 `Publications`인데 섹션 제목은 `Publications & Awards`, admin API `type`은 `projects` `papers` `research` `pieces`.
 
 ### 3-2. 데이터 흐름
 
@@ -171,7 +175,7 @@ content/posts/   글 본문 md          public/uploads/  admin 업로드 이미�
 - 토큰: `app/globals.css`의 CSS 변수 `--background --foreground --card --muted --muted-foreground --border --ring --shadow-card`(다크 기본값 + `prefers-color-scheme: light` 세트)를 `@theme inline`으로 노출한다 → `bg-background` `text-foreground` `bg-card` `bg-muted` `text-muted-foreground` `border-border` `divide-border` `ring-border` `shadow-card`. **사이트 UI에서 색은 이 토큰만 쓴다.** `black/white/gray-*` 직접값과 opacity 위계(`text-black/60`)는 쓰지 않는다(admin 화면은 예외).
 - 타이포: Inter + Pretendard 하나. 섹션 제목 24~30px semibold `tracking-tight` 중앙 정렬, 카드·항목 제목 15px semibold, 보조 13px `text-muted-foreground`, 메타는 12px `dl`(라벨 좌 muted · 값 우 medium). uppercase 라벨은 11~12px `tracking-[0.18em]`~`[0.22em]`에만. serif·italic·`font-mono` 없음, 숫자는 `tabular-nums`.
 - 형태: 카드 `rounded-2xl` + `shadow-card`(코버플로우 카드는 `shadow-xl`) + `ring-1 ring-border`. 버튼·링크·nav는 `rounded-full`, 입력은 `rounded-xl`. 괘선은 `border-border`/`divide-border`만.
-- 레이아웃: 전부 중앙 정렬. 본문 카드 `max-w-3xl`(About·Contact·Papers·Research), 상세 `max-w-2xl`, 코버플로우 `max-w-5xl`. 섹션 `py-14 sm:py-20`. nav는 `fixed top-4` 알약이라 `section[id]`에 `scroll-margin-top` 5.5rem.
+- 레이아웃: 전부 중앙 정렬. 본문 카드 `max-w-3xl`(About·Contact·Publications·Research), 상세 `max-w-2xl`, 코버플로우 `max-w-5xl`. 섹션 `py-14 sm:py-20`. nav는 `fixed top-4` 알약이라 `section[id]`에 `scroll-margin-top` 5.5rem.
 - 모션: 코버플로우(드래그·rAF settle, 보이는 동안 6초마다 자동 회전하다가 사용자가 만지면 멈춤), 섹션 스크롤 등장(`[data-reveal]` + `RevealObserver`, JS 전에는 숨기지 않음), 히어로 포인터 글로우(`HeroGlow`, 마우스 있을 때만), 카드 hover `-translate-y-1`, 페이지 페이드(`.page-enter`), 아코디언 CSS grid 0.3s. **전부 `prefers-reduced-motion`을 존중한다**(코버플로우는 즉시 이동, 자동 회전·등장·글로우는 꺼짐). 새 모션을 추가하면 같은 규칙을 지킨다.
 - 알약 버튼은 전부 `components/GlassButton.tsx`(Liquid Glass). `as`로 `button`·`a`·`next/link`, `variant`로 `glass`(기본)·`solid`. 광학은 `globals.css`의 `.glass`가 맡고, 포인터 추적은 `components/GlassPointer.tsx`가 `layout.tsx`에서 한 번만 마운트해 `document`의 위임 리스너 하나로 처리한다(알약마다 리스너를 달지 않는다). `--glass-*` 토큰 12개도 `:root`·라이트 블록·`@theme inline` 세 곳 규칙을 따른다.
 - **`.glass` 위에 `transform`·`opacity < 1`·`filter`를 주지 않는다.** backdrop-filter가 걸린 요소라 배경 샘플링이 깨진다(그래서 hover 리프트와 `hover:opacity-90`이 없다). 그림자 깊이와 빛으로 hover를 표현한다.

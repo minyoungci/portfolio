@@ -1,5 +1,6 @@
 import { projects } from '@/data/projects'
 import { papers } from '@/data/papers'
+import { awards } from '@/data/awards'
 import { researchItems } from '@/data/research'
 import { posts } from '@/data/posts'
 import { pieces } from '@/data/pieces'
@@ -9,7 +10,7 @@ import Hero from '@/components/Hero'
 import Shelf from '@/components/Shelf'
 import PieceShelf from '@/components/PieceShelf'
 import ResearchSection from '@/components/ResearchSection'
-import PapersSection from '@/components/PapersSection'
+import PublicationsSection from '@/components/PublicationsSection'
 import AboutSection from '@/components/AboutSection'
 import ContactSection from '@/components/ContactSection'
 import AdminAccess from '@/components/AdminAccess'
@@ -47,7 +48,7 @@ export default function HomePage() {
 
         {visible('research') && <ResearchSection items={researchItems} />}
 
-        {visible('papers') && <PapersSection papers={papers} />}
+        {visible('publications') && <PublicationsSection papers={papers} awards={awards} />}
 
         <AboutSection />
 

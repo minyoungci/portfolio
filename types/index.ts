@@ -19,14 +19,43 @@ export interface Project {
   featured: boolean;   // true면 hero "Selected work"에 노출
 }
 
+/** 게재 상태. 'published'가 기본이고, 나머지는 목록에서 따로 묶인다. */
+export type PaperStatus = 'published' | 'preprint' | 'under-review';
+/** 저자 기여. 화면에는 한국어 배지로 나온다(components/PublicationsSection.tsx). */
+export type AuthorRole = 'first' | 'co-first' | 'contributing';
+
 export interface Paper {
   id: number;
   title: string;
-  authors: string;
-  journal: string;
+  titleKo?: string;    // 국문 병기 (선택)
+  authors: string;     // 한 줄 문자열. 심사 중 원고는 비워 둘 수 있다
+  journal: string;     // 학술지 또는 투고처
   year: number;
-  abstract?: string;
+  status?: PaperStatus;  // 없으면 published
+  role?: AuthorRole;
+  note?: string;       // 권·호·쪽, 투고일 등 보조 표기
+  abstract?: string;   // 핵심 결과
   links: { arxiv?: string; pdf?: string; doi?: string };
+}
+
+export interface AwardMetric {
+  label: string;
+  value: string;
+  note?: string;
+}
+
+export interface Award {
+  id: number;
+  title: string;       // 과제명
+  titleEn?: string;
+  event: string;       // 대회명
+  organizer?: string;  // 주최 / 주관
+  year: number;
+  prize: string;       // 상격
+  role?: string;       // 본인 역할
+  team?: string;
+  description?: string;
+  metrics?: AwardMetric[];
 }
 
 export interface ResearchItem {
