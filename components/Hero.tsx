@@ -1,5 +1,6 @@
 import { profile } from '@/data/profile'
 import HeroGlow from '@/components/HeroGlow'
+import GlassButton from '@/components/GlassButton'
 
 /** 이름 · 한 줄 정체성 · 소속 · 링크. 중앙 정렬, 작게. 대표작은 아래 선반이 맡는다. */
 export default function Hero() {
@@ -23,15 +24,15 @@ export default function Hero() {
 
         <div className="mt-8 flex flex-wrap justify-center gap-2">
           {profile.links.map((link) => (
-            <a
+            <GlassButton
               key={link.label}
+              as="a"
               href={link.href}
               target={link.href.startsWith('mailto') ? undefined : '_blank'}
               rel="noopener noreferrer"
-              className="rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium shadow-card transition-all hover:-translate-y-0.5 hover:bg-muted motion-reduce:transition-none motion-reduce:hover:translate-y-0"
             >
               {link.label}
-            </a>
+            </GlassButton>
           ))}
         </div>
       </div>

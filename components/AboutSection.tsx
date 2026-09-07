@@ -1,7 +1,7 @@
-import Link from 'next/link'
 import { profile } from '@/data/profile'
 import { timeline } from '@/data/timeline'
 import type { TimelineKind } from '@/types'
+import GlassButton from '@/components/GlassButton'
 
 export const KIND_ORDER: TimelineKind[] = ['career', 'education', 'award', 'scholarship', 'activity']
 export const KIND_LABEL: Record<TimelineKind, string> = {
@@ -65,12 +65,9 @@ export default function AboutSection() {
         )}
 
         <div className="mt-10 text-center">
-          <Link
-            href="/about"
-            className="inline-block rounded-full border border-border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-muted"
-          >
+          <GlassButton as="link" href="/about">
             Full profile
-          </Link>
+          </GlassButton>
         </div>
       </div>
     </section>

@@ -14,6 +14,20 @@
   --border: rgba(255, 255, 255, 0.1);
   --ring: #f4f4f5;
   --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.8);
+
+  /* Liquid Glass (components/GlassButton.tsx). Dark set. */
+  --glass-tint-top: rgba(255, 255, 255, 0.1);
+  --glass-tint-bottom: rgba(255, 255, 255, 0.035);
+  --glass-edge: rgba(255, 255, 255, 0.14);
+  --glass-sheen: rgba(255, 255, 255, 0.3);
+  --glass-shade: rgba(0, 0, 0, 0.34);
+  --glass-rim: rgba(255, 255, 255, 0.72);
+  --glass-rim-back: rgba(255, 255, 255, 0.26);
+  --glass-caustic: rgba(255, 255, 255, 0.14);
+  --glass-mote: rgba(255, 255, 255, 0.5);
+  --glass-solid-spec: rgba(0, 0, 0, 0.3);
+  --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.35), 0 10px 26px -14px rgba(0, 0, 0, 0.8);
+  --glass-shadow-hover: 0 1px 1px rgba(0, 0, 0, 0.4), 0 18px 34px -16px rgba(0, 0, 0, 0.85);
 }
 
 @media (prefers-color-scheme: light) {
@@ -27,6 +41,22 @@
     --border: rgba(0, 0, 0, 0.08);
     --ring: #131316;
     --shadow-card: 0 24px 48px -24px rgba(0, 0, 0, 0.35);
+
+    /* Liquid Glass, light set. Inverted on purpose: a white specular on a near-white
+       pill is invisible, so in light the travelling glint and the interior light are
+       shade. That is also how glass reads against a bright room - as contrast, not glare. */
+    --glass-tint-top: rgba(255, 255, 255, 0.66);
+    --glass-tint-bottom: rgba(255, 255, 255, 0.36);
+    --glass-edge: rgba(0, 0, 0, 0.1);
+    --glass-sheen: rgba(255, 255, 255, 0.9);
+    --glass-shade: rgba(0, 0, 0, 0.08);
+    --glass-rim: rgba(19, 19, 22, 0.34);
+    --glass-rim-back: rgba(19, 19, 22, 0.12);
+    --glass-caustic: rgba(19, 19, 22, 0.05);
+    --glass-mote: rgba(19, 19, 22, 0.22);
+    --glass-solid-spec: rgba(255, 255, 255, 0.42);
+    --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.05), 0 10px 22px -14px rgba(0, 0, 0, 0.3);
+    --glass-shadow-hover: 0 1px 1px rgba(0, 0, 0, 0.07), 0 18px 30px -16px rgba(0, 0, 0, 0.34);
   }
 }
 
@@ -39,6 +69,19 @@
   --color-border: var(--border);
   --color-ring: var(--ring);
   --shadow-card: var(--shadow-card);
+
+  --color-glass-tint-top: var(--glass-tint-top);
+  --color-glass-tint-bottom: var(--glass-tint-bottom);
+  --color-glass-edge: var(--glass-edge);
+  --color-glass-sheen: var(--glass-sheen);
+  --color-glass-shade: var(--glass-shade);
+  --color-glass-rim: var(--glass-rim);
+  --color-glass-rim-back: var(--glass-rim-back);
+  --color-glass-caustic: var(--glass-caustic);
+  --color-glass-mote: var(--glass-mote);
+  --color-glass-solid-spec: var(--glass-solid-spec);
+  --shadow-glass: var(--glass-shadow);
+  --shadow-glass-hover: var(--glass-shadow-hover);
 
   /* Latin from Inter, Hangul from Noto Sans KR — both self-hosted via next/font */
   --font-sans: var(--font-inter), var(--font-noto-sans-kr), "Apple SD Gothic Neo", "Malgun Gothic", "Helvetica Neue", Arial, sans-serif;
@@ -295,4 +338,380 @@ html.js [data-reveal].is-visible {
 }
 .fade-in {
   animation: fade-in 0.3s ease both;
+}
+
+/* ═══ Liquid Glass buttons ══════════════════════════════════════════════════
+   components/GlassButton.tsx draws the pill; components/GlassPointer.tsx (mounted
+   once in app/layout.tsx) writes --g-angle / --g-px / --g-py onto the pill under
+   the cursor. The pointer is the light source, so all three hover behaviours are
+   one thing moving: the specular travels around the rim because the light moved,
+   the interior gradient parallaxes at 42% of the pointer's travel because it sits
+   deeper in the material, and the motes are inclusions that are lit only where the
+   light currently is.
+
+   Paint order inside .glass: the element (tint + backdrop + hairlines), ::before
+   (the interior light), .glass-motes, ::after (the rim), .glass-label. The label is
+   the only layer above the effects, so nothing the effect does can cross a glyph.
+
+   --glass-* are theme tokens (:root + light block + @theme inline).
+   --g-*     are runtime values GlassPointer writes inline. Every one has a working
+             default here, so the resting pill needs no JavaScript at all.
+
+   Notes for whoever changes this next:
+   - There is no `border`. The resting hairline is `inset 0 0 0 1px var(--glass-edge)`,
+     so the animated 1px rim lands on that exact band instead of doubling it, and the
+     padding box (what `inset: 0` resolves against) stays equal to the border box.
+   - Never put opacity < 1, filter, mask or transform on .glass itself: each makes it
+     a backdrop root and the glass silently goes flat. That is also why the old
+     `hover:-translate-y-0.5` lift is gone; the hover response is shadow depth plus
+     the light coming up.
+   - .page-enter (0.45s) and html.js [data-reveal] (0.7s) animate opacity on ancestors
+     of these pills, so the glass samples only inside that subtree until they finish.
+     It self-corrects. It is not a bug in the button.
+   ═════════════════════════════════════════════════════════════════════════════ */
+
+@keyframes glass-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(var(--m-dx, 4px), var(--m-dy, -4px), 0);
+  }
+}
+
+/* @layer components, so call-site Tailwind utilities (rounded-xl, px-5, text-*) still
+   win and the base-layer :focus-visible ring is never outranked. */
+@layer components {
+  .glass {
+    --g-drop: var(--glass-shadow);
+    position: relative;
+    z-index: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 9999px;
+    color: var(--foreground);
+    background-image: linear-gradient(180deg, var(--glass-tint-top), var(--glass-tint-bottom));
+    /* 12px, and no brightness(): over this site's flat token grounds blur and saturate
+       are near no-ops and brightness would only duplicate what the tint already does.
+       The filter earns its place where a pill overlaps the hero glow or a shelf card. */
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    backdrop-filter: blur(12px) saturate(1.4);
+    /* Earlier shadows paint on top: lit top curve, resting hairline, shaded underside. */
+    box-shadow:
+      inset 0 1px 0 0 var(--glass-sheen),
+      inset 0 0 0 1px var(--glass-edge),
+      inset 0 -1px 0 0 var(--glass-shade),
+      var(--g-drop);
+    transition: box-shadow 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  /* Interior light. It travels 42% of the pointer's distance and lags it in time, so it
+     reads as a layer sitting below the surface rather than painted on it. */
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: radial-gradient(
+      120% 180% at var(--g-px, 50%) var(--g-py, 34%),
+      var(--glass-caustic) 0%,
+      transparent 62%
+    );
+    opacity: 0.55;
+    transition: opacity 380ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  /* Inclusions suspended in the glass, revealed only where the light is. The mask makes
+     this dust caught in a beam rather than a field of glitter: two of the four are lit at
+     any moment. Positions, sizes, durations and negative delays are literal values, so
+     the server and client markup are identical and nothing can mismatch on hydration.
+     (#000 below is mask alpha, not a UI colour.) */
+  .glass-motes {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 460ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    -webkit-mask-image: radial-gradient(
+      24px circle at var(--g-px, 50%) var(--g-py, 40%),
+      #000 0%,
+      rgba(0, 0, 0, 0.4) 55%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      24px circle at var(--g-px, 50%) var(--g-py, 40%),
+      #000 0%,
+      rgba(0, 0, 0, 0.4) 55%,
+      transparent 100%
+    );
+  }
+
+  /* --m-anim is `none` until hover, so an unhovered pill owns no animation object at all.
+     The negative delays mean each mote resumes mid-drift, in its own phase. */
+  .glass-mote {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 9999px;
+    background-color: var(--glass-mote);
+    opacity: var(--m-a, 0.6);
+    animation-name: var(--m-anim, none);
+    animation-duration: var(--m-dur, 12s);
+    animation-delay: var(--m-delay, 0s);
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  .glass-mote:nth-child(1) {
+    left: 16%;
+    top: 62%;
+    --m-dx: 5px;
+    --m-dy: -6px;
+    --m-dur: 13s;
+    --m-delay: -2.1s;
+    --m-a: 0.7;
+  }
+  .glass-mote:nth-child(2) {
+    left: 38%;
+    top: 30%;
+    width: 1.5px;
+    height: 1.5px;
+    --m-dx: -4px;
+    --m-dy: 5px;
+    --m-dur: 11s;
+    --m-delay: -6.4s;
+    --m-a: 0.5;
+  }
+  .glass-mote:nth-child(3) {
+    left: 62%;
+    top: 70%;
+    --m-dx: 6px;
+    --m-dy: 4px;
+    --m-dur: 15s;
+    --m-delay: -0.8s;
+    --m-a: 0.62;
+  }
+  .glass-mote:nth-child(4) {
+    left: 84%;
+    top: 38%;
+    width: 2.5px;
+    height: 2.5px;
+    --m-dx: -5px;
+    --m-dy: -4px;
+    --m-dur: 12s;
+    --m-delay: -9.2s;
+    --m-a: 0.45;
+  }
+
+  /* The rim: a true 1px ring (border box minus content box) painted by a conic gradient
+     whose `from` angle IS the light's angle. Two lobes - a tight primary one centred on
+     the light, and a dimmer counter-glint 180deg opposite, which is the bounce off the far
+     wall of the bead and the thing that stops a conic reading as a rotating decal.
+     Without mask-composite the conic would fill the pill behind the label, so the whole
+     pseudo-element exists only where the mask works; elsewhere the inset hairline carries
+     the edge. */
+  @supports ((-webkit-mask-composite: xor) or (mask-composite: exclude)) {
+    .glass::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      box-sizing: border-box;
+      padding: 1px;
+      border-radius: inherit;
+      pointer-events: none;
+      background-image: conic-gradient(
+        from var(--g-angle, 315deg) at 50% 50%,
+        var(--glass-rim) 0deg,
+        transparent 26deg,
+        transparent 158deg,
+        var(--glass-rim-back) 180deg,
+        transparent 202deg,
+        transparent 334deg,
+        var(--glass-rim) 360deg
+      );
+      -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+      -webkit-mask-clip: content-box, border-box;
+      -webkit-mask-composite: xor;
+      mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+      mask-clip: content-box, border-box;
+      mask-composite: exclude;
+      opacity: 0.45;
+      transition: opacity 340ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    /* An opaque pill has no interior, so the solid variant keeps only the optical event
+       that survives opacity: the travelling specular. One token, because the perception
+       inverts - on a near-white pill you read the far side falling into shade, on a
+       near-black one you read the highlight. */
+    .glass--solid::after {
+      background-image: conic-gradient(
+        from var(--g-angle, 315deg) at 50% 50%,
+        var(--glass-solid-spec) 0deg,
+        transparent 34deg,
+        transparent 326deg,
+        var(--glass-solid-spec) 360deg
+      );
+      opacity: 0.9;
+    }
+  }
+
+  /* The only layer above the effects. Its gap replaces the old `ml-2` in ContactSection. */
+  .glass-label {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .glass:hover {
+      --g-drop: var(--glass-shadow-hover);
+      --m-anim: glass-drift;
+    }
+    .glass:hover::before,
+    .glass:hover::after,
+    .glass:hover .glass-motes {
+      opacity: 1;
+    }
+  }
+
+  /* Keyboard users get the same material response, with the light at its rest angle.
+     Deliberately outside the hover gate. */
+  .glass:focus-visible {
+    --m-anim: glass-drift;
+  }
+  .glass:focus-visible::before,
+  .glass:focus-visible::after,
+  .glass:focus-visible .glass-motes {
+    opacity: 1;
+  }
+
+  /* Pressed: the hairlines invert, so the surface reads as pushed in. Ungated, because it
+     is the only feedback a touch device gets, and no transform - transforming a
+     backdrop-filtered element smears the sampled backdrop. */
+  .glass:active {
+    box-shadow:
+      inset 0 2px 3px -1px var(--glass-shade),
+      inset 0 0 0 1px var(--glass-edge),
+      inset 0 -1px 0 0 var(--glass-sheen),
+      var(--g-drop);
+  }
+
+  /* Engines with no backdrop-filter get exactly today's pill: an opaque card surface with
+     the hairline, the rim and the shadow intact. Nested, so no multi-condition @supports
+     syntax and no :not() selector list is required in the engines this targets. */
+  @supports not (backdrop-filter: blur(1px)) {
+    @supports not (-webkit-backdrop-filter: blur(1px)) {
+      .glass {
+        background-image: none;
+        background-color: var(--card);
+      }
+    }
+  }
+
+  /* Transparency and contrast are not motion; they are honoured separately. Both drop the
+     translucency and the interior and keep the pill legible and finished. */
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      background-image: none;
+      background-color: var(--card);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+    .glass::before,
+    .glass-motes {
+      display: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .glass {
+      background-image: none;
+      background-color: var(--card);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+    .glass::before,
+    .glass-motes {
+      display: none;
+    }
+    .glass::after {
+      opacity: 1;
+    }
+  }
+
+  /* Solid variant. Declared after the fallbacks above so its opaque fill wins on source
+     order, which is why none of them need a :not() selector list. */
+  .glass--solid {
+    background-image: none;
+    background-color: var(--foreground);
+    color: var(--background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow:
+      inset 0 -1px 0 0 var(--glass-solid-spec),
+      var(--g-drop);
+  }
+
+  .glass--solid::before {
+    display: none;
+  }
+
+  .glass--solid:active {
+    box-shadow:
+      inset 0 2px 3px -1px var(--glass-solid-spec),
+      var(--g-drop);
+  }
+
+  /* Forced colours: the OS supplies the palette. background-image is not cleared for us,
+     so it is cleared here, and the rim is repainted in a system colour rather than with an
+     outline - an outline in this layer would outrank the base :focus-visible ring. */
+  @media (forced-colors: active) {
+    .glass {
+      background-image: none;
+      background-color: ButtonFace;
+      color: ButtonText;
+    }
+    .glass::before,
+    .glass-motes {
+      display: none;
+    }
+    .glass::after {
+      background-image: linear-gradient(ButtonBorder, ButtonBorder);
+      opacity: 1;
+    }
+  }
+
+  /* Reduced motion. Three guarantees, in order of authority:
+     1. these !important pins beat the non-important inline values GlassPointer writes, so
+        a preference flipped mid-session stops the light travelling immediately;
+     2. GlassPointer listens for that same change and tears itself down;
+     3. the motes are removed outright - motionless dust is just dirt on the screen.
+     Hover and focus still change state, instantly. That is feedback, not motion, and what
+     remains (tint, both hairlines, the rim at its resting 315deg, the shadow) is a
+     finished piece of glass that simply does not move. */
+  @media (prefers-reduced-motion: reduce) {
+    .glass {
+      --g-angle: 315deg !important;
+      --g-px: 50% !important;
+      --g-py: 34% !important;
+      --m-anim: none !important;
+      transition: none;
+    }
+    .glass::before,
+    .glass::after,
+    .glass-motes {
+      transition: none;
+    }
+    .glass-motes {
+      display: none;
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import GlassButton from '@/components/GlassButton'
 
 export default function NotFound() {
   return (
@@ -9,12 +9,9 @@ export default function NotFound() {
         <p className="mt-3 text-[13px] leading-6 text-muted-foreground">
           주소가 바뀌었거나 삭제된 페이지입니다.
         </p>
-        <Link
-          href="/"
-          className="mt-6 inline-block rounded-full bg-foreground px-5 py-2 text-[13px] font-semibold text-background transition-opacity hover:opacity-90"
-        >
+        <GlassButton as="link" href="/" variant="solid" className="mt-6 px-5">
           Home
-        </Link>
+        </GlassButton>
       </div>
     </main>
   )

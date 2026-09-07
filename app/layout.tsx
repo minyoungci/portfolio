@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Noto_Sans_KR } from "next/font/google";
 import Navigation from "@/components/Navigation";
 import RevealObserver from "@/components/RevealObserver";
+import GlassPointer from "@/components/GlassPointer";
 import { getHomeSections } from "@/lib/sections";
 import { siteUrl } from "@/lib/site";
 import { profile } from "@/data/profile";
@@ -51,6 +52,7 @@ export default function RootLayout({
       <body className="bg-background text-foreground font-sans antialiased">
         <Navigation sections={getHomeSections()} />
         <RevealObserver />
+        <GlassPointer />
         {children}
       </body>
     </html>

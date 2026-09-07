@@ -1,5 +1,6 @@
 import { profile } from '@/data/profile'
 import CopyButton from '@/components/CopyButton'
+import GlassButton from '@/components/GlassButton'
 
 export default function ContactSection() {
   return (
@@ -19,16 +20,16 @@ export default function ContactSection() {
       <div className="mt-8 flex flex-wrap justify-center gap-2">
         <CopyButton text={profile.email} label="Copy email" copiedLabel="Copied ✓" />
         {profile.links.map((link) => (
-          <a
+          <GlassButton
             key={link.label}
+            as="a"
             href={link.href}
             target={link.href.startsWith('mailto') ? undefined : '_blank'}
             rel="noopener noreferrer"
-            className="rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium shadow-card transition-colors hover:bg-muted"
           >
             <span className="text-muted-foreground">{link.label}</span>
-            <span className="ml-2">{link.handle}</span>
-          </a>
+            <span>{link.handle}</span>
+          </GlassButton>
         ))}
       </div>
 
