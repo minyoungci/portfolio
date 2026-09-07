@@ -80,27 +80,55 @@
 
 ## 4. Projects **[P0]** — `data/projects.json`
 
-현재 등록: 테스트 데이터 1건(`ddaaa`)뿐 → **전부 새로 채워야 함**
+현재 등록: **3건**. 제목·subtitle·description·slug는 채워져 있고, 아래 네 가지만 비어 있다.
+`stack`(빈 배열) · `links`(빈 객체) · `thumbnail`(빈 문자열) · `year`(셋 다 2026 — 확인 필요)
 
-3~8개를 목표로, 아래 블록을 프로젝트 수만큼 복사해서 채워주세요.
-**우선 제목과 한 줄만 전부 나열**해도 됩니다. 상세는 나중에 채워도 됩니다.
+각 블록의 빈칸만 채우면 된다. 여기에 쓰든, 채팅에 그대로 붙여넣든 상관없다.
+모르는 항목은 `없음`이라고 쓴다 — 비워 두면 물어보느라 한 번 더 오간다.
+
+**이미지 파일**: 아무 데나 두고 경로만 알려주거나, `public/uploads/`에 직접 넣는다.
+핵심 피사체를 **중앙 정사각형** 안에 두면 선반(1:1)과 상세(4:3) 양쪽에서 안 잘린다.
+영상(mp4/webm/mov)도 썸네일로 쓸 수 있지만 R2 업로드가 필요하다.
+
+```
+### 1. Non-invasive Cardiac Output from PPG & ECG   (slug: cardiac-output-ppg-ecg)
+- 스택:                        (예: Python, PyTorch, SciPy / 쉼표 구분)
+- 연도:                        (현재 2026 — 시작 연도가 맞나?)
+- 링크 GitHub:                 (없으면 `없음`)
+- 링크 Demo:
+- 링크 Paper:
+- 썸네일:                      (파일 경로 또는 `없음`)
+
+### 2. GBD Epidemiology                            (slug: gbd-epidemiology)
+- 스택:
+- 연도:                        (현재 2026)
+- 링크 GitHub:
+- 링크 Demo:
+- 링크 Paper:
+- 썸네일:
+
+### 3. Brain MRI Foundation Model                   (slug: brain-mri-foundation-model)
+- 스택:
+- 연도:                        (현재 2026)
+- 링크 GitHub:
+- 링크 Demo:
+- 링크 Paper:
+- 썸네일:
+```
+
+프로젝트를 **추가**할 때는 아래 블록을 복사해서 쓴다.
 
 ```
 ### 프로젝트 N
-- 제목:
-- 한 줄 설명 (subtitle):
+- 제목:                        (slug가 제목에서 만들어지므로 영문 제목 권장)
+- 한 줄 설명 (subtitle):        (선반 캡션 + 상세 meta description에 쓰인다. 한 문장)
 - 연도:
-- 카테고리: (예: Medical AI / Vision / Data / Tooling / Web)
-- 스택: (예: PyTorch, MONAI, Next.js)
-- 문제 — 무엇이 안 되고 있었나:
-- 접근 — 어떻게 풀었나:
-- 결과 — 가능하면 숫자로 (정확도, 처리시간, 사용자 수 등):
-- 내 역할: (개인 / 팀 — 팀이면 담당 부분)
+- 카테고리:                     (예: Medical AI / Epidemiology / Vision / Data — 첫 번째가 카드의 대표 분류)
+- 스택:
+- 설명:                        (문단 단위. 마크다운은 안 먹고 줄바꿈만 유지된다)
 - 링크: GitHub / Demo / Paper
-- 이미지·스크린샷: 있음(경로 또는 설명) / 없음
+- 썸네일:
 ```
-
----
 
 ## 5. Post **[P1]** — `data/posts.json` + `content/posts/*.md`
 
