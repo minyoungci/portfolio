@@ -1,3 +1,9 @@
+/** 상세 페이지 하단 갤러리 한 장. 캡션은 이미지 아래 작은 글씨로 나온다. */
+export interface ProjectImage {
+  src: string;
+  caption?: string;
+}
+
 export interface ProjectLinks {
   github?: string;
   demo?: string;
@@ -14,7 +20,7 @@ export interface Project {
   stack: string[];
   description: string; // 일반 텍스트. 줄바꿈은 유지되지만 마크다운은 렌더되지 않는다
   thumbnail: string;   // /uploads/... 또는 영상 URL
-  images: string[];
+  images: ProjectImage[];
   links: ProjectLinks;
   featured: boolean;   // true면 hero "Selected work"에 노출
 }

@@ -104,6 +104,32 @@ export default async function ProjectPage({ params }: Props) {
           <div className="mt-10 whitespace-pre-wrap text-[15px] leading-7">{project.description}</div>
         )}
 
+        {/* 화면 캡처 갤러리. 로컬 경로라 next/image가 최적화한다. */}
+        {project.images.length > 0 && (
+          <section className="mt-14">
+            <h2 className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Screens</h2>
+            <div className="mt-4 space-y-8">
+              {project.images.map((img) => (
+                <figure key={img.src}>
+                  <div className="overflow-hidden rounded-2xl bg-muted ring-1 ring-border">
+                    <Image
+                      src={img.src}
+                      alt={img.caption ?? project.title}
+                      width={1280}
+                      height={800}
+                      sizes="(max-width: 672px) 100vw, 672px"
+                      className="h-auto w-full"
+                    />
+                  </div>
+                  {img.caption && (
+                    <figcaption className="mt-2.5 text-[12px] leading-5 text-muted-foreground">{img.caption}</figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
         <nav className="mt-16 flex justify-between gap-4 border-t border-border pt-8 text-[13px]">
           {prev ? (
             <Link href={`/projects/${prev.slug}`} className="text-muted-foreground transition-colors hover:text-foreground">

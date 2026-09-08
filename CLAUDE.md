@@ -74,8 +74,8 @@
 2. **slug는 최초 저장 때 제목에서 만들어지며 영문 소문자·숫자·하이픈만 남는다.** 한글 제목만 쓰면 slug가 비거나(`한글제목` → `""`) 하이픈만 남아(`한글 제목` → `-`) 링크가 깨지고 다른 항목과 겹친다. 영문 제목을 쓰거나 저장 후 JSON에서 `slug`를 직접 넣는다. 한 번 정해진 slug는 이후 admin 저장에서도 유지된다(제목을 바꿔도 URL이 안 끊긴다).
 3. 썸네일: admin의 `파일 선택`으로 올린다. 이미지는 `public/uploads/`(경로 `/uploads/...`), 영상(mp4/webm/mov)은 R2로 올라가 URL이 들어간다. 직접 URL을 넣을 때 외부 이미지는 `next.config.ts`의 `images.remotePatterns`에 있는 호스트(unsplash, picsum, `*.r2.dev`)만 된다. 그 밖의 호스트는 페이지가 죽는다.
 4. 같은 썸네일이 선반 카드에서는 1:1, 상세 상단에서는 4:3으로 잘린다. **핵심을 중앙 정사각 안에** 두면 둘 다 안전하다. 썸네일이 없으면 카테고리 + 제목이 적힌 카드가 대신 나온다.
-5. `description`은 마크다운이 아니라 **줄바꿈이 유지되는 일반 텍스트**. `category[0]`이 카드의 대표 분류이고 상세에서는 전체가 쉼표로 이어진다. `subtitle`은 선반 캡션과 상세 페이지 meta description에 쓰이니 한 문장으로. `images[]`와 `featured`는 아직 화면에 쓰이지 않는다.
-6. 테스트 항목 `ddaaa`는 실제 프로젝트를 넣을 때 삭제한다.
+5. `description`은 마크다운이 아니라 **줄바꿈이 유지되는 일반 텍스트**. `category[0]`이 카드의 대표 분류이고 상세에서는 전체가 쉼표로 이어진다. `subtitle`은 선반 캡션과 상세 페이지 meta description에 쓰이니 한 문장으로. `featured`는 아직 화면에 쓰이지 않는다.
+6. `images[]`는 상세 페이지 맨 아래 **Screens 갤러리**로 나온다. 원소는 `{ "src": "/images/projects/<슬러그>/x.png", "caption": "..." }` 꼴이고 `caption`은 선택이다(이미지 아래 12px 회색 글씨). 파일은 `public/images/projects/<슬러그>/`에 넣는다 — admin 업로드(`public/uploads/`)와 달리 손으로 커밋하는 자리다. 본문 폭(672px)에 꽉 차게 나오니 가로형을 쓰고, `next/image`가 알아서 줄여 서빙한다(1280px PNG 800KB → 약 70KB).
 
 ### 2-4. 글(Post) 추가 (`posts.json` + `content/posts/*.md`)
 
@@ -159,7 +159,8 @@ components/
 data/        *.json + 래퍼 .ts. export 이름: projects · posts · pieces · papers · awards · researchItems(← research 아님) · profile · timeline
 lib/         sections.ts(섹션 정본) shelves.ts(데이터 → 선반 슬라이드) site.ts(siteUrl·이미지 최적화 판정) utils.ts(cn) adminAuth.ts adminFetch.ts github.ts r2.ts
 types/index.ts   모든 데이터 타입 (Project Post Piece Paper ResearchItem Profile TimelineEntry)
-content/posts/   글 본문 md          public/uploads/  admin 업로드 이미지          public/images/articles/  글 이미지
+content/posts/   글 본문 md          public/uploads/  admin 업로드 이미지
+public/images/articles/  글 이미지          public/images/projects/<슬러그>/  프로젝트 화면 캡처(Screens 갤러리)
 ```
 
 이름이 층마다 다르니 그대로 따른다: 섹션 id·앵커는 `about` `projects` `post` `piece` `research` `publications` `contact`(Post·Piece 단수), nav 라벨은 `Publications`인데 섹션 제목은 `Publications & Awards`, admin API `type`은 `projects` `papers` `research` `pieces`.
