@@ -99,6 +99,7 @@
 
 - Papers: admin → Papers → `+ New`. `authors`는 한 줄 문자열(예: `Kim M., Lee S.`), `journal`, `year`(숫자), `abstract`(선택), 링크 arXiv/PDF/DOI(선택). 목록에는 제목과 `authors · journal, note`가 보이고 abstract·링크는 클릭해 펼친다(한 번에 하나).
 - 논문의 선택 필드는 JSON으로만 넣는다(admin 폼에 없다): `titleKo`(국문 병기), `status`(`published` 기본 · `preprint` · `under-review`), `role`(`first` · `co-first` · `contributing` — 앞 둘만 진한 배지), `note`(권·호·쪽 또는 투고일). `under-review`는 **Under review** 묶음으로 따로 내려가고, 머리말 카운트의 "제1·공동제1저자"는 **게재분만** 센다.
+- 논문 카드의 썸네일은 `thumbnail`(`/images/papers/<slug>.jpg`) — 논문 첫 면을 정사각으로 구운 것이다. 카드가 1:1로 잘리므로 **페이지 위쪽만** 잘라야 제목·저자·학술지 머리말이 남는다. 원본 PDF에서 만들 때는 첫 장이 교정 안내지인 경우가 있으니 제목이 실제로 있는 면을 골라야 한다(실제로 한 건이 그랬다). 없으면 기여 배지 + 제목의 타이포 카드로 대체된다.
 - 논문마다 `slug`가 필요하다(`/papers/[slug]`). admin으로 추가하면 제목에서 영문 소문자·숫자·하이픈만 남겨 만들고, 한글만 있는 제목이면 `paper-<id>`로 대체된다. 한 번 정해진 slug는 이후 저장에서도 유지된다.
 - Awards: `data/awards.json`을 직접 편집한다(admin 탭 없음). `title`(과제명) `titleEn` `event`(대회) `organizer` `year` `prize`(상격) `team` `role` `description` `metrics[]`(`label`·`value`·`note` — 2열 격자 숫자 카드). Awards가 섹션 맨 위에 온다.
 - 이 섹션은 About 타임라인의 `award` 항목과 별개다. 타임라인은 한 줄 CV 요약, 이 섹션이 상세 기록이다.

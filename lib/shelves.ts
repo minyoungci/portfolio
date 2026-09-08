@@ -69,7 +69,9 @@ export function paperSlides(papers: Paper[]): ShelfSlide[] {
   return papers.map((p) => {
     const underReview = p.status === 'under-review'
     return {
-      alt: p.title,
+      src: p.thumbnail || undefined,
+      media: 'image' as const,
+      alt: `${p.title} 첫 면`,
       title: p.title,
       kicker: p.role ? PAPER_ROLE[p.role] ?? p.journal : p.journal,
       subtitle: p.titleKo ?? p.journal,

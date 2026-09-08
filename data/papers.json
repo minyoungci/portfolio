@@ -10,6 +10,7 @@
     "status": "published",
     "role": "co-first",
     "note": "2026년 5월 온라인 게재",
+    "thumbnail": "/images/papers/stroke-burden-east-asia-europe-north-america.jpg",
     "abstract": "GBD 2023 자료로 세 권역을 비교했다. 연령표준화 사망률은 51.7% 감소한 반면 절대 사망자 수는 458만 명에서 655만 명으로 늘었다. 2순위 위험요인은 권역마다 달랐고(동아시아 초미세먼지, 서유럽·북미 고LDL), 고령화가 동아시아 사망 증가의 113.1%를 설명했다.",
     "links": {
       "doi": "https://doi.org/10.1159/000552068"
@@ -26,6 +27,7 @@
     "status": "published",
     "role": "first",
     "note": "13(20):2552 · 3인 동등기여 제1저자",
+    "thumbnail": "/images/papers/spinal-cord-injury-worldwide-2050.jpg",
     "abstract": "GBD 2021을 기반으로 2021년 전 세계 척수손상 유병 인구를 약 1,450만 명(경부 730만, 경부 이하 722만)으로 추정했다. 연령표준화율은 소폭 감소했으나 절대 부담은 동아시아와 중저소득국에서 크게 늘었고, 50–64세 남성에서 가장 높았다.",
     "links": {
       "doi": "https://doi.org/10.3390/healthcare13202552"
@@ -42,6 +44,7 @@
     "status": "published",
     "role": "contributing",
     "note": "13(15):1774 · 제2저자",
+    "thumbnail": "/images/papers/vertebral-fractures-global-burden.jpg",
     "abstract": "2021년 척추 골절은 약 537만 명(95% UI 470–620만), 연령표준화 유병률은 10만 명당 65명이었다. 70세를 기점으로 남녀 순위가 역전되고 낙상과 교통사고가 주요 원인이었다. 2050년에는 801만 명까지 늘 것으로 전망했다.",
     "links": {
       "doi": "https://doi.org/10.3390/healthcare13151774"
@@ -58,6 +61,7 @@
     "status": "published",
     "role": "co-first",
     "note": "8:239 · 5인 동등기여 제1저자",
+    "thumbnail": "/images/papers/traumatic-brain-injury-americas.jpg",
     "abstract": "GBD 2023으로 미주 지역 외상성 뇌손상을 중증도·연령·성별·SDI·원인별로 분석했다. 고소득 북미가 연령표준화 부담 최고치를 유지했고, 1990년 이후 변화는 인구 증가와 고령화가 주도했으며, 모든 SDI 수준에서 낙상이 최대 원인이었다.",
     "links": {
       "doi": "https://doi.org/10.1007/s42399-026-02469-7"
@@ -74,6 +78,7 @@
     "status": "published",
     "role": "co-first",
     "note": "10(2):102–112 · 4인 동등기여 제1저자",
+    "thumbnail": "/images/papers/osteosarcopenia-degenerative-spinal-disorders.jpg",
     "abstract": "UK Biobank·MVP·GIANT GWAS로 사지근육량·악력·보행속도·골밀도와 추간판질환·척추협착·척추증의 양방향 인과관계를 검정했다. 높은 사지근육량은 위험 증가와, 빠른 보행속도와 높은 골밀도는 위험 감소와 연관되었다.",
     "links": {
       "doi": "https://doi.org/10.23838/pfm.2026.00135"
@@ -90,6 +95,7 @@
     "status": "published",
     "role": "co-first",
     "note": "45:4947–4958 · 4인 동등기여 제1저자",
+    "thumbnail": "/images/papers/arrhythmia-after-ankylosing-spondylitis.jpg",
     "abstract": "국민건강보험 자료(2012–2023)에서 강직성 척추염 3,022명과 매칭 대조군 30,220명을 평균 4.3년 추적했다. 부정맥 발생률비는 1.41(95% CI 1.17–1.69)이었고, 60세 미만 여성에서 가장 높았다(IRR 1.95).",
     "links": {
       "doi": "https://doi.org/10.1007/s10067-026-08259-9"
@@ -106,6 +112,7 @@
     "status": "published",
     "role": "co-first",
     "note": "10(1):27–38 · 5인 동등기여 제1저자",
+    "thumbnail": "/images/papers/fluid-intelligence-psychiatric-disorders.jpg",
     "abstract": "PheWAS 기반 2표본 MR으로 10개 정신질환을 검정했다. 높은 유동성 지능은 ADHD(OR 0.72)·조현병(OR 0.69)·PTSD(OR 0.93) 위험 감소와, 자폐스펙트럼장애(OR 1.43)·신경성 식욕부진증(OR 1.39) 위험 증가와 연관되었다.",
     "links": {
       "doi": "https://doi.org/10.23838/pfm.2026.00023"
@@ -122,6 +129,7 @@
     "status": "published",
     "role": "contributing",
     "note": "2:22 · 제3저자",
+    "thumbnail": "/images/papers/healthcare-utilization-costs-screening-cohort.jpg",
     "abstract": "약 20년 청구자료에서 총 진료비의 89.2%가 비감염성 질환에서 발생했고(감염성의 약 8배), 상위 20개 질환이 전체 비용의 약 60%를 차지했다. 2010년대 중반 이후로는 만성질환 이용량이 비용 상승을 주도했다.",
     "links": {
       "doi": "https://doi.org/10.64066/kobrareports.26.0019"
@@ -138,6 +146,7 @@
     "status": "preprint",
     "role": "contributing",
     "note": "abstract 6215418 · peer review 진행 중 · 제2저자",
+    "thumbnail": "/images/papers/tuberculosis-ethiopia-2000-2024.jpg",
     "abstract": "2000–2024년 국가 단위 지표를 통합한 생태학적 종단 분석이다. 결핵 발생률은 10만 명당 400건 이상에서 150건 미만으로 감소했으나 2010년대 후반 이후 둔화했고, ARIMA 예측상 현 추세로는 퇴치 목표 달성이 어렵다.",
     "links": {}
   }

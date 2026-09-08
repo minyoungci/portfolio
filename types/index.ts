@@ -41,6 +41,7 @@ export interface Paper {
   status?: PaperStatus;  // 없으면 published
   role?: AuthorRole;
   note?: string;       // 권·호·쪽, 투고일 등 보조 표기
+  thumbnail?: string;  // 논문 첫 면 캡처 (/images/papers/<slug>.jpg). 선반 카드에 쓰인다
   abstract?: string;   // 핵심 결과
   links: { arxiv?: string; pdf?: string; doi?: string };
 }
