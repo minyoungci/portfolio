@@ -97,5 +97,46 @@
     ],
     "links": {},
     "featured": true
+  },
+  {
+    "id": 5,
+    "slug": "tossbot",
+    "title": "Tossbot",
+    "subtitle": "토스증권 데이터를 차트 분석·퀀트 스크리닝·백테스트·모의매매로 연결하는 웹·데스크톱 워크스테이션.",
+    "year": 2026,
+    "category": [
+      "FinTech",
+      "Quant",
+      "Desktop"
+    ],
+    "stack": [
+      "Python",
+      "FastAPI",
+      "React",
+      "JavaScript",
+      "Vite",
+      "Tailwind CSS",
+      "Lightweight Charts",
+      "pywebview",
+      "PyInstaller"
+    ],
+    "description": "국내·미국 주식의 시세와 분석 신호를 한 작업 공간에서 살펴보는 로컬 웹·데스크톱 앱입니다. 대시보드, 시장 레짐, 인트라데이 분석, 퀀트 스크리닝, 종목 상세, 백테스트, 모의투자와 오토파일럿을 연결합니다.\n\nPython 분석 엔진을 FastAPI로 노출하고 React·Vite 프론트엔드에서 차트와 계좌 상태를 보여줍니다. 백엔드는 크기가 제한된 TTL 캐시와 동일 요청의 동시 계산 공유를 사용하며, 프론트엔드도 중복 GET 요청을 공유하고 변경 후 관련 데이터를 갱신합니다.\n\n차트 스터디에서는 일봉·분봉의 확인된 피벗, EMA·SMA, ATR 가격 구간, 돌파·리테스트, RSI·MACD 다이버전스, 상대 거래량과 변동성을 함께 확인합니다. 수동 피보나치·추세선과 비용·환율·초기 위험을 반영한 수량·순손익비 계산도 제공합니다. 분석 스터디 화면에는 로컬 가이드의 본문 검색, 그림 갤러리와 출처 탐색을 연결했습니다.\n\n모의매매는 최대 8개의 독립 계좌, 원화·달러 평가, 매매 저널과 목표·손절 오토파일럿을 지원합니다. 웹 모의투자와 오토파일럿은 로컬 모의 원장을 사용하며, 실제 주문의 체결·잔고 동기화는 구현되어 있지 않습니다. 차트 스터디의 시나리오 계산은 분석 전용으로 자동매매 조건을 변경하지 않습니다.\n\nPC에서는 사이드바와 카드형 대시보드, 모바일에서는 하단 메뉴와 접히는 계좌 정보를 사용합니다. 라이트·다크 설정을 저장하고 차트 테마를 함께 갱신합니다. pywebview와 PyInstaller로 Windows 실행 파일을 구성하며, API 키는 OS 자격 증명 저장소와 연동합니다.\n\n아래 화면은 2026년 10월 3일 합성 시세와 임시 모의계좌로 검증한 앱 캡처입니다. 화면의 금액·신호는 투자 성과나 실제 거래 결과를 나타내지 않습니다.",
+    "thumbnail": "/images/projects/tossbot/01-dashboard-desktop.png",
+    "images": [
+      {
+        "src": "/images/projects/tossbot/01-dashboard-desktop.png",
+        "caption": "PC 대시보드. 모의계좌 평가액·자산 구성·관심종목·분석 신호를 함께 보여준다. 합성 시세와 임시 모의계좌로 촬영했다."
+      },
+      {
+        "src": "/images/projects/tossbot/02-chart-study.png",
+        "caption": "종목 상세와 차트 스터디. 피벗·이동평균·ATR 구간, 돌파·리테스트, 다이버전스와 수동 위험·수량 시나리오를 확인한다. 합성 시세 화면이다."
+      },
+      {
+        "src": "/images/projects/tossbot/03-dashboard-mobile.png",
+        "caption": "모바일 대시보드. 접히는 계좌 정보, 자산 요약과 하단 탐색 메뉴로 같은 모의계좌에 접근한다."
+      }
+    ],
+    "links": {},
+    "featured": true
   }
 ]
