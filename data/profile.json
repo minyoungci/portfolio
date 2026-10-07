@@ -2,22 +2,22 @@
   "name": "Minyoung Kim",
   "nameLines": ["Minyoung", "Kim"],
   "nameKo": "",
-  "tagline": "Medical AI / Futurist",
-  "identity": "뇌 MRI와 파운데이션 모델을 중심으로, 새로운 AI 기술을 견고한 의료 연구와 응용으로 옮기는 의료 AI 연구자입니다.",
-  "identityEn": "PhD researcher in Medical AI, working on brain MRI and foundation models.",
+  "tagline": "Medical AI / Open Source Developer / Futurist",
+  "identity": "뇌 MRI와 파운데이션 모델을 연구하고, AI 기술을 의료 연구와 일상에서 쓸 수 있는 도구로 구현하는 의료 AI 연구자이자 오픈소스 개발자입니다.",
+  "identityEn": "Medical AI researcher and open-source developer, building tools for research and everyday use.",
   "affiliation": "Sungkyunkwan University · MetaBioHealth",
   "location": "Suwon, South Korea",
   "email": "dbssus123@gmail.com",
   "bio": [
     "성균관대학교 메타바이오헬스학과 석박통합과정에서 의료 인공지능을 연구하고 있습니다. 뇌 MRI와 파운데이션 모델이 중심 주제이고, 질병부담(GBD) 역학 분석과 UK Biobank 데이터를 활용한 연구도 함께 진행합니다.",
-    "새롭게 등장하는 AI 기술이 의미 있는 의학 연구에 어떻게 쓰일 수 있는지를 탐구합니다.",
+    "연구에서 얻은 아이디어를 실제로 실행할 수 있는 소프트웨어로 옮깁니다. 오픈소스 개발자로서 GitHub에 코드를 공개하고, 다른 개발자와 연구자가 살펴보고 함께 발전시킬 수 있는 도구를 만드는 데 관심이 있습니다.",
     "빠르게 변화하는 AI의 발전을 견고하고 실용적인 의료 응용으로 옮기는 일에 특히 관심이 있습니다."
   ],
   "bioEn": [
-    "I am a PhD researcher in Medical AI, focusing on brain MRI and foundation models. My work explores how emerging AI technologies can be applied to meaningful medical research. I am particularly interested in translating fast-moving AI advances into robust and practical healthcare applications."
+    "I am a PhD researcher in Medical AI and an open-source developer, focusing on brain MRI and foundation models. I turn research ideas into working software and share code on GitHub for others to explore and build upon. My work connects emerging AI technologies with meaningful medical research and practical tools for everyday use."
   ],
   "contactTitle": "Work Together",
-  "contactLine": "For research collaboration, medical AI projects, and knowledge architecture.",
+  "contactLine": "For open-source collaboration, medical AI research, and building useful tools together.",
   "links": [
     { "label": "Email", "handle": "dbssus123@gmail.com", "href": "mailto:dbssus123@gmail.com" },
     { "label": "GitHub", "handle": "minyoungci", "href": "https://github.com/minyoungci" },
