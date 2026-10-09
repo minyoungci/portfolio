@@ -455,7 +455,7 @@ export function CoverflowCarousel({
                       src={slide.src}
                       alt={slide.alt}
                       fill
-                      sizes="(max-width: 640px) 70vw, 480px"
+                      sizes="(max-width: 761px) 84vw, 640px"
                       draggable={false}
                       className="select-none object-cover"
                     />
@@ -497,7 +497,7 @@ export function CoverflowCarousel({
                 touch();
                 nudge(-1);
               }}
-              className="absolute left-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-background"
+              className="absolute left-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-3 text-foreground backdrop-blur transition hover:bg-background"
             >
               <ChevronLeft className="size-5" />
             </button>
@@ -508,7 +508,7 @@ export function CoverflowCarousel({
                 touch();
                 nudge(1);
               }}
-              className="absolute right-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-background"
+              className="absolute right-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-background/70 p-3 text-foreground backdrop-blur transition hover:bg-background"
             >
               <ChevronRight className="size-5" />
             </button>
@@ -521,7 +521,7 @@ export function CoverflowCarousel({
           key={selected}
           className="fade-in mt-2 flex flex-col items-center px-6 motion-reduce:animate-none"
         >
-          <p className="text-center text-[17px] font-semibold tracking-tight text-foreground sm:text-[19px]">
+          <p className="text-center text-[19px] font-semibold tracking-tight text-foreground sm:text-[22px]">
             {active.title}
           </p>
           {active.subtitle && (

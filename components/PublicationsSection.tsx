@@ -108,7 +108,7 @@ export default function PublicationsSection({ papers, awards }: Props) {
             <div className="mx-auto mt-2 max-w-7xl overflow-hidden">
               <CoverflowCarousel
                 slides={slides}
-                cardWidth="clamp(220px, 40vw, 480px)"
+                cardWidth="min(84vw, 640px)"
                 cardClassName="ring-1 ring-border ring-inset"
                 showCaption
                 showPagination

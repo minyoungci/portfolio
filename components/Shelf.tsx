@@ -44,7 +44,7 @@ export default function Shelf({ id, title, description, slides, onActivate, auto
         {slides.length >= 3 ? (
           <CoverflowCarousel
             slides={slides}
-            cardWidth="clamp(220px, 40vw, 480px)"
+            cardWidth="min(84vw, 640px)"
             cardClassName="ring-1 ring-border ring-inset"
             showCaption
             showPagination
@@ -69,7 +69,7 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
           key={`${slide.title}-${index}`}
           type="button"
           onClick={() => onActivate(index)}
-          className="group w-[clamp(220px,40vw,480px)] cursor-pointer rounded-2xl text-center outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="group w-[min(84vw,640px)] cursor-pointer rounded-2xl text-center outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted shadow-xl ring-1 ring-inset ring-border transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none">
             {slide.src ? (
@@ -88,7 +88,7 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
                   src={slide.src}
                   alt={slide.alt}
                   fill
-                  sizes="(max-width: 640px) 70vw, 480px"
+                  sizes="(max-width: 761px) 84vw, 640px"
                   className="object-cover"
                 />
               ) : (
@@ -106,7 +106,7 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
               </div>
             )}
           </div>
-          <p className="mt-4 text-[17px] font-semibold tracking-tight">{slide.title}</p>
+          <p className="mt-4 text-[19px] sm:text-[22px] font-semibold tracking-tight">{slide.title}</p>
           {slide.subtitle && <p className="mt-1 text-[13px] text-muted-foreground">{slide.subtitle}</p>}
           {slide.meta && slide.meta.length > 0 && (
             <dl className="mx-auto mt-6 w-full max-w-[280px] text-[12px] sm:text-[13px]">
