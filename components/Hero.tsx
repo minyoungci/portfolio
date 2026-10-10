@@ -1,5 +1,5 @@
 import { profile } from '@/data/profile'
-import HeroGlow from '@/components/HeroGlow'
+import MotionIdentity from '@/components/MotionIdentity'
 import GlassButton from '@/components/GlassButton'
 
 /** 이름 · 한 줄 정체성 · 소속 · 링크. 중앙 정렬, 작게. 대표작은 아래 선반이 맡는다. */
@@ -8,12 +8,12 @@ export default function Hero() {
 
   return (
     <section id="hero" className="relative overflow-hidden">
-      <HeroGlow />
-      <div className="mx-auto max-w-3xl px-6 pt-28 pb-2 text-center sm:pt-36 sm:pb-4">
+      <div className="mx-auto max-w-7xl px-6 pt-28 pb-2 text-center sm:pt-36 sm:pb-4">
         <p className="text-[12px] font-medium uppercase tracking-[0.22em] text-muted-foreground">{profile.tagline}</p>
         <h1 className="mt-5 text-[clamp(2.5rem,7vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
           {profile.name}
         </h1>
+        <MotionIdentity name={profile.name} />
         <p className="mx-auto mt-6 max-w-xl text-[16px] leading-7 text-muted-foreground sm:text-[17px]">
           {profile.identity}
         </p>

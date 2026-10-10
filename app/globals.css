@@ -6,6 +6,9 @@
  */
 :root {
   color-scheme: dark;
+  --motion-purple: #b768f4;
+  --motion-ink: #101112;
+  --motion-paper: #f7f7f7;
   --background: #0b0b0c;
   --foreground: #f4f4f5;
   --card: #141416;
@@ -33,6 +36,9 @@
 @media (prefers-color-scheme: light) {
   :root {
     color-scheme: light;
+    --motion-purple: #b768f4;
+    --motion-ink: #101112;
+    --motion-paper: #f7f7f7;
     --background: #f7f7f8;
     --foreground: #131316;
     --card: #ffffff;
@@ -61,6 +67,9 @@
 }
 
 @theme inline {
+  --color-motion-purple: var(--motion-purple);
+  --color-motion-ink: var(--motion-ink);
+  --color-motion-paper: var(--motion-paper);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -740,3 +749,29 @@ html.js [data-reveal].is-visible {
     }
   }
 }
+
+/* Betr/Motto motion study. Browser-drawn typography; no reference footage. */
+.motion-identity { margin: 2.5rem auto 0; max-width: 1000px; }
+.motion-board { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); aspect-ratio: 1; gap: 14px; text-align: center; }
+.motion-panel { position: relative; min-width: 0; overflow: hidden; border-radius: 18px; }
+.motion-reel { grid-row: span 2; background: var(--motion-paper); }
+.motion-reel canvas { display: block; width: 100%; height: 100%; }
+.motion-name-panel { display: grid; place-items: center; background: var(--motion-purple); color: var(--motion-ink); }
+.motion-name { font-size: clamp(26px, 6vw, 76px); font-weight: 800; line-height: .9; letter-spacing: -.065em; text-transform: uppercase; will-change: transform; }
+.motion-vector-panel { background: var(--motion-ink); color: var(--motion-paper); display: grid; place-items: center; }
+.motion-vector { width: 100%; height: 100%; }
+.motion-outline { font-family: var(--font-sans); font-size: 180px; font-weight: 800; fill: none; stroke: var(--motion-paper); stroke-width: .6; stroke-dasharray: 180; }
+.motion-vector path { fill: none; stroke: var(--motion-paper); stroke-width: .7; stroke-dasharray: 900; }
+.motion-vector circle { fill: var(--motion-purple); }
+.motion-statement-panel { background: var(--motion-purple); color: var(--motion-ink); }
+.motion-statement { position: absolute; inset: 0; display: grid; place-content: center; white-space: pre-line; font-size: clamp(19px, 4.3vw, 52px); font-weight: 850; line-height: .94; letter-spacing: -.06em; opacity: 0; transition: opacity 100ms, transform 200ms; }
+.motion-statement:first-child { opacity: 1; }
+.motion-ticker-panel { display: flex; align-items: center; justify-content: center; gap: .3em; background: var(--motion-ink); color: var(--motion-paper); font-size: clamp(19px, 4.2vw, 48px); font-weight: 600; line-height: 1.12; letter-spacing: -.055em; }
+.motion-ticker-label { color: var(--motion-purple); }
+.motion-ticker-window { height: 100%; width: 6.1em; position: relative; overflow: hidden; mask-image: linear-gradient(transparent, black 42%, black 58%, transparent); }
+.motion-ticker-track { position: absolute; top: calc(50% - .56em); left: 0; right: 0; will-change: transform; text-align: left; }
+.motion-ticker-track span { display: block; height: 1.12em; white-space: nowrap; }
+.motion-control { display: block; margin: 16px auto 0; padding: 10px 18px; border: 1px solid var(--border); border-radius: 999px; color: var(--muted-foreground); cursor: pointer; font-size: 12px; }
+.motion-control:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+@media (max-width: 640px) { .motion-board { gap: 7px; } .motion-panel { border-radius: 10px; } .motion-identity { margin-top: 2rem; } .motion-ticker-panel { font-size: clamp(14px, 4.2vw, 26px); } }
+@media (prefers-reduced-motion: reduce) { .motion-statement { transition: none; } .motion-control { display: none; } }
