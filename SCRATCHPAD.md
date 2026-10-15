@@ -136,3 +136,10 @@
 - Applied web UI/layout/type/accessibility skills and an actual motionsites MCP reference lookup.
 - Updated home, responsive navigation, public detail styles, motion controls and Piece lightbox. Data records unchanged; corrected published/preprint count presentation.
 - Design decisions and validation scope: `docs/design-redesign-20261015.md`.
+
+## 2026-10-15 — Interactive particle hero
+
+- Added a real Three.js particle sphere, purple display typography and pointer/touch response to the homepage hero, based on the public NEX Robotics composition.
+- Added mobile quality caps, motion suspension, keyboard pause/play and static fallbacks; retained profile/content data.
+- Reference access limits, implementation and verification scope: `docs/particle-hero-20261015.md`.
+- Local implementation candidate; no production push for this version.

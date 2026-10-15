@@ -12,7 +12,7 @@
 
 | 항목 | 값 |
 |------|----|
-| 스택 | Next.js 16 (App Router, dev·build 모두 Turbopack), React 19, TypeScript, Tailwind CSS v4 (`@theme` in CSS, config 파일 없음). 애니메이션 라이브러리 없음(코버플로우는 rAF, 아코디언은 CSS grid) |
+| 스택 | Next.js 16 (App Router, dev·build 모두 Turbopack), React 19, TypeScript, Tailwind CSS v4 (`@theme` in CSS, config 파일 없음). 히어로는 지연 로드하는 Three.js, 코버플로우는 rAF, 아코디언은 CSS grid |
 | 폰트 | 산세리프 하나: Inter (라틴) + Noto Sans KR (한글), 둘 다 `next/font`로 셀프 호스팅. 외부 폰트 CSS 없음. 세리프 없음 |
 | 테마 | 다크 기본, 시스템이 라이트면 자동 라이트(`prefers-color-scheme`). 토글 없음 |
 | 데이터 | `data/*.json` + 얇은 `.ts` 래퍼(`raw as Type`). DB·런타임 검증 없음. **빌드 시 번들에 구워지므로 배포 후 바꾸려면 재배포** |
@@ -176,6 +176,8 @@ public/images/articles/  글 이미지          public/images/projects/<슬러�
 ### 3-3. 디자인 시스템 (레퍼런스 = 코버플로우 데모의 언어. 기록은 `docs/design-audit.md` 6절)
 
 > 2026-10-15: 사용자의 전체 디자인 개선 요청으로 홈을 소개/모션 2열, 좌측 섹션 헤더, 640px 앨범, 2열 Post, 분리형 About, 보라색 Contact로 갱신했다. 아래의 이전 중앙 정렬·폭·크기 값보다 `docs/design-redesign-20261015.md` 및 현재 코드가 우선한다. 모션·데이터·폰트·접근성 규칙은 유지한다.
+
+> 같은 날 추가 요청: 첫 화면 모션을 NEX Robotics 공개 구도에서 영감을 받은 Three.js 입자 구체로 교체했다. 히어로의 최신 규칙은 `docs/particle-hero-20261015.md` 및 현재 코드가 우선한다. 나머지 섹션에는 이전 리디자인이 유지된다.
 
 - 톤: 둥근 카드 + 부드러운 그림자 + 중앙 정렬 + 알약형 UI. 앱 같은 감각이지 편집 디자인이 아니다. 다크 기본, 시스템이 라이트면 자동 라이트. **단일 반응형 레이아웃** — 데스크톱/모바일 분기 컴포넌트를 만들지 않는다.
 - 토큰: `app/globals.css`의 CSS 변수 `--background --foreground --card --muted --muted-foreground --border --ring --shadow-card`(다크 기본값 + `prefers-color-scheme: light` 세트)를 `@theme inline`으로 노출한다 → `bg-background` `text-foreground` `bg-card` `bg-muted` `text-muted-foreground` `border-border` `divide-border` `ring-border` `shadow-card`. **사이트 UI에서 색은 이 토큰만 쓴다.** `black/white/gray-*` 직접값과 opacity 위계(`text-black/60`)는 쓰지 않는다(admin 화면은 예외).
