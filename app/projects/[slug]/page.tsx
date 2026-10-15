@@ -45,33 +45,35 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <PageTransition>
-      <main className="mx-auto min-h-screen max-w-2xl px-6 pt-28 pb-24 sm:pt-32">
-        <Link href="/#projects" className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+      <main className="detail-page min-h-screen">
+        <Link href="/#projects" className="detail-back">
           ← Projects
         </Link>
-
-        {/* Cover */}
-        <div className="relative mt-8 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted shadow-card">
-          {project.thumbnail ? (
-            isVideo(project.thumbnail) ? (
-              <video src={project.thumbnail} autoPlay muted loop playsInline className="h-full w-full object-cover" />
-            ) : (
-              <Image src={project.thumbnail} alt={project.title} fill className="object-cover" priority />
-            )
-          ) : (
-            <div className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted to-card p-8">
-              <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                {project.category[0] ?? 'Project'}
-              </span>
-              <span className="mt-2 text-2xl font-semibold tracking-tight">{project.title}</span>
-            </div>
-          )}
-        </div>
 
         <header className="mt-8">
           <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{project.title}</h1>
           {project.subtitle && <p className="mt-3 text-[15px] leading-7 text-muted-foreground">{project.subtitle}</p>}
         </header>
+
+        {/* Cover */}
+        <div className="detail-cover relative w-full overflow-hidden bg-muted ring-1 ring-border">
+          {project.thumbnail ? (
+            isVideo(project.thumbnail) ? (
+              <video src={project.thumbnail} autoPlay muted loop playsInline className="h-full w-full object-cover" />
+            ) : (
+              <Image src={project.thumbnail} alt={project.title} fill sizes="(max-width: 960px) 100vw, 912px" className="object-cover" priority />
+            )
+          ) : (
+            <div className="album-placeholder">
+              <span className="album-kicker">
+                {project.category[0] ?? 'Project'}
+              </span>
+              <span className="album-title">{project.title}</span>
+            </div>
+          )}
+        </div>
+
+
 
         <dl className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card px-5 text-[13px] shadow-card">
           {rows.map((row) => (
@@ -90,7 +92,7 @@ export default async function ProjectPage({ params }: Props) {
                     href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-full border border-border px-3 py-0.5 text-[12px] font-medium transition-colors hover:bg-muted"
+                    className="inline-flex min-h-11 items-center rounded-full border border-border px-4 py-2 text-[13px] font-medium transition-colors hover:bg-muted"
                   >
                     {l.label}
                   </a>
@@ -101,7 +103,7 @@ export default async function ProjectPage({ params }: Props) {
         </dl>
 
         {project.description && (
-          <div className="mt-10 whitespace-pre-wrap text-[15px] leading-7">{project.description}</div>
+          <div className="detail-body mt-10 whitespace-pre-wrap">{project.description}</div>
         )}
 
         {/* 화면 캡처 갤러리. 로컬 경로라 next/image가 최적화한다. */}

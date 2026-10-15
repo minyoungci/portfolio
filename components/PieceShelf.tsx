@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { Piece } from '@/types'
 import { pieceSlides } from '@/lib/shelves'
 import { isVideoSrc } from '@/lib/site'
@@ -27,6 +28,10 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
   useEffect(() => {
     if (!isOpen) return
     const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const background = Array.from(document.body.children)
+      .filter((element): element is HTMLElement => element instanceof HTMLElement && !element.contains(dialogRef.current))
+      .map((element) => ({ element, inert: element.inert }))
+    background.forEach(({ element }) => { element.inert = true })
     dialogRef.current?.focus()
 
     const onKey = (e: KeyboardEvent) => {
@@ -64,6 +69,7 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
     return () => {
       window.removeEventListener('keydown', onKey)
       document.body.style.overflow = previousOverflow
+      background.forEach(({ element, inert }) => { element.inert = inert })
       if (opener && opener.isConnected) opener.focus()
     }
   }, [isOpen, count])
@@ -78,18 +84,18 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
         onActivate={(index) => setOpenIndex(index)}
       />
 
-      {open && openIndex !== null && (
+      {open && openIndex !== null && createPortal(
         <div
           ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={open.title ?? 'Piece'}
           tabIndex={-1}
-          className="on-dark fade-in fixed inset-0 z-[300] flex items-center justify-center bg-black/85 p-4 outline-none backdrop-blur-sm motion-reduce:animate-none md:p-10"
+          className="on-dark fade-in fixed inset-0 z-[300] overflow-y-auto overscroll-contain bg-black/85 p-4 pt-16 outline-none motion-reduce:animate-none md:flex md:items-center md:justify-center md:p-10"
           onClick={() => setOpenIndex(null)}
         >
           <div
-            className="relative flex w-full max-w-5xl flex-col items-start gap-6 md:flex-row"
+            className="relative mx-auto flex w-full max-w-5xl flex-col items-stretch gap-6 md:flex-row md:items-start"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-1 items-center justify-center">
@@ -102,7 +108,7 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
                   muted
                   loop
                   playsInline
-                  className="max-h-[80vh] w-auto rounded-2xl shadow-2xl"
+                  className="max-h-[50vh] max-w-full rounded-2xl shadow-2xl md:max-h-[80vh]"
                 />
               ) : (
                 /* eslint-disable-next-line @next/next/no-img-element */
@@ -110,12 +116,12 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
                   key={open.id}
                   src={open.image}
                   alt={open.title ?? open.prompt.slice(0, 60)}
-                  className="max-h-[80vh] w-auto rounded-2xl object-contain shadow-2xl"
+                  className="max-h-[50vh] max-w-full rounded-2xl object-contain shadow-2xl md:max-h-[80vh]"
                 />
               )}
             </div>
 
-            <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 p-5 text-white md:w-72">
+            <div className="shrink-0 rounded-2xl border border-white/10 bg-motion-ink p-5 text-white md:w-72">
               <div className="flex items-baseline justify-between gap-3">
                 <h3 className="text-[15px] font-semibold tracking-tight">{open.title ?? 'Untitled'}</h3>
                 <span className="text-[11px] tabular-nums text-white/50" aria-live="polite">
@@ -136,7 +142,7 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
                     <button
                       type="button"
                       onClick={() => setOpenIndex((openIndex - 1 + count) % count)}
-                      className="rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[13px] text-white transition-colors hover:bg-white/20"
+                      className="min-h-11 min-w-11 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[13px] text-white transition-colors hover:bg-white/20"
                       aria-label="Previous piece"
                     >
                       ←
@@ -144,7 +150,7 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
                     <button
                       type="button"
                       onClick={() => setOpenIndex((openIndex + 1) % count)}
-                      className="rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[13px] text-white transition-colors hover:bg-white/20"
+                      className="min-h-11 min-w-11 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[13px] text-white transition-colors hover:bg-white/20"
                       aria-label="Next piece"
                     >
                       →
@@ -158,12 +164,13 @@ export default function PieceShelf({ pieces }: PieceShelfProps) {
               type="button"
               onClick={() => setOpenIndex(null)}
               aria-label="Close"
-              className="absolute -top-3 right-0 rounded-full bg-white/10 px-3 py-1 text-[12px] text-white/80 transition-colors hover:bg-white/20 md:-top-10"
+              className="fixed top-3 right-4 z-10 min-h-11 rounded-full bg-black/85 px-5 py-2 text-[13px] text-white ring-1 ring-white/20 transition-colors hover:bg-black"
             >
               Close
             </button>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   )

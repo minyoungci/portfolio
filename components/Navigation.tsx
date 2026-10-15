@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { HomeSection } from '@/lib/sections'
@@ -16,7 +16,21 @@ export default function Navigation({ sections }: NavigationProps) {
   const pathname = usePathname()
   const isHome = pathname === '/'
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuButton = useRef<HTMLButtonElement>(null)
   const shownActive = isHome ? activeId : null
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+        menuButton.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
 
   useEffect(() => {
     if (!isHome) return
@@ -47,30 +61,34 @@ export default function Navigation({ sections }: NavigationProps) {
   }, [isHome, sections])
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-3">
-      <nav
-        aria-label="Primary"
-        className="scrollbar-none pointer-events-auto flex max-w-full items-center gap-0.5 overflow-x-auto rounded-full border border-border bg-background/70 p-1.5 shadow-card backdrop-blur-md"
-      >
+    <header className="site-navigation">
+      <div className="nav-shell">
         <Link
           href="/"
-          className="hidden shrink-0 rounded-full px-3 py-1.5 text-[13px] font-semibold tracking-tight transition-colors hover:bg-muted sm:block"
+          aria-label={`${profile.name} — Home`}
+          className="nav-brand"
+          onClick={() => setMenuOpen(false)}
         >
-          {profile.name}
+          <span aria-hidden="true">mk<span className="text-accent">.</span></span>
         </Link>
+        <button ref={menuButton} type="button" className="nav-menu-button" aria-expanded={menuOpen} aria-controls="primary-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? 'Close' : 'Menu'} <span aria-hidden="true">{menuOpen ? '−' : '+'}</span></button>
+        <nav id="primary-navigation" aria-label="Primary" className={cn('nav-links scrollbar-none', menuOpen && 'is-open')}>
         {sections.map(({ id, label }) => (
           <Link
             key={id}
             href={`/#${id}`}
+            aria-current={shownActive === id ? 'location' : undefined}
+            onClick={() => setMenuOpen(false)}
             className={cn(
-              'shrink-0 rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors',
-              shownActive === id ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground',
+              'nav-link',
+              shownActive === id && 'is-active',
             )}
           >
             {label}
           </Link>
         ))}
-      </nav>
+        </nav>
+      </div>
     </header>
   )
 }

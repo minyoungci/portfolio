@@ -2,6 +2,7 @@ import { profile } from '@/data/profile'
 import { timeline } from '@/data/timeline'
 import type { TimelineKind } from '@/types'
 import GlassButton from '@/components/GlassButton'
+import SectionHeading from '@/components/SectionHeading'
 
 export const KIND_ORDER: TimelineKind[] = ['career', 'education', 'award', 'scholarship', 'activity']
 export const KIND_LABEL: Record<TimelineKind, string> = {
@@ -23,11 +24,11 @@ export function groupTimeline() {
 export function TimelineGroup({ kind, items }: ReturnType<typeof groupTimeline>[number]) {
   return (
     <div>
-      <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">{KIND_LABEL[kind]}</p>
+      <h3 className="eyebrow">{KIND_LABEL[kind]}</h3>
       <dl className="mt-3 divide-y divide-border">
         {items.map((entry, i) => (
-          <div key={i} className="flex gap-4 py-3 text-[13px]">
-            <dt className="w-24 shrink-0 tabular-nums text-muted-foreground">{entry.year}</dt>
+          <div key={i} className="flex gap-4 py-4 text-[14px]">
+            <dt className="w-20 shrink-0 tabular-nums text-muted-foreground">{entry.year}</dt>
             <dd className="min-w-0 flex-1">
               <p className="font-medium">{entry.title}</p>
               {entry.org && <p className="text-muted-foreground">{entry.org}</p>}
@@ -46,28 +47,29 @@ export default function AboutSection() {
   const groups = groupTimeline()
 
   return (
-    <section id="about" data-reveal className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
-      <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">About</h2>
+    <section id="about" data-reveal className="archive-section">
+      <SectionHeading title="About" label="The person behind the work" description="연구와 코드 사이에서, 쓸모 있는 가능성을 찾습니다." />
 
-      <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-card sm:p-10">
-        <div className="space-y-4 text-[15px] leading-7">
-          {profile.bio.map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
-        </div>
-
-        {groups.length > 0 && (
-          <div className="mt-10 grid gap-8 sm:grid-cols-2">
-            {groups.map((group) => (
-              <TimelineGroup key={group.kind} {...group} />
-            ))}
+      <div className="site-container">
+        <div className="about-grid">
+          <div className="about-bio">
+            <p className="about-statement">Research into reality.<br /><span className="text-accent">Code in the open.</span></p>
+            <div className="space-y-5 text-[15px] leading-7 text-muted-foreground sm:text-base sm:leading-8">
+              {profile.bio.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
+            <GlassButton as="link" href="/about" className="mt-8">Full profile <span aria-hidden="true">↗</span></GlassButton>
           </div>
-        )}
 
-        <div className="mt-10 text-center">
-          <GlassButton as="link" href="/about">
-            Full profile
-          </GlassButton>
+          {groups.length > 0 && (
+            <div className="about-timeline space-y-8">
+              {groups.map((group) => (
+                <TimelineGroup key={group.kind} {...group} />
+              ))}
+            </div>
+          )}
+
         </div>
       </div>
     </section>

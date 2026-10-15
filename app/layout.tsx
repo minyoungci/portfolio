@@ -50,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${inter.variable} ${notoSansKr.variable}`}>
       <body className="bg-background text-foreground font-sans antialiased">
+        <a className="skip-link" href="#main-content">본문으로 건너뛰기</a>
         <Navigation sections={getHomeSections()} />
         <RevealObserver />
         <GlassPointer />

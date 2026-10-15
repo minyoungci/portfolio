@@ -50,8 +50,8 @@ export default async function PaperPage({ params }: { params: Promise<{ slug: st
 
   return (
     <PageTransition>
-      <main className="mx-auto max-w-2xl px-6 pt-28 pb-24 sm:pt-36">
-        <Link href="/#publications" className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+      <main className="detail-page paper-page">
+        <Link href="/#publications" className="detail-back">
           ← Publications &amp; Awards
         </Link>
 
@@ -122,7 +122,7 @@ export default async function PaperPage({ params }: { params: Promise<{ slug: st
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-border bg-card px-4 py-2 text-[13px] font-medium shadow-card transition-colors hover:bg-muted"
+                  className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-5 py-3 text-[13px] font-medium shadow-card transition-colors hover:bg-muted"
                 >
                   {label}
                 </a>

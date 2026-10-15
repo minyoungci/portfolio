@@ -2,39 +2,30 @@ import { profile } from '@/data/profile'
 import MotionIdentity from '@/components/MotionIdentity'
 import GlassButton from '@/components/GlassButton'
 
-/** 이름 · 한 줄 정체성 · 소속 · 링크. 중앙 정렬, 작게. 대표작은 아래 선반이 맡는다. */
 export default function Hero() {
   const meta = [profile.affiliation, profile.location].filter((v): v is string => Boolean(v))
 
   return (
-    <section id="hero" className="relative overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 pt-28 pb-2 text-center sm:pt-36 sm:pb-4">
-        <p className="text-[12px] font-medium uppercase tracking-[0.22em] text-muted-foreground">{profile.tagline}</p>
-        <h1 className="mt-5 text-[clamp(2.5rem,7vw,4.5rem)] font-semibold leading-[1.02] tracking-tight">
-          {profile.name}
-        </h1>
-        <MotionIdentity name={profile.name} />
-        <p className="mx-auto mt-6 max-w-xl text-[16px] leading-7 text-muted-foreground sm:text-[17px]">
-          {profile.identity}
-        </p>
-        {profile.identityEn && (
-          <p className="mx-auto mt-2 max-w-xl text-[13px] leading-6 text-muted-foreground/80">{profile.identityEn}</p>
-        )}
-        {meta.length > 0 && <p className="mt-6 text-[12px] text-muted-foreground">{meta.join(' · ')}</p>}
-
-        <div className="mt-8 flex flex-wrap justify-center gap-2">
-          {profile.links.map((link) => (
-            <GlassButton
-              key={link.label}
-              as="a"
-              href={link.href}
-              target={link.href.startsWith('mailto') ? undefined : '_blank'}
-              rel="noopener noreferrer"
-            >
-              {link.label}
-            </GlassButton>
-          ))}
+    <section id="hero" className="hero-section site-container">
+      <div className="hero-layout">
+        <div className="hero-copy">
+          <p className="eyebrow hero-eyebrow">Research. Build. Share.</p>
+          <h1 className="hero-title" aria-label={profile.name}>{profile.name.split(' ').map((word, index) => <span key={index}>{word}</span>)}<span className="hero-period" aria-hidden="true">.</span></h1>
+          <p className="hero-role">{profile.tagline}</p>
+          <p className="hero-description">{profile.identity}</p>
+          <div className="hero-actions">
+            <GlassButton as="link" href="/#projects" variant="solid">Explore projects <span aria-hidden="true">↗</span></GlassButton>
+            {profile.links.filter((link) => link.label === 'GitHub').map((link) => (
+              <GlassButton key={link.label} as="a" href={link.href} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></GlassButton>
+            ))}
+          </div>
+          {meta.length > 0 && <p className="hero-meta">{meta.join(' / ')}</p>}
         </div>
+        <MotionIdentity name={profile.name} />
+      </div>
+      <div className="hero-footnote">
+        <p>{profile.identityEn}</p>
+        <a href="#projects" className="explore-link">Explore the archive <span aria-hidden="true">↓</span></a>
       </div>
     </section>
   )

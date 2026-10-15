@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 export type GlassVariant = 'glass' | 'solid'
 
 /** 모양·크기·타이포는 Tailwind 유틸리티, 유리의 광학은 globals.css의 `.glass`가 맡는다. */
-const SHAPE = 'glass rounded-full px-4 py-2 text-[13px] font-medium'
+const SHAPE = 'glass min-h-11 rounded-full px-5 py-3 text-[13px] font-medium'
 const SOLID = 'glass--solid font-semibold'
 
 interface GlassOwn {

@@ -129,3 +129,10 @@
 - `docs/deploy.md` — 배포 가이드
 
 ---
+
+## 2026-10-15 — Public portfolio redesign
+
+- Production worktree and base verified: `codex/add-tossbot-portfolio`, `7446d3a`, remote `master`.
+- Applied web UI/layout/type/accessibility skills and an actual motionsites MCP reference lookup.
+- Updated home, responsive navigation, public detail styles, motion controls and Piece lightbox. Data records unchanged; corrected published/preprint count presentation.
+- Design decisions and validation scope: `docs/design-redesign-20261015.md`.

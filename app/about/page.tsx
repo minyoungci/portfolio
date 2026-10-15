@@ -14,7 +14,7 @@ export default function AboutPage() {
 
   return (
     <PageTransition>
-      <main className="mx-auto min-h-screen max-w-3xl px-6 pt-32 pb-24 sm:pt-40">
+      <main className="detail-page profile-page min-h-screen">
         <header className="text-center">
           <p className="text-[12px] font-medium uppercase tracking-[0.22em] text-muted-foreground">{profile.tagline}</p>
           <h1 className="mt-4 text-[clamp(2.25rem,6vw,3.5rem)] font-semibold leading-[1.05] tracking-tight">
@@ -58,14 +58,14 @@ export default function AboutPage() {
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Links</p>
           <dl className="mt-3 divide-y divide-border">
             {profile.links.map((link) => (
-              <div key={link.label} className="flex items-baseline justify-between gap-4 py-3 text-[13px]">
+              <div key={link.label} className="flex flex-wrap items-baseline justify-between gap-4 py-3 text-[14px]">
                 <dt className="text-muted-foreground">{link.label}</dt>
                 <dd>
                   <a
                     href={link.href}
                     target={link.href.startsWith('mailto') ? undefined : '_blank'}
                     rel="noopener noreferrer"
-                    className="font-medium underline decoration-muted-foreground underline-offset-4 transition-colors hover:decoration-foreground"
+                    className="inline-flex min-h-11 items-center break-all font-medium underline decoration-muted-foreground underline-offset-4 transition-colors hover:decoration-foreground"
                   >
                     {link.handle}
                   </a>

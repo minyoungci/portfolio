@@ -7,5 +7,5 @@ interface PageTransitionProps {
  * 서버 HTML이 하이드레이션 전에도 보이고, reduced-motion에서는 꺼진다.
  */
 export default function PageTransition({ children }: PageTransitionProps) {
-  return <div className="page-enter">{children}</div>
+  return <div id="main-content" tabIndex={-1} className="page-enter">{children}</div>
 }

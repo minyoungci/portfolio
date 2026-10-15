@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { CoverflowCarousel } from '@/components/ui/coverflow-carousel'
 import type { ShelfSlide } from '@/lib/shelves'
 import { isOptimizableImage } from '@/lib/site'
+import SectionHeading from '@/components/SectionHeading'
 
 interface ShelfProps {
   id: string
@@ -34,11 +35,8 @@ export default function Shelf({ id, title, description, slides, onActivate, auto
   }
 
   return (
-    <section id={id} data-reveal className="py-10 sm:py-14">
-      <header className="mx-auto max-w-2xl px-6 text-center">
-        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
-        {description && <p className="mt-2 text-[13px] text-muted-foreground">{description}</p>}
-      </header>
+    <section id={id} data-reveal className="archive-section">
+      <SectionHeading title={title} label={id === 'projects' ? 'Ideas into tools' : id === 'post' ? 'Notes & guides' : 'Visual experiments'} description={description} count={slides.length} />
 
       <div className="mx-auto mt-2 max-w-7xl overflow-hidden">
         {slides.length >= 3 ? (
@@ -63,15 +61,15 @@ export default function Shelf({ id, title, description, slides, onActivate, auto
 
 function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (index: number) => void }) {
   return (
-    <div className="flex flex-wrap justify-center gap-10 px-6 py-10">
+    <div className="shelf-row site-container">
       {slides.map((slide, index) => (
         <button
           key={`${slide.title}-${index}`}
           type="button"
           onClick={() => onActivate(index)}
-          className="group w-[min(84vw,640px)] cursor-pointer rounded-2xl text-center outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="shelf-row-card group cursor-pointer rounded-2xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <div className="relative aspect-square overflow-hidden rounded-2xl bg-muted shadow-xl ring-1 ring-inset ring-border transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-muted ring-1 ring-inset ring-border transition-transform duration-300 motion-safe:group-hover:-translate-y-1 motion-reduce:transition-none">
             {slide.src ? (
               slide.media === 'video' ? (
                 <video
@@ -88,7 +86,7 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
                   src={slide.src}
                   alt={slide.alt}
                   fill
-                  sizes="(max-width: 761px) 84vw, 640px"
+                  sizes="(max-width: 700px) 90vw, 560px"
                   className="object-cover"
                 />
               ) : (
@@ -109,11 +107,11 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
           <p className="mt-4 text-[19px] sm:text-[22px] font-semibold tracking-tight">{slide.title}</p>
           {slide.subtitle && <p className="mt-1 text-[13px] text-muted-foreground">{slide.subtitle}</p>}
           {slide.meta && slide.meta.length > 0 && (
-            <dl className="mx-auto mt-6 w-full max-w-[280px] text-[12px] sm:text-[13px]">
+            <dl className="mt-4 w-full text-[12px] sm:text-[13px]">
               {slide.meta.map((row) => (
                 <div key={row.label} className="flex justify-between gap-4 py-[5px]">
                   <dt className="shrink-0 text-muted-foreground">{row.label}</dt>
-                  <dd className="truncate font-medium">{row.value}</dd>
+                  <dd className="text-right font-medium">{row.value}</dd>
                 </div>
               ))}
             </dl>

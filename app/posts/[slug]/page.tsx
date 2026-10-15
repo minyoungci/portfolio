@@ -48,8 +48,8 @@ export default async function PostPage({ params }: Props) {
   return (
     <PageTransition>
       <main className="min-h-screen">
-        <article className="mx-auto max-w-[720px] px-6 pt-28 pb-24 sm:pt-32">
-          <Link href="/#post" className="text-[13px] text-muted-foreground transition-colors hover:text-foreground">
+        <article className="detail-page article-page">
+          <Link href="/#post" className="detail-back">
             ← Post
           </Link>
 

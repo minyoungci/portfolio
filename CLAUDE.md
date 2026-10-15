@@ -175,6 +175,8 @@ public/images/articles/  글 이미지          public/images/projects/<슬러�
 
 ### 3-3. 디자인 시스템 (레퍼런스 = 코버플로우 데모의 언어. 기록은 `docs/design-audit.md` 6절)
 
+> 2026-10-15: 사용자의 전체 디자인 개선 요청으로 홈을 소개/모션 2열, 좌측 섹션 헤더, 640px 앨범, 2열 Post, 분리형 About, 보라색 Contact로 갱신했다. 아래의 이전 중앙 정렬·폭·크기 값보다 `docs/design-redesign-20261015.md` 및 현재 코드가 우선한다. 모션·데이터·폰트·접근성 규칙은 유지한다.
+
 - 톤: 둥근 카드 + 부드러운 그림자 + 중앙 정렬 + 알약형 UI. 앱 같은 감각이지 편집 디자인이 아니다. 다크 기본, 시스템이 라이트면 자동 라이트. **단일 반응형 레이아웃** — 데스크톱/모바일 분기 컴포넌트를 만들지 않는다.
 - 토큰: `app/globals.css`의 CSS 변수 `--background --foreground --card --muted --muted-foreground --border --ring --shadow-card`(다크 기본값 + `prefers-color-scheme: light` 세트)를 `@theme inline`으로 노출한다 → `bg-background` `text-foreground` `bg-card` `bg-muted` `text-muted-foreground` `border-border` `divide-border` `ring-border` `shadow-card`. **사이트 UI에서 색은 이 토큰만 쓴다.** `black/white/gray-*` 직접값과 opacity 위계(`text-black/60`)는 쓰지 않는다(admin 화면은 예외).
 - 타이포: Inter + Pretendard 하나. 섹션 제목 24~30px semibold `tracking-tight` 중앙 정렬, 카드·항목 제목 15px semibold, 보조 13px `text-muted-foreground`, 메타는 12px `dl`(라벨 좌 muted · 값 우 medium). uppercase 라벨은 11~12px `tracking-[0.18em]`~`[0.22em]`에만. serif·italic·`font-mono` 없음, 숫자는 `tabular-nums`.

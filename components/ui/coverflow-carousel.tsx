@@ -116,6 +116,7 @@ export function CoverflowCarousel({
   }, []);
 
   const [selected, setSelected] = React.useState(0);
+  const [playbackPaused, setPlaybackPaused] = React.useState(false);
 
   const select = React.useCallback((index: number) => {
     setSelected(index);
@@ -223,7 +224,7 @@ export function CoverflowCarousel({
   // Auto-advance: only while at least half in view, tab visible, not hovered,
   // not yet touched, and motion allowed. One interval per carousel.
   React.useEffect(() => {
-    if (!autoAdvance || count < 2) return;
+    if (!autoAdvance || count < 2 || playbackPaused) return;
     const frame = frameRef.current;
     if (!frame) return;
 
@@ -245,10 +246,10 @@ export function CoverflowCarousel({
       io.disconnect();
       window.clearInterval(id);
     };
-  }, [autoAdvance, count, nudge]);
+  }, [autoAdvance, count, nudge, playbackPaused]);
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    touchedRef.current = true;
+    touch();
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
@@ -260,7 +261,7 @@ export function CoverflowCarousel({
       x: event.clientX,
       pos: posRef.current,
       v: 0,
-      t: performance.now(),
+      t: event.timeStamp,
     };
   };
 
@@ -271,7 +272,7 @@ export function CoverflowCarousel({
     const pitch = widthRef.current * (1 + gap);
     if (!pitch) return;
 
-    const now = performance.now();
+    const now = event.timeStamp;
     const previous = posRef.current;
     posRef.current = clamp(drag.pos - (event.clientX - drag.x) / pitch);
     // Cards per second, for the throw.
@@ -343,25 +344,28 @@ export function CoverflowCarousel({
     if (!frame) return;
     const videos = Array.from(frame.querySelectorAll<HTMLVideoElement>("video[data-src]"));
     if (videos.length === 0) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        videos.forEach((video) => {
-          if (entry.isIntersecting) {
-            if (!video.src && video.dataset.src) video.src = video.dataset.src;
-            video.play().catch(() => {});
-          } else {
-            video.pause();
-          }
-        });
-      },
-      { threshold: 0.25 },
-    );
+    let inView = false;
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => videos.forEach((video) => {
+      if (inView && !video.src && video.dataset.src) video.src = video.dataset.src;
+      if (inView && !document.hidden && !preference.matches && !playbackPaused) video.play().catch(() => {});
+      else video.pause();
+    });
+    const io = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); }, { threshold: 0.25 });
     io.observe(frame);
-    return () => io.disconnect();
-  }, [slides]);
+    preference.addEventListener("change", sync);
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      io.disconnect();
+      preference.removeEventListener("change", sync);
+      document.removeEventListener("visibilitychange", sync);
+      videos.forEach((video) => video.pause());
+    };
+  }, [slides, playbackPaused]);
 
   const touch = () => {
     touchedRef.current = true;
+    setPlaybackPaused(true);
   };
 
   const active = slides[selected];
@@ -473,12 +477,12 @@ export function CoverflowCarousel({
                 ) : (
                   <div
                     aria-label={slide.alt}
-                    className="flex h-full w-full flex-col justify-end bg-gradient-to-br from-muted-foreground/30 via-muted to-muted p-5"
+                    className="album-placeholder"
                   >
-                    <span className="line-clamp-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                    <span className="album-kicker">
                       {slide.kicker ?? slide.subtitle}
                     </span>
-                    <span className="mt-2 line-clamp-3 text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
+                    <span className="album-title">
                       {slide.title}
                     </span>
                   </div>
@@ -519,7 +523,7 @@ export function CoverflowCarousel({
       {showCaption && active?.title && (
         <div
           key={selected}
-          className="fade-in mt-2 flex flex-col items-center px-6 motion-reduce:animate-none"
+          className="carousel-caption fade-in mt-2 flex flex-col items-center px-6 motion-reduce:animate-none"
         >
           <p className="text-center text-[19px] font-semibold tracking-tight text-foreground sm:text-[22px]">
             {active.title}
@@ -554,7 +558,7 @@ export function CoverflowCarousel({
                 touch();
                 goTo(index);
               }}
-              className="p-2"
+              className="flex min-h-11 min-w-8 items-center justify-center p-2"
             >
               <span
                 className={cn(
@@ -564,6 +568,19 @@ export function CoverflowCarousel({
               />
             </button>
           ))}
+        </div>
+      )}
+      {(autoAdvance > 0 || slides.some((slide) => slide.media === "video")) && (
+        <div className="mt-2 text-center motion-reduce:hidden">
+          <button
+            type="button"
+            aria-label={`${label}: ${playbackPaused ? 'Play' : 'Pause'} motion`}
+            aria-pressed={playbackPaused}
+            className="min-h-11 rounded-full border border-border px-5 py-2 text-[12px] text-muted-foreground transition-colors hover:text-foreground"
+            onClick={() => { touchedRef.current = false; setPlaybackPaused(!playbackPaused); }}
+          >
+            {playbackPaused ? 'Play motion' : 'Pause motion'}
+          </button>
         </div>
       )}
     </div>

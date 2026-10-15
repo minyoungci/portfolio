@@ -4,38 +4,34 @@ import GlassButton from '@/components/GlassButton'
 
 export default function ContactSection() {
   return (
-    <section id="contact" data-reveal className="mx-auto max-w-3xl px-6 py-14 text-center sm:py-20">
-      <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Contact</h2>
-
-      <a
-        href={`mailto:${profile.email}`}
-        className="mt-8 inline-block text-[clamp(2rem,6vw,3.5rem)] font-semibold leading-none tracking-tight transition-opacity hover:opacity-70"
-      >
-        {profile.contactTitle ?? 'Say hello'}
-      </a>
-      {profile.contactLine && (
-        <p className="mx-auto mt-4 max-w-md text-[14px] leading-6 text-muted-foreground">{profile.contactLine}</p>
-      )}
-
-      <div className="mt-8 flex flex-wrap justify-center gap-2">
-        <CopyButton text={profile.email} label="Copy email" copiedLabel="Copied ✓" />
-        {profile.links.map((link) => (
-          <GlassButton
-            key={link.label}
-            as="a"
-            href={link.href}
-            target={link.href.startsWith('mailto') ? undefined : '_blank'}
-            rel="noopener noreferrer"
-          >
-            <span className="text-muted-foreground">{link.label}</span>
-            <span>{link.handle}</span>
-          </GlassButton>
-        ))}
+    <section id="contact" data-reveal className="contact-section site-container">
+      <div className="contact-panel">
+        <p className="eyebrow">Have something in mind?</p>
+        <h2><a href={`mailto:${profile.email}`} className="contact-title">{profile.contactTitle ?? 'Say hello'}<span aria-hidden="true">↗</span></a></h2>
+        {profile.contactLine && (
+          <p className="mt-6 max-w-xl text-[15px] leading-7 sm:text-base">{profile.contactLine}</p>
+        )}
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <GlassButton as="a" href={`mailto:${profile.email}`} variant="solid">{profile.email} <span aria-hidden="true">↗</span></GlassButton>
+          <CopyButton text={profile.email} label="Copy email" copiedLabel="Copied ✓" />
+        </div>
       </div>
-
-      <p className="mt-16 text-[12px] text-muted-foreground">
-        © {new Date().getFullYear()} {profile.name}
-      </p>
+      <footer className="site-footer">
+        <p className="text-[13px] text-muted-foreground">© {new Date().getFullYear()} {profile.name}</p>
+        <div className="flex flex-wrap gap-2">
+          {profile.links.filter((link) => !link.href.startsWith('mailto')).map((link) => (
+            <GlassButton
+              key={link.label}
+              as="a"
+              href={link.href}
+              target={link.href.startsWith('mailto') ? undefined : '_blank'}
+              rel="noopener noreferrer"
+            >
+              {link.label} <span aria-hidden="true">↗</span>
+            </GlassButton>
+          ))}
+        </div>
+      </footer>
     </section>
   )
 }

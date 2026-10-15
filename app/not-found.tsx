@@ -2,7 +2,7 @@ import GlassButton from '@/components/GlassButton'
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen items-center justify-center px-6">
+    <main id="main-content" tabIndex={-1} className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 text-center shadow-card">
         <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">404</p>
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">Page not found</h1>

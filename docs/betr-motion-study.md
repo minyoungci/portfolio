@@ -3,7 +3,7 @@
 Reference: https://60fps.design/motion/betr-by-motto
 Official case study: https://wearemotto.com/portfolio/betr
 
-Local implementation only, 2026-10-10. No production deployment yet.
+Initial local study: 2026-10-10. The refined implementation was deployed to minyoungxi.com in commit `7446d3a` before the 2026-10-15 whole-site redesign.
 
 Observed source is a 15-second square montage: a tall white reel, two upper-right panels, and two lower panels. Frames examined at 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14 seconds. Left reel repeats three bands of words with vertical foreshortening; lower-right ticker exposes a bright centered line and masked neighboring lines. Upper-right scenes include stadium imagery and mobile screens; these brand assets are not replicated.
 
@@ -22,4 +22,4 @@ Actual calls: search_prompts("Betr Motto") returned zero matches; the kinetic ty
 
 Reference-based refinements: normal-weight reel letters (400 rather than 500), increased maximum type size from 19% to 21% of panel width, three reel bands confined to the inner 76.5% of the tall panel instead of touching its edges. Ticker now advances every 1000ms with a 250ms transition and selectively highlights the centered word; adjacent words stay dim. These are observation-based tuning values, not author-supplied timings. Canvas font/color reads moved out of the frame loop. Corrected animation clock drift from capped frame deltas, and combined viewport/document visibility checks. Disposed effect callbacks cannot repaint a newer effect after font loading.
 
-Original fonts and exact scene keyframes remain unverified. Local preview only; no production push.
+Original fonts and exact scene keyframes remain unverified. This refinement was subsequently deployed in `7446d3a`; production motion, pause/resume and reduced-motion behavior were checked. The next design iteration is documented in `design-redesign-20261015.md`.
