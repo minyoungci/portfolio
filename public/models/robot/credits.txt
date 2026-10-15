@@ -1,0 +1,9 @@
+AI Companion — model attribution
+
+Base geometry: Unitree G1, provided by Unitree Robotics and distributed in Google DeepMind MuJoCo Menagerie.
+Source: https://github.com/google-deepmind/mujoco_menagerie/tree/62ab00f2bc44f6f20c1c9b7a13f3fb1dd41a4e35/unitree_g1
+License: BSD-3-Clause. The full copyright notice, conditions and disclaimer are in LICENSE.txt in this directory.
+
+Adaptation for this portfolio: upper-body crop, omitted logo geometry, welded and simplified meshes, Meshopt compression, ceramic/graphite materials, an artistic head pivot, illuminated visor and chest element, and procedural AI visualizations. The poster is rendered from the adapted scene.
+
+This is a stylized interactive visual study. It does not perform AI inference, medical analysis or physical robot control. The visual study is not endorsed by Unitree Robotics or Google DeepMind.

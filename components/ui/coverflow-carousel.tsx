@@ -547,7 +547,7 @@ export function CoverflowCarousel({
       )}
 
       {showPagination && (
-        <div className="mt-6 flex items-center justify-center">
+        <div className="mt-6 flex flex-wrap items-center justify-center">
           {slides.map((_, index) => (
             <button
               key={index}

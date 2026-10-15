@@ -1,5 +1,5 @@
 import { profile } from '@/data/profile'
-import ParticleSphere from '@/components/ParticleSphere'
+import RobotExperience from '@/components/RobotExperience'
 import GlassButton from '@/components/GlassButton'
 
 export default function Hero() {
@@ -8,7 +8,6 @@ export default function Hero() {
   return (
     <section id="hero" className="hero-section site-container">
       <div className="hero-stage">
-        <ParticleSphere />
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow">Research. Build. Share.</p>
           <h1 className="hero-title" aria-label={profile.name}>{profile.name.split(' ').map((word, index) => <span key={index}>{word}</span>)}<span className="hero-period" aria-hidden="true">.</span></h1>
@@ -22,6 +21,7 @@ export default function Hero() {
           </div>
           {meta.length > 0 && <p className="hero-meta">{meta.join(' / ')}</p>}
         </div>
+        <RobotExperience />
       </div>
       <div className="hero-footnote">
         <p>{profile.identityEn}</p>

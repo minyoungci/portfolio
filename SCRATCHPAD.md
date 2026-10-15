@@ -143,3 +143,12 @@
 - Added mobile quality caps, motion suspension, keyboard pause/play and static fallbacks; retained profile/content data.
 - Reference access limits, implementation and verification scope: `docs/particle-hero-20261015.md`.
 - Local implementation candidate; no production push for this version.
+
+## 2026-10-15 — Interactive AI robot hero
+
+- User selected an AI-themed robot instead of the particle sphere or space scene.
+- Added a licensed real G1 upper-body mesh, articulated gaze/greeting, drag rotation, AI theme morphs, scan, zoom/reset and accessible motion controls.
+- Produced separate Meshopt assets: 0.89 MB desktop and 0.35 MB mobile, plus a locally rendered transparent fallback poster. Credits and full BSD notice ship with the model.
+- Replaced the now-unused particle runtime/component; retained all portfolio data and lower sections.
+- Implementation, provenance and verification: `docs/robot-hero-20261015.md`.
+- Local candidate only; production deployment requires approval for this robot version.

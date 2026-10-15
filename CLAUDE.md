@@ -179,6 +179,8 @@ public/images/articles/  글 이미지          public/images/projects/<슬러�
 
 > 같은 날 추가 요청: 첫 화면 모션을 NEX Robotics 공개 구도에서 영감을 받은 Three.js 입자 구체로 교체했다. 히어로의 최신 규칙은 `docs/particle-hero-20261015.md` 및 현재 코드가 우선한다. 나머지 섹션에는 이전 리디자인이 유지된다.
 
+> 후속 사용자 선택으로 입자 구체를 실제 Unitree G1 상체 모델 기반 AI 로봇으로 교체했다. 현재 히어로의 정본은 `docs/robot-hero-20261015.md`와 코드다. `RobotExperience`가 `lib/robotScene.ts`를 지연 로드하며, 모델 라이선스와 출처를 `public/models/robot/`에 보관한다.
+
 - 톤: 둥근 카드 + 부드러운 그림자 + 중앙 정렬 + 알약형 UI. 앱 같은 감각이지 편집 디자인이 아니다. 다크 기본, 시스템이 라이트면 자동 라이트. **단일 반응형 레이아웃** — 데스크톱/모바일 분기 컴포넌트를 만들지 않는다.
 - 토큰: `app/globals.css`의 CSS 변수 `--background --foreground --card --muted --muted-foreground --border --ring --shadow-card`(다크 기본값 + `prefers-color-scheme: light` 세트)를 `@theme inline`으로 노출한다 → `bg-background` `text-foreground` `bg-card` `bg-muted` `text-muted-foreground` `border-border` `divide-border` `ring-border` `shadow-card`. **사이트 UI에서 색은 이 토큰만 쓴다.** `black/white/gray-*` 직접값과 opacity 위계(`text-black/60`)는 쓰지 않는다(admin 화면은 예외).
 - 타이포: Inter + Pretendard 하나. 섹션 제목 24~30px semibold `tracking-tight` 중앙 정렬, 카드·항목 제목 15px semibold, 보조 13px `text-muted-foreground`, 메타는 12px `dl`(라벨 좌 muted · 값 우 medium). uppercase 라벨은 11~12px `tracking-[0.18em]`~`[0.22em]`에만. serif·italic·`font-mono` 없음, 숫자는 `tabular-nums`.
