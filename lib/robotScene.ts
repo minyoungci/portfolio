@@ -1,8 +1,7 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js'
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
-import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
+import { createRobotStudio, refineRobotAppearance } from './robotAppearance'
 
 export type RobotMode = 'medical' | 'open' | 'research'
 export type RobotAction = 'scan' | 'wave' | 'zoomIn' | 'zoomOut' | 'reset'
@@ -32,21 +31,21 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
   camera.lookAt(0, .05, 0)
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.05
+  renderer.shadowMap.enabled = true
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.setClearColor(0x000000, 0)
-  function makeEnvironment() {
-    const pmrem = new THREE.PMREMGenerator(renderer)
-    const room = new RoomEnvironment()
-    const target = pmrem.fromScene(room, .04)
-    room.dispose()
-    pmrem.dispose()
-    return target
-  }
-  let env = makeEnvironment()
+  let env = createRobotStudio(renderer)
   scene.environment = env.texture
-  scene.environmentIntensity = .65
-  const key = new THREE.DirectionalLight(0xf1e9ff, 2.6)
+  scene.environmentIntensity = .55
+  const key = new THREE.DirectionalLight(0xf1e9ff, 2.1)
   key.position.set(-3, 4, 5)
-  const rim = new THREE.DirectionalLight(0xa87aff, 3.5)
+  key.castShadow = true
+  key.shadow.mapSize.setScalar(mobile ? 1024 : 2048)
+  Object.assign(key.shadow.camera, { left: -2.8, right: 2.8, top: 2.8, bottom: -2.8, near: .1, far: 15 })
+  key.shadow.camera.updateProjectionMatrix()
+  key.shadow.bias = -.00015
+  key.shadow.normalBias = .006
+  const rim = new THREE.DirectionalLight(0xa87aff, 2.4)
   rim.position.set(3, 2, -3)
   const fill = new THREE.DirectionalLight(0x98bdff, .85)
   fill.position.set(-3, 0, 1)
@@ -265,7 +264,7 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
   function contextRestored() {
     lost = false
     env.dispose()
-    env = makeEnvironment()
+    env = createRobotStudio(renderer)
     scene.environment = env.texture
     if (loaded) { onStatus('ready'); resize(); sync() }
   }
@@ -309,43 +308,8 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
       gltf.scene.traverse(object => {
         if (Array.isArray(object.userData.axis)) joints.set(object.name, { object, axis: new THREE.Vector3().fromArray(object.userData.axis) })
         if (object.name === 'head_gaze') head = object
-        if (object instanceof THREE.Mesh && object.material instanceof THREE.MeshPhysicalMaterial && object.material.name === 'Ceramic alloy') {
-          object.material.color.set(0x9aa4b7)
-          object.material.metalness = .68
-          object.material.roughness = .3
-        }
       })
-      if (head) {
-        const visor = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 32), new THREE.MeshPhysicalMaterial({ color: 0x070a17, metalness: .15, roughness: .5, clearcoat: .15, envMapIntensity: .35 }))
-        visor.scale.set(.04, .067, .073)
-        visor.position.set(.035, 0, .115)
-        head.add(visor)
-        for (const y of [-.028, .028]) {
-          const eye = new THREE.Mesh(new RoundedBoxGeometry(.005, .024, .007, 3, .002), glow)
-          eye.position.set(.073, y, .123)
-          head.add(eye)
-          const aura = new THREE.Mesh(new THREE.SphereGeometry(.019, 12, 8), haloMaterial)
-          aura.scale.set(.3, 1, .6)
-          aura.position.copy(eye.position)
-          head.add(aura)
-        }
-      }
-      const torso = gltf.scene.getObjectByName('waist_pitch_joint')
-      if (torso) {
-        const core = new THREE.Mesh(new THREE.TorusGeometry(.018, .0015, 6, 40), glow)
-        core.rotation.y = Math.PI / 2
-        core.position.set(.084, 0, .17)
-        torso.add(core)
-        const coreLens = new THREE.Mesh(new THREE.CircleGeometry(.013, 32), new THREE.MeshBasicMaterial({ color: 0xbe8cff, transparent: true, opacity: .5, toneMapped: false }))
-        coreLens.rotation.copy(core.rotation)
-        coreLens.position.copy(core.position)
-        torso.add(coreLens)
-        const circuitPoints: THREE.Vector3[] = []
-        for (const side of [-1, 1]) {
-          circuitPoints.push(new THREE.Vector3(.084, side * .025, .17), new THREE.Vector3(.083, side * .041, .17), new THREE.Vector3(.083, side * .041, .17), new THREE.Vector3(.077, side * .061, .19))
-        }
-        torso.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(circuitPoints), new THREE.LineBasicMaterial({ color: 0xc195ff, transparent: true, opacity: .65 })))
-      }
+      refineRobotAppearance(gltf.scene, glow)
       loaded = true
       onStatus(lost ? 'fallback' : 'ready')
       sync()
@@ -373,6 +337,7 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
       canvas.removeEventListener('webglcontextlost', contextLost)
       canvas.removeEventListener('webglcontextrestored', contextRestored)
       disposeObject(scene)
+      key.shadow.dispose()
       env.dispose()
       renderer.dispose()
     },

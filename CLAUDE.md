@@ -181,6 +181,8 @@ public/images/articles/  글 이미지          public/images/projects/<슬러�
 
 > 후속 사용자 선택으로 입자 구체를 실제 Unitree G1 상체 모델 기반 AI 로봇으로 교체했다. 현재 히어로의 정본은 `docs/robot-hero-20261015.md`와 코드다. `RobotExperience`가 `lib/robotScene.ts`를 지연 로드하며, 모델 라이선스와 출처를 `public/models/robot/`에 보관한다.
 
+> 2026-10-16: 로봇 품질 개선으로 모델 표면을 재처리하고, 곡면 바이저·광학 센서가 있는 자체 헬멧과 재질/조명을 적용했다. 외형 구현은 `lib/robotAppearance.ts`, 최신 에셋 및 검증 기록은 `docs/robot-quality-20261016.md`를 따른다.
+
 - 톤: 둥근 카드 + 부드러운 그림자 + 중앙 정렬 + 알약형 UI. 앱 같은 감각이지 편집 디자인이 아니다. 다크 기본, 시스템이 라이트면 자동 라이트. **단일 반응형 레이아웃** — 데스크톱/모바일 분기 컴포넌트를 만들지 않는다.
 - 토큰: `app/globals.css`의 CSS 변수 `--background --foreground --card --muted --muted-foreground --border --ring --shadow-card`(다크 기본값 + `prefers-color-scheme: light` 세트)를 `@theme inline`으로 노출한다 → `bg-background` `text-foreground` `bg-card` `bg-muted` `text-muted-foreground` `border-border` `divide-border` `ring-border` `shadow-card`. **사이트 UI에서 색은 이 토큰만 쓴다.** `black/white/gray-*` 직접값과 opacity 위계(`text-black/60`)는 쓰지 않는다(admin 화면은 예외).
 - 타이포: Inter + Pretendard 하나. 섹션 제목 24~30px semibold `tracking-tight` 중앙 정렬, 카드·항목 제목 15px semibold, 보조 13px `text-muted-foreground`, 메타는 12px `dl`(라벨 좌 muted · 값 우 medium). uppercase 라벨은 11~12px `tracking-[0.18em]`~`[0.22em]`에만. serif·italic·`font-mono` 없음, 숫자는 `tabular-nums`.

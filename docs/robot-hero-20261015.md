@@ -1,5 +1,7 @@
 # AI robot hero — 2026-10-15
 
+Historical baseline. The current appearance and asset versions are documented in [Robot quality refinement](robot-quality-20261016.md).
+
 The user's robot selection supersedes the local particle-sphere hero. The homepage now renders an articulated, real 3D humanoid upper body with a purple AI visualization. Profile facts, portfolio records and archive content remain unchanged. Verification also prompted narrow wrapping fixes for enlarged section titles, carousel dots and the contact heading at 200% text size.
 
 ## Reference and provenance

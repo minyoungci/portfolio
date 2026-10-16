@@ -152,3 +152,10 @@
 - Replaced the now-unused particle runtime/component; retained all portfolio data and lower sections.
 - Implementation, provenance and verification: `docs/robot-hero-20261015.md`.
 - Local candidate only; production deployment requires approval for this robot version.
+
+## 2026-10-16 — Robot visual quality
+
+- Rebuilt the helmet with a curved optical visor, sensor lenses and temple actuators. Refined ceramic armor, titanium joints, graphite recesses, finger grips and the layered AI chest core.
+- Reprocessed desktop/mobile source meshes with edge-aware weighted normals and small bevels; removed the replaced original head. New Meshopt assets: 2.31 MB desktop / 0.92 MB mobile.
+- Added studio softbox reflections and self-shadows; regenerated the fallback poster. Retained the existing controls and motion/accessibility lifecycle.
+- Current assets, provenance, verification and release boundary: `docs/robot-quality-20261016.md`. Local candidate; no production push.

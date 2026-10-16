@@ -4,6 +4,6 @@ Base geometry: Unitree G1, provided by Unitree Robotics and distributed in Googl
 Source: https://github.com/google-deepmind/mujoco_menagerie/tree/62ab00f2bc44f6f20c1c9b7a13f3fb1dd41a4e35/unitree_g1
 License: BSD-3-Clause. The full copyright notice, conditions and disclaimer are in LICENSE.txt in this directory.
 
-Adaptation for this portfolio: upper-body crop, omitted logo geometry, welded and simplified meshes, Meshopt compression, ceramic/graphite materials, an artistic head pivot, illuminated visor and chest element, and procedural AI visualizations. The poster is rendered from the adapted scene.
+Adaptation for this portfolio: upper-body crop, omitted logo and original head geometry, welded and simplified meshes, edge-aware surface normals, small machined-edge bevels, and Meshopt compression. The portfolio adds an original sculpted helmet with a curved optical visor, sensor lenses and temple assemblies; ceramic, titanium, graphite and grip materials; a layered illuminated chest element; studio reflections and shadows; an artistic gaze pivot and procedural AI visualizations. The poster is rendered from the adapted scene. The custom helmet and decorative details are artistic additions, not the manufacturer's G1 design.
 
 This is a stylized interactive visual study. It does not perform AI inference, medical analysis or physical robot control. The visual study is not endorsed by Unitree Robotics or Google DeepMind.
