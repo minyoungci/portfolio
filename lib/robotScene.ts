@@ -27,8 +27,8 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
   const mobile = matchMedia('(max-width: 700px), (pointer: coarse)').matches
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(35, 1, .1, 40)
-  camera.position.set(0, .18, 6.5)
-  camera.lookAt(0, .05, 0)
+  camera.position.set(0, -.18, 7.8)
+  camera.lookAt(0, -.32, 0)
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = 1.05
   renderer.shadowMap.enabled = true
@@ -100,6 +100,8 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
   let yaw = -.24, targetYaw = -.24, zoom = 1, targetZoom = 1
   let scanAge = -1, waveAge = -1
   let gazeX = 0, gazeY = 0
+  let entrance = 0, pose = 0, targetPose = 0
+  const lightColor = new THREE.Color()
   const pointer = new THREE.Vector2()
   let drag: { id: number; x: number; yaw: number } | null = null
   const abort = new AbortController()
@@ -108,6 +110,7 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
 
   function setMode(next: RobotMode) {
     mode = next
+    targetPose = next === 'open' ? 1 : next === 'research' ? -1 : 0
     for (let i = 0; i < 48; i++) {
       const a = (mode === 'medical' ? Math.floor(i / 2) : i) * 2.39996323
       const y = 1 - ((mode === 'medical' ? Math.floor(i / 2) / 23 : i / 47)) * 2
@@ -143,23 +146,34 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
     zoom = THREE.MathUtils.lerp(zoom, targetZoom, blend)
     gazeX = THREE.MathUtils.lerp(gazeX, pointer.x, blend)
     gazeY = THREE.MathUtils.lerp(gazeY, pointer.y, blend)
-    robot.rotation.y = yaw + gazeX * .045
+    pose = THREE.MathUtils.lerp(pose, targetPose, blend)
+    // A single entrance opens the composition; switching themes never replays it.
+    entrance = animate ? Math.min(1, entrance + dt / 1.4) : 1
+    const arrived = 1 - (1 - entrance) ** 3
+    robot.rotation.y = yaw + gazeX * .045 + pose * .14 - (1 - arrived) * .42
     robot.rotation.z = animate ? Math.sin(time * .6) * .008 : 0
-    robot.position.y = .18 + (animate ? Math.sin(time * .9) * .018 : 0)
+    robot.position.y = .18 - (1 - arrived) * .22 + (animate ? Math.sin(time * .9) * .018 : 0)
     if (head) head.rotation.set(0, -gazeY * .12, -gazeX * .26, 'ZYX')
     const wave = waveAge >= 0 ? Math.sin(Math.min(waveAge / .65, 1) * Math.PI / 2) * Math.min((3.4 - waveAge) / .65, 1) : 0
     // Open the framing for a raised hand, including at the user's closest zoom.
-    camera.zoom = zoom * (1 - wave * .22)
+    camera.zoom = zoom * (1 - wave * .22) * (.94 + arrived * .06)
     camera.updateProjectionMatrix()
     joint('right_shoulder_pitch_joint', -.14 - wave * .84)
     joint('right_shoulder_roll_joint', -.12 - wave * .45)
     joint('right_elbow_joint', .2 * (1 - wave))
     joint('right_wrist_roll_joint', wave * Math.sin(waveAge * 10) * .4)
-    joint('left_shoulder_pitch_joint', -.12)
-    joint('left_shoulder_roll_joint', .15)
-    joint('left_elbow_joint', .3)
+    joint('left_shoulder_pitch_joint', -.24 + pose * .12)
+    joint('left_shoulder_roll_joint', .18 + Math.abs(pose) * .08)
+    joint('left_elbow_joint', .7 - pose * .25)
     hologram.rotation.y = animate ? time * .16 : 0
-    hologram.position.y = .22 + (animate ? Math.sin(time * 1.2) * .04 : 0)
+    hologram.position.set(-1.3 + pose * .12, .22 - pose * .12 + (animate ? Math.sin(time * 1.2) * .04 : 0), .65)
+    hologram.scale.setScalar(.65 + arrived * .35)
+    key.position.x = -3 + gazeX * .65
+    key.position.y = 4 + gazeY * .35
+    lightColor.set(mode === 'research' ? 0x9caeff : mode === 'open' ? 0xe3b3ff : 0xbf8aff)
+    glow.color.lerp(lightColor, blend)
+    rim.color.lerp(lightColor, blend)
+    nodeMaterial.uniforms.color.value.lerp(lightColor, blend)
     for (let i = 0; i < nodePositions.length; i++) nodePositions[i] += (destinations[i] - nodePositions[i]) * blend
     nodeGeometry.attributes.position.needsUpdate = true
     for (let i = 0; i < 96; i++) {
@@ -173,7 +187,6 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
     nodeGeometry.computeBoundingSphere()
     scan.visible = scanAge >= 0
     scan.position.y = 1.6 - Math.max(0, scanAge) * 1.45
-    glow.color.set(mode === 'research' ? 0x9caeff : mode === 'open' ? 0xe3b3ff : 0xbf8aff)
   }
 
   function active() { return loaded && visible && !document.hidden && !lost && !disposed }
@@ -215,7 +228,7 @@ export function createRobotScene(canvas: HTMLCanvasElement, onStatus: (status: '
     nodeMaterial.uniforms.pixelRatio.value = quality
     camera.aspect = width / height
     // Portrait framing retains the whole upper body without clipping its shoulders.
-    camera.position.z = Math.max(6.5, 7.25 / camera.aspect)
+    camera.position.z = Math.max(7.8, 7.8 / camera.aspect)
     camera.updateProjectionMatrix()
     drawOnce()
   }

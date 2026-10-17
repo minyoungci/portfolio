@@ -159,3 +159,11 @@
 - Reprocessed desktop/mobile source meshes with edge-aware weighted normals and small bevels; removed the replaced original head. New Meshopt assets: 2.31 MB desktop / 0.92 MB mobile.
 - Added studio softbox reflections and self-shadows; regenerated the fallback poster. Retained the existing controls and motion/accessibility lifecycle.
 - Current assets, provenance, verification and release boundary: `docs/robot-quality-20261016.md`. Local candidate; no production push.
+
+## 2026-10-17 — 60fps web design refinement
+
+- Inspected Wabi and Melius in 60fps App Sites and Betr by Motto in Motion. Applied their text/object coordination, spatial entrance and purple display-type principles to the existing portfolio.
+- Enlarged and integrated the robot stage, strengthened the name and shared section typography, restyled About/Contact, and moved reveals to headings. Added one-time robot entrance, coordinated theme poses/colors and pointer lighting; regenerated the fallback poster.
+- Preserved all content data, model licensing, coverflow behavior and existing robot controls. Typegen, TypeScript, ESLint and production build passed; production browser suites passed 48/48 + 36/36 checks.
+- Reference mapping, motion parameters, screenshots and verification limits: `docs/design-60fps-20261017.md`.
+- Local development preview 3111 and production-build preview 3112. No push or deployment of this version.

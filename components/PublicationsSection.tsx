@@ -34,7 +34,7 @@ export default function PublicationsSection({ papers, awards }: Props) {
   const slides = paperSlides(papers)
 
   return (
-    <section id="publications" data-reveal className="archive-section">
+    <section id="publications" className="archive-section">
       <SectionHeading title="Publications & Awards" label="Research & recognition" description={counts.join(' · ')} />
 
       {awards.length > 0 && (

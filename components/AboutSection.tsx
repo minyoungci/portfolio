@@ -47,7 +47,7 @@ export default function AboutSection() {
   const groups = groupTimeline()
 
   return (
-    <section id="about" data-reveal className="archive-section">
+    <section id="about" className="archive-section">
       <SectionHeading title="About" label="The person behind the work" description="연구와 코드 사이에서, 쓸모 있는 가능성을 찾습니다." />
 
       <div className="site-container">

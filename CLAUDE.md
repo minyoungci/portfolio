@@ -183,6 +183,8 @@ public/images/articles/  글 이미지          public/images/projects/<슬러�
 
 > 2026-10-16: 로봇 품질 개선으로 모델 표면을 재처리하고, 곡면 바이저·광학 센서가 있는 자체 헬멧과 재질/조명을 적용했다. 외형 구현은 `lib/robotAppearance.ts`, 최신 에셋 및 검증 기록은 `docs/robot-quality-20261016.md`를 따른다.
 
+> 2026-10-17: 60fps App Sites(Wabi/Melius)와 Motion(Betr)을 참고해 큰 타이포, 넓은 로봇 무대, 가로 테마 콘솔, 섹션 헤더/소개/연락처 구성을 개선했다. 테마별 문구·자세·조명 전환과 최신 대체 이미지는 `docs/design-60fps-20261017.md` 및 현재 코드가 정본이다. 데이터와 기존 모델 라이선스는 유지한다.
+
 - 톤: 둥근 카드 + 부드러운 그림자 + 중앙 정렬 + 알약형 UI. 앱 같은 감각이지 편집 디자인이 아니다. 다크 기본, 시스템이 라이트면 자동 라이트. **단일 반응형 레이아웃** — 데스크톱/모바일 분기 컴포넌트를 만들지 않는다.
 - 토큰: `app/globals.css`의 CSS 변수 `--background --foreground --card --muted --muted-foreground --border --ring --shadow-card`(다크 기본값 + `prefers-color-scheme: light` 세트)를 `@theme inline`으로 노출한다 → `bg-background` `text-foreground` `bg-card` `bg-muted` `text-muted-foreground` `border-border` `divide-border` `ring-border` `shadow-card`. **사이트 UI에서 색은 이 토큰만 쓴다.** `black/white/gray-*` 직접값과 opacity 위계(`text-black/60`)는 쓰지 않는다(admin 화면은 예외).
 - 타이포: Inter + Pretendard 하나. 섹션 제목 24~30px semibold `tracking-tight` 중앙 정렬, 카드·항목 제목 15px semibold, 보조 13px `text-muted-foreground`, 메타는 12px `dl`(라벨 좌 muted · 값 우 medium). uppercase 라벨은 11~12px `tracking-[0.18em]`~`[0.22em]`에만. serif·italic·`font-mono` 없음, 숫자는 `tabular-nums`.

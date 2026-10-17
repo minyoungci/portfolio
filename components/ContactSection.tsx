@@ -4,10 +4,10 @@ import GlassButton from '@/components/GlassButton'
 
 export default function ContactSection() {
   return (
-    <section id="contact" data-reveal className="contact-section site-container">
+    <section id="contact" className="contact-section site-container">
       <div className="contact-panel">
         <p className="eyebrow">Have something in mind?</p>
-        <h2><a href={`mailto:${profile.email}`} className="contact-title">{profile.contactTitle ?? 'Say hello'}<span aria-hidden="true">↗</span></a></h2>
+        <h2 data-reveal><a href={`mailto:${profile.email}`} className="contact-title">{profile.contactTitle ?? 'Say hello'}<span aria-hidden="true">↗</span></a></h2>
         {profile.contactLine && (
           <p className="mt-6 max-w-xl text-[15px] leading-7 sm:text-base">{profile.contactLine}</p>
         )}

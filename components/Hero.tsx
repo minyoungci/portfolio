@@ -10,7 +10,7 @@ export default function Hero() {
       <div className="hero-stage">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow">Research. Build. Share.</p>
-          <h1 className="hero-title" aria-label={profile.name}>{profile.name.split(' ').map((word, index) => <span key={index}>{word}</span>)}<span className="hero-period" aria-hidden="true">.</span></h1>
+          <h1 className="hero-title" aria-label={profile.name}>{profile.name.split(' ').map((word, index, words) => <span className="hero-title-line" key={index}><span>{word}{index === words.length - 1 && <span className="hero-period" aria-hidden="true">.</span>}</span></span>)}</h1>
           <p className="hero-role">{profile.tagline}</p>
           <p className="hero-description">{profile.identity}</p>
           <div className="hero-actions">

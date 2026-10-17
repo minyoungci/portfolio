@@ -35,7 +35,7 @@ export default function Shelf({ id, title, description, slides, onActivate, auto
   }
 
   return (
-    <section id={id} data-reveal className="archive-section">
+    <section id={id} className="archive-section">
       <SectionHeading title={title} label={id === 'projects' ? 'Ideas into tools' : id === 'post' ? 'Notes & guides' : 'Visual experiments'} description={description} count={slides.length} />
 
       <div className="mx-auto mt-2 max-w-7xl overflow-hidden">
