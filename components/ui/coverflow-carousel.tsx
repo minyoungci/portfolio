@@ -14,6 +14,7 @@ export interface CoverflowSlide {
   /** Image or video URL. Omit for a typographic placeholder card. */
   src?: string;
   media?: "image" | "video";
+  poster?: string;
   alt: string;
   title?: string;
   /** Short label printed on the placeholder card. Falls back to subtitle. */
@@ -447,6 +448,7 @@ export function CoverflowCarousel({
                   slide.media === "video" ? (
                     <video
                       data-src={slide.src}
+                      poster={slide.poster}
                       muted
                       loop
                       playsInline

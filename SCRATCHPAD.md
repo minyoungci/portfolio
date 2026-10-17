@@ -167,3 +167,11 @@
 - Preserved all content data, model licensing, coverflow behavior and existing robot controls. Typegen, TypeScript, ESLint and production build passed; production browser suites passed 48/48 + 36/36 checks.
 - Reference mapping, motion parameters, screenshots and verification limits: `docs/design-60fps-20261017.md`.
 - Local development preview 3111 and production-build preview 3112. No push or deployment of this version.
+
+## 2026-10-17 — HaruDual first project
+
+- Added 하루두알 as the first Projects record with a unique ID, development status, verified feature overview and React Native/Django stack.
+- Reused the source project's brand and HBTI illustration assets; preserved all five existing project records and the shared carousel/detail components.
+- Typegen, TypeScript, ESLint and production build passed. Checked desktop/mobile cards, detail navigation, loaded media, metadata and narrow-screen overflow.
+- Follow-up: user approved production deployment and confirmed the role as 풀스택 개발 및 기술 총괄. Added three user-provided company selection milestones and an 8-second app presentation video with poster, pause/play and reduced-motion support.
+- Final local motion/content QA passed 41/41 checks; production build passed. Source references and release verification scope: `docs/harudual-project-20261017.md`.

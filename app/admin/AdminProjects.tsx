@@ -8,6 +8,7 @@ import { adminList, adminSave } from '@/lib/adminFetch'
 const EMPTY = {
   title: '', subtitle: '', year: new Date().getFullYear(),
   categoryStr: '', stackStr: '', description: '',
+  role: '', recognitionStr: '', thumbnailPoster: '', mediaCaption: '',
   thumbnail: '', github: '', demo: '', paper: '', featured: false,
 }
 
@@ -27,6 +28,10 @@ function toProject(form: Form, id: number, existing?: Project): Project {
     category: form.categoryStr.split(',').map(s => s.trim()).filter(Boolean),
     stack: form.stackStr.split(',').map(s => s.trim()).filter(Boolean),
     description: form.description,
+    role: form.role || undefined,
+    recognition: form.recognitionStr.split('\n').map(s => s.trim()).filter(Boolean),
+    thumbnailPoster: form.thumbnailPoster || undefined,
+    mediaCaption: form.mediaCaption || undefined,
     thumbnail: form.thumbnail,
     images: existing?.images ?? [],
     links: {
@@ -43,6 +48,8 @@ function fromProject(p: Project): Form {
     title: p.title, subtitle: p.subtitle, year: p.year,
     categoryStr: p.category.join(', '), stackStr: p.stack.join(', '),
     description: p.description, thumbnail: p.thumbnail,
+    role: p.role ?? '', recognitionStr: (p.recognition ?? []).join('\n'),
+    thumbnailPoster: p.thumbnailPoster ?? '', mediaCaption: p.mediaCaption ?? '',
     github: p.links.github ?? '', demo: p.links.demo ?? '', paper: p.links.paper ?? '',
     featured: p.featured,
   }
@@ -155,6 +162,14 @@ export default function AdminProjects() {
               <div className="max-w-xl">
                 {F({ label: "Title", k: "title" })}
                 {F({ label: "Subtitle (한 줄 설명)", k: "subtitle" })}
+                {F({ label: "Role (개발 역할)", k: "role" })}
+                {F({ label: "Video poster URL", k: "thumbnailPoster" })}
+                {F({ label: "Media caption", k: "mediaCaption" })}
+                <div className="mb-4">
+                  <label className="text-xs opacity-50 block mb-1">Recognition (프로젝트·기업 선정 이력, 한 줄에 하나)</label>
+                  <textarea value={form.recognitionStr} onChange={e => set('recognitionStr', e.target.value)} rows={3}
+                    className="w-full text-sm border-b border-black outline-none py-1 bg-transparent resize-none leading-relaxed" />
+                </div>
                 <div className="grid grid-cols-2 gap-4">
                   {F({ label: "Year", k: "year", type: "number" })}
                   <div className="mb-4">

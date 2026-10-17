@@ -1,5 +1,43 @@
 [
   {
+    "id": 6,
+    "slug": "harudual",
+    "title": "하루두알 · HaruDual",
+    "role": "풀스택 개발 및 기술 총괄",
+    "recognition": [
+      "예비창업패키지 선정",
+      "창업중심대학 실험실 창업 예비패키지 선정",
+      "벤처기업 혁신유형 선정"
+    ],
+    "subtitle": "HBTI 설문부터 영양 정보와 일상 건강 기록까지 연결하는 모바일 헬스케어 서비스 · 개발 중",
+    "year": 2026,
+    "category": [
+      "Digital Health",
+      "Mobile App"
+    ],
+    "stack": [
+      "React Native",
+      "TypeScript",
+      "TanStack Query",
+      "Zustand",
+      "Python",
+      "Django REST Framework",
+      "PostgreSQL"
+    ],
+    "description": "하루두알은 자신의 생활 습관을 이해하고, 매일의 건강 관리를 이어갈 수 있도록 돕는 모바일 헬스케어 서비스입니다. 현재 React Native 앱과 Django 백엔드를 함께 개발하고 있습니다.\n\nHBTI(Health-Based Type Indicator) 설문을 통해 건강 행동 유형을 살펴보고, 유형별 결과와 리포트에서 영양소 정보를 확인하는 흐름을 구현했습니다. 영양소 백과사전과 주의사항 안내, 섭취 체크, 월간 캘린더와 연속 기록을 연결해 정보를 읽는 경험이 일상의 기록으로 이어지도록 구성했습니다.\n\n건강 대시보드에는 Android Health Connect와 iOS HealthKit 연동 코드를 구성하고, 기기의 활동·수면 등 건강 데이터를 조회해 일별 기록으로 동기화하는 흐름을 구현했습니다. 건강검진 기록의 입력·조회와 변화 추이를 확인하는 화면도 포함합니다.\n\n앱은 React Native·TypeScript를 기반으로 TanStack Query와 Zustand를 활용하며, Django REST Framework·PostgreSQL 기반 API와 연결됩니다. 모바일 화면, 설문·리포트, 건강 기록과 데이터 연동을 함께 다듬고 있는 진행형 프로젝트입니다.",
+    "thumbnail": "/images/projects/harudual/app-preview.mp4",
+    "thumbnailPoster": "/images/projects/harudual/app-preview-poster.webp",
+    "mediaCaption": "App experience — 건강 기록과 영양소 안내를 담은 서비스 소개용 앱 모션.",
+    "images": [
+      {
+        "src": "/images/projects/harudual/hbti-types.png",
+        "caption": "하루두알 서비스 소개용 HBTI 유형별 캐릭터 일러스트."
+      }
+    ],
+    "links": {},
+    "featured": true
+  },
+  {
     "id": 1,
     "slug": "cardiac-output-ppg-ecg",
     "title": "Non-invasive Cardiac Output from PPG & ECG",

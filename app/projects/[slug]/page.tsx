@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { projects } from '@/data/projects'
 import PageTransition from '@/components/PageTransition'
+import ProjectVideo from '@/components/ProjectVideo'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -38,6 +39,7 @@ export default async function ProjectPage({ params }: Props) {
   ].filter((l): l is { label: string; href: string } => Boolean(l.href))
 
   const rows = [
+    ...(project.role ? [{ label: 'Role', value: project.role }] : []),
     { label: 'Year', value: String(project.year) },
     ...(project.category.length ? [{ label: 'Category', value: project.category.join(', ') }] : []),
     ...(project.stack.length ? [{ label: 'Stack', value: project.stack.join(', ') }] : []),
@@ -56,10 +58,10 @@ export default async function ProjectPage({ params }: Props) {
         </header>
 
         {/* Cover */}
-        <div className="detail-cover relative w-full overflow-hidden bg-muted ring-1 ring-border">
+        <div className={`detail-cover relative w-full overflow-hidden bg-muted ring-1 ring-border${isVideo(project.thumbnail) ? ' detail-cover-video' : ''}`}>
           {project.thumbnail ? (
             isVideo(project.thumbnail) ? (
-              <video src={project.thumbnail} autoPlay muted loop playsInline className="h-full w-full object-cover" />
+              <ProjectVideo src={project.thumbnail} poster={project.thumbnailPoster} title={project.title} />
             ) : (
               <Image src={project.thumbnail} alt={project.title} fill sizes="(max-width: 960px) 100vw, 912px" className="object-cover" priority />
             )
@@ -72,9 +74,7 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           )}
         </div>
-
-
-
+        {project.mediaCaption && <p className="mx-auto max-w-[680px] text-[12px] leading-6 text-muted-foreground">{project.mediaCaption}</p>}
         <dl className="mt-8 divide-y divide-border rounded-2xl border border-border bg-card px-5 text-[13px] shadow-card">
           {rows.map((row) => (
             <div key={row.label} className="flex justify-between gap-6 py-3">
@@ -101,6 +101,18 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           )}
         </dl>
+
+        {project.recognition && project.recognition.length > 0 && (
+          <section className="mt-10" aria-labelledby="project-recognition">
+            <h2 id="project-recognition" className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">Recognition</h2>
+            <p className="mt-2 text-sm text-muted-foreground">프로젝트·기업 선정 이력</p>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+              {project.recognition.map((item) => (
+                <li key={item} className="rounded-2xl border border-border bg-card p-5 text-sm font-medium leading-7">{item}</li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {project.description && (
           <div className="detail-body mt-10 whitespace-pre-wrap">{project.description}</div>

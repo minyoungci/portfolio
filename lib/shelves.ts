@@ -4,6 +4,7 @@ import type { Paper, Piece, Post, Project } from '@/types'
 export interface ShelfSlide {
   src?: string
   media?: 'image' | 'video'
+  poster?: string
   alt: string
   title: string
   /** 썸네일이 없을 때 카드 위에 찍히는 짧은 라벨 (카테고리 등). 없으면 subtitle */
@@ -19,11 +20,13 @@ export function projectSlides(projects: Project[]): ShelfSlide[] {
   return projects.map((p) => ({
     src: p.thumbnail || undefined,
     media: p.thumbnail && isVideo(p.thumbnail) ? 'video' : 'image',
+    poster: p.thumbnailPoster,
     alt: p.title,
     title: p.title,
     kicker: p.category[0] ?? 'Project',
     subtitle: p.subtitle || p.category[0],
     meta: [
+      ...(p.role ? [{ label: 'Role', value: p.role }] : []),
       { label: 'Year', value: String(p.year) },
       ...(p.category.length ? [{ label: 'Category', value: p.category.slice(0, 2).join(', ') }] : []),
       ...(p.stack.length ? [{ label: 'Stack', value: p.stack.slice(0, 3).join(', ') }] : []),

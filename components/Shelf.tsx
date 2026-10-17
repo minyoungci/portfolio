@@ -74,6 +74,7 @@ function ShelfRow({ slides, onActivate }: { slides: ShelfSlide[]; onActivate: (i
               slide.media === 'video' ? (
                 <video
                   src={slide.src}
+                  poster={slide.poster}
                   autoPlay
                   muted
                   loop

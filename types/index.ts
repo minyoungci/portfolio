@@ -15,11 +15,15 @@ export interface Project {
   slug: string;        // URL slug (/projects/[slug])
   title: string;
   subtitle: string;    // 한 줄 설명
+  role?: string;
+  recognition?: string[]; // 프로젝트/기업의 선정 이력
   year: number;
   category: string[];  // ['Medical AI', 'Vision', ...]
   stack: string[];
   description: string; // 일반 텍스트. 줄바꿈은 유지되지만 마크다운은 렌더되지 않는다
   thumbnail: string;   // /uploads/... 또는 영상 URL
+  thumbnailPoster?: string; // 영상 로딩/모션 축소 시 표시할 이미지
+  mediaCaption?: string;
   images: ProjectImage[];
   links: ProjectLinks;
   featured: boolean;   // true면 hero "Selected work"에 노출

@@ -914,6 +914,7 @@ html.js [data-reveal].is-visible {
 .detail-page > header { margin-top: 40px; margin-bottom: 36px; }
 .detail-page h1 { max-width: 22ch; font-size: clamp(2rem, 4.5vw, 3.5rem); line-height: 1.2; letter-spacing: -.045em; font-weight: 550; text-wrap: balance; }
 .detail-page .detail-cover { margin-block: 40px; aspect-ratio: 16 / 10; border-radius: 24px; }
+.detail-page .detail-cover-video { aspect-ratio: auto; max-width: 680px; margin-inline: auto; }
 .detail-page > dl, .detail-page > section, .detail-page > .detail-body { max-width: 680px; margin-inline: auto; }
 .detail-page > dl { padding: 16px 28px; }
 .detail-page .detail-body, .detail-page > section > p { font-size: 16px; line-height: 1.9; }
